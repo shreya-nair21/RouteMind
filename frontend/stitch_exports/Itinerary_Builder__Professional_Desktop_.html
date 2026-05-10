@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .clay-card {
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(0, 96, 172, 0.08), inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+        }
+        .clay-surface {
+            background: linear-gradient(145deg, #ffffff, #f8fafd);
+        }
+        .clay-inset {
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05), inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#d6e3fb",
+                    "primary-container": "#2976c7",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary-fixed": "#151c22",
+                    "secondary": "#585f66",
+                    "on-primary-container": "#fdfcff",
+                    "error": "#ba1a1a",
+                    "surface-container": "#e6eeff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5e656c",
+                    "on-tertiary-container": "#fcfcfc",
+                    "tertiary-fixed": "#e2e2e2",
+                    "primary-fixed": "#d4e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#d6e3fb",
+                    "surface-tint": "#0060ac",
+                    "outline": "#717783",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed": "#dce3eb",
+                    "primary-fixed-dim": "#a4c9ff",
+                    "on-error-container": "#93000a",
+                    "surface": "#f8f9ff",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "secondary-fixed-dim": "#c0c7cf",
+                    "primary": "#005da7",
+                    "on-surface": "#0f1c2d",
+                    "inverse-primary": "#a4c9ff",
+                    "outline-variant": "#c1c7d3",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#737575",
+                    "on-primary-fixed-variant": "#004883",
+                    "inverse-surface": "#243143",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "on-background": "#0f1c2d",
+                    "on-secondary-fixed-variant": "#40484e",
+                    "on-primary-fixed": "#001c39",
+                    "background": "#f8f9ff",
+                    "tertiary": "#5a5c5c",
+                    "secondary-container": "#dce3eb",
+                    "on-surface-variant": "#414751",
+                    "surface-dim": "#cddbf2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "unit": "4px",
+                    "max-width": "1280px",
+                    "margin-desktop": "64px",
+                    "xxl": "80px",
+                    "xl": "48px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-xl": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-lg py-sm">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed-dim tracking-tight">Traveloop</span>
+<nav class="hidden md:flex gap-md ml-xl">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 px-md py-xs rounded-xl" href="#">Home</a>
+<a class="text-primary font-bold border-b-2 border-primary hover:bg-surface-container-low transition-colors duration-200 px-md py-xs" href="#">Trips</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 px-md py-xs rounded-xl" href="#">Profile</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="clay-inset bg-surface-container-low px-md py-xs rounded-full flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary scale-75">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-48" placeholder="Search destinations..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-xs rounded-full transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User avatar" data-alt="A professional headshot of a smiling man with a neutral background, styled in a clean, modern aesthetic with soft lighting and high clarity to match a luxury tech interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0-HO1XSppt3LFjUSVFtk131WZNK0U9ndwll-ixYbxMV1lYsCSX-nZaMkFUm1XB-pd9KtJ0WgK_7cJ9UuAfkRmQZu_yhGsSme7lWiHHEk0VeHNh22d45WVFA6rH2OaP3Vq6InDFDkCVhc2gDyQYCLQQofwaLMnUfI6RgNiNcv0tARnFD9mI7-8jMH_dJoC6oCtiHvcF59m-6jNL_U7Kk0JAIHefvdc20SyTjWxZT1WJEagU-4UFBa2wk0WThQmY9XnRVk1qM6KTUA0"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface dark:bg-surface-dim border-r border-outline-variant/20 shadow-xl flex flex-col p-md gap-sm z-40 pt-24 hidden lg:flex">
+<div class="flex items-center gap-md mb-lg px-md">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+</div>
+<div>
+<h2 class="font-headline-md text-label-md font-bold text-primary">Traveloop</h2>
+<p class="text-label-sm text-on-surface-variant">Elite Planning</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs">
+<a class="flex items-center gap-md p-md text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md">Home</span>
+</a>
+<a class="flex items-center gap-md p-md bg-primary-container text-on-primary-container rounded-xl shadow-inner hover:translate-x-1 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md">Trips</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-md">Create</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md">Profile</span>
+</a>
+<div class="mt-auto">
+<a class="flex items-center gap-md p-md text-on-surface-variant hover:bg-surface-container-high rounded-xl hover:translate-x-1 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 min-h-screen px-margin-mobile md:px-margin-desktop pb-xxl">
+<!-- Dashboard Header -->
+<div class="max-w-max-width mx-auto mb-xl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-lg">
+<div>
+<nav class="flex items-center gap-sm text-label-sm text-on-surface-variant mb-sm">
+<span>My Trips</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Paris Getaway</span>
+</nav>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Paris Summer Itinerary</h1>
+<p class="text-body-md text-on-surface-variant mt-xs">June 14 - June 21, 2024 • 2 Guests</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="clay-card px-lg py-md flex items-center gap-sm text-primary font-bold hover:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">share</span>
+<span>Share Trip</span>
+</button>
+<button class="bg-primary text-on-primary px-lg py-md rounded-xl font-bold flex items-center gap-sm shadow-lg hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">publish</span>
+<span>Export PDF</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Itinerary Builder Grid -->
+<div class="max-w-max-width mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Side: Timeline (7 Columns) -->
+<div class="lg:col-span-7 space-y-lg">
+<!-- Day Selector -->
+<div class="clay-card p-md flex items-center gap-md overflow-x-auto no-scrollbar">
+<button class="flex-shrink-0 px-lg py-sm bg-primary-container text-on-primary-container rounded-full font-bold shadow-inner">Day 1</button>
+<button class="flex-shrink-0 px-lg py-sm text-on-surface-variant hover:bg-surface-container-low rounded-full font-medium transition-colors">Day 2</button>
+<button class="flex-shrink-0 px-lg py-sm text-on-surface-variant hover:bg-surface-container-low rounded-full font-medium transition-colors">Day 3</button>
+<button class="flex-shrink-0 px-lg py-sm text-on-surface-variant hover:bg-surface-container-low rounded-full font-medium transition-colors">Day 4</button>
+<button class="flex-shrink-0 px-lg py-sm text-on-surface-variant hover:bg-surface-container-low rounded-full font-medium transition-colors">Day 5</button>
+<button class="flex-shrink-0 p-xs text-primary hover:bg-primary-fixed rounded-full transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<!-- Timeline View -->
+<div class="clay-card p-xl clay-surface">
+<div class="relative space-y-xl">
+<!-- Timeline Vertical Line -->
+<div class="absolute left-[23px] top-4 bottom-4 w-1 bg-surface-container-highest rounded-full"></div>
+<!-- Activity Item 1 -->
+<div class="relative flex gap-xl group">
+<div class="relative z-10 w-12 h-12 rounded-full bg-white border-4 border-surface-container-highest flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">breakfast_dining</span>
+</div>
+<div class="flex-1 clay-card p-lg flex items-start gap-md hover:-translate-y-1 transition-transform cursor-grab">
+<div class="flex-1">
+<div class="flex items-center justify-between mb-xs">
+<span class="text-label-sm text-primary font-bold">09:00 AM</span>
+<div class="flex gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-xs hover:bg-error-container hover:text-error rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<h3 class="font-headline-md text-body-lg font-bold">Breakfast at Café de Flore</h3>
+<p class="text-body-md text-on-surface-variant">Iconic spot for coffee and croissants. Reservations not required but recommended for outdoor seating.</p>
+<div class="mt-md flex gap-sm">
+<span class="px-sm py-xs bg-surface-container-low text-primary text-label-sm rounded-full">Dining</span>
+<span class="px-sm py-xs bg-surface-container-low text-primary text-label-sm rounded-full">Saint-Germain</span>
+</div>
+</div>
+<div class="w-24 h-24 rounded-xl overflow-hidden shadow-inner">
+<img alt="Cafe in Paris" data-alt="A classic Parisian cafe corner with wicker chairs and small round tables under a striped awning, bathed in soft morning sunlight. The scene is elegant and inviting, using a palette of creams, blacks, and subtle greens, perfectly capturing a high-end luxury travel aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpZl_E33-ucGu_ZqeHhIiB5EdqRwMcRA00LotVDhisXrD_ffgkLw8-XkyLBqmdehusNi7l2OrIvkI2u_m9Te1BbeH5q1E9dIcpvb1BkMlOWERRb8ru7LWZYlEJJxDdr-FjF26uPR9p0PqpT5Lr4EM1N3aV6faRpDMvaGwsGM35MU7S11LhyGZprK_-BH2q7r9wbKf6Ur4eLoCCyBoqplWTi9xPDK_oZM37gUccqFBP9uapww8GiGPbEaH-rwD2id3hNtEwdey6xt6V"/>
+</div>
+</div>
+</div>
+<!-- Activity Item 2 (In Transit) -->
+<div class="relative flex gap-xl">
+<div class="relative z-10 w-12 h-12 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">directions_walk</span>
+</div>
+<div class="flex-1 py-xs">
+<div class="bg-surface-container-low/50 border border-dashed border-outline-variant rounded-xl p-md flex items-center justify-between">
+<span class="text-label-md text-on-surface-variant italic">15 min walk to Musée d'Orsay</span>
+<span class="text-label-sm text-on-surface-variant">0.8 km</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="relative flex gap-xl group">
+<div class="relative z-10 w-12 h-12 rounded-full bg-white border-4 border-surface-container-highest flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">museum</span>
+</div>
+<div class="flex-1 clay-card p-lg flex items-start gap-md hover:-translate-y-1 transition-transform cursor-grab">
+<div class="flex-1">
+<div class="flex items-center justify-between mb-xs">
+<span class="text-label-sm text-primary font-bold">11:00 AM</span>
+<div class="flex gap-xs opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-surface-container rounded-full text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">drag_indicator</span></button>
+</div>
+</div>
+<h3 class="font-headline-md text-body-lg font-bold">Musée d'Orsay Tour</h3>
+<p class="text-body-md text-on-surface-variant">Guided private tour focus on Impressionist masterpieces. Meet at the clock tower on the 5th floor.</p>
+<div class="mt-md flex gap-sm">
+<span class="px-sm py-xs bg-surface-container-low text-primary text-label-sm rounded-full">Culture</span>
+<span class="px-sm py-xs bg-surface-container-low text-primary text-label-sm rounded-full">Confirmed</span>
+</div>
+</div>
+<div class="w-24 h-24 rounded-xl overflow-hidden shadow-inner">
+<img alt="Musée d'Orsay" data-alt="The grand interior of the Musée d'Orsay in Paris, highlighting the massive gold-rimmed clock and the high vaulted ceilings of the former train station. Soft architectural lighting emphasizes the grandeur and historical significance of the space, rendered in a sophisticated, airy light-mode style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcSVRQS3fI4QUNIHGkt58sydr6Ba4aRWwKstIkv-8umB82hRgB2kCQ2qWR8gKdCyfWqNO1C1uvYJvXYYCCrdagFR7j2-TYPWqVveFE4U3yOSUJ2ZZ58GL2nH_C2fxFowsccZDb2C0ASJ8A-YR7HZRH7gp1SPVUwYYTVPjpoTI8V_ZiLWsCpKYFT3yZjwws8J5JjddRXQcPP_lZ8E6fS9NkW1g8uE_yjUBnyIvc5C7zru1Ns18cvBP8gSFKKnFBswQEHoQ06NgUxgYu"/>
+</div>
+</div>
+</div>
+<!-- Add Activity Placeholder -->
+<div class="relative flex gap-xl">
+<div class="relative z-10 w-12 h-12 rounded-full bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">add</span>
+</div>
+<button class="flex-1 border-2 border-dashed border-outline-variant rounded-2xl p-xl text-on-surface-variant hover:bg-surface-container-low transition-colors font-medium">
+                                Add an activity for the afternoon
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Suggestions & Map (5 Columns) -->
+<div class="lg:col-span-5 space-y-lg">
+<!-- Map Preview -->
+<div class="clay-card overflow-hidden h-[300px] relative">
+<img alt="Paris Map" class="w-full h-full object-cover grayscale-[0.5] opacity-80" data-location="Paris" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1jH7UmmGuGUWpFyIeRVqfBJvXW1k4PqugYSB4429F8BCtVrsgH5tNoaK7ndrnGwS_yEQC8A-Xz68MbZNVqT5Tdx2jzoUXQKu99L95sqsJYD4GAzfGonn_4WoXeJLcvg218fkAC9XBr9XXWg0QM3Ie-RdlZEiWdM5QReTnIuZFPgjPYHkZ4XLpp7YZNvdqZPABCPYR1YKpA7Gm_de6FqnY3x4sCvW2-NDuP86BKFhJ5ylheJ5AxwapdBn09DYJScpL1mN3ZSlnD6fx"/>
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<div class="absolute top-md left-md clay-card px-md py-xs flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="text-label-md font-bold">Paris, France</span>
+</div>
+<button class="absolute bottom-md right-md bg-white p-sm rounded-full shadow-lg text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">fullscreen</span>
+</button>
+<!-- Simulated Pins -->
+<div class="absolute top-1/2 left-1/3 w-8 h-8 -mt-4 -ml-4 bg-primary text-on-primary rounded-full border-4 border-white flex items-center justify-center shadow-xl">
+<span class="font-bold text-[12px]">1</span>
+</div>
+<div class="absolute top-1/4 right-1/4 w-8 h-8 -mt-4 -ml-4 bg-primary text-on-primary rounded-full border-4 border-white flex items-center justify-center shadow-xl">
+<span class="font-bold text-[12px]">2</span>
+</div>
+</div>
+<!-- AI Suggestions Section -->
+<div class="clay-card p-xl">
+<div class="flex items-center justify-between mb-lg">
+<h2 class="font-headline-md text-headline-md">Smart Suggestions</h2>
+<span class="material-symbols-outlined text-primary" data-weight="fill">auto_awesome</span>
+</div>
+<div class="space-y-md">
+<!-- Suggestion Card 1 -->
+<div class="p-md bg-surface-container-low rounded-xl border border-white hover:shadow-md transition-all group">
+<div class="flex gap-md">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Eiffel Tower" data-alt="A low-angle shot of the Eiffel Tower framed by lush green trees against a clear blue sky. The lighting is crisp and bright, reflecting a vibrant summer day in Paris, styled with a high-end travel photography aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9tzPX7wSovVcdFkd1J3fHMp4W-UASYyQZi6XDDqtVwPdgmMbW_-HwigqUBX7Xshe23-NSYfrIfu1ro0a6xUKvB4v1xR6rqeOFHQ2h967d-8VSTcegq9ytHtHlStrSXHQNy-n9EnDhF0BEGp1UZQ2z6NR9jnieRAwhf5dIfdUhlsqvACZ8xFmJ1NOrSG28qSgrS_HfBvcFM0Oasl7Au05QsAxpuEwjFQOG8I0O5909jsbRVSQJafY1CIEI2CvDDBK0o9y4CA7U61E7"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-label-md">Seine River Sunset Cruise</h4>
+<p class="text-label-sm text-on-surface-variant line-clamp-1">Fits perfectly after your museum tour</p>
+<div class="mt-xs flex items-center justify-between">
+<span class="text-primary text-label-sm font-bold">€35 / person</span>
+<button class="bg-white text-primary px-sm py-1 rounded-full text-label-sm font-bold border border-primary/20 shadow-sm hover:bg-primary hover:text-on-primary transition-colors">Add</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Suggestion Card 2 -->
+<div class="p-md bg-surface-container-low rounded-xl border border-white hover:shadow-md transition-all group">
+<div class="flex gap-md">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Paris Street" data-alt="A charming cobblestone street in Montmartre with vibrant flower boxes and vintage storefronts. The atmosphere is romantic and nostalgic, captured with soft lighting and pastel tones to match a luxury lifestyle brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVso7R5-CjdM9wuXGmMg8rW7kHb52gZMle5mRWncdgw-xoywLafLB6hHTgm1Pc-cEWabGYYjG5uvKW2CeDyW_RvDDmSd27m6XsVPHHy_yc5wPYxxdWmye5yqUadL9gLQwR3wHidDzPKWuCYP0jxHo23jvGqZ7ZxtxMrx0IZW5sJXjx2UQ8FK1DbyY8l48UudLUWuehD3HvY7y4-UEJ2fEWSOcnUlDIIWxGWOyulFEpg4nUzHFX2lz3uajjqwSRqI8_ZLQ5-i7A5_z7"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-label-md">Montmartre Walking Tour</h4>
+<p class="text-label-sm text-on-surface-variant line-clamp-1">Highly rated for first-time visitors</p>
+<div class="mt-xs flex items-center justify-between">
+<span class="text-primary text-label-sm font-bold">€25 / person</span>
+<button class="bg-white text-primary px-sm py-1 rounded-full text-label-sm font-bold border border-primary/20 shadow-sm hover:bg-primary hover:text-on-primary transition-colors">Add</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-lg py-md border-2 border-primary/10 text-primary rounded-xl font-bold hover:bg-primary/5 transition-colors">
+                        View more recommendations
+                    </button>
+</div>
+<!-- Weather Card -->
+<div class="clay-card p-xl bg-gradient-to-br from-primary-container to-primary text-on-primary-container">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-label-md opacity-90">Current Weather in Paris</p>
+<h3 class="text-[32px] font-bold leading-tight mt-xs">24°C</h3>
+<p class="text-label-md font-medium">Partly Cloudy • High 26°C</p>
+</div>
+<span class="material-symbols-outlined text-[48px]" data-weight="fill">partly_cloudy_day</span>
+</div>
+<div class="mt-lg pt-lg border-t border-white/20 flex justify-between">
+<div class="text-center">
+<p class="text-label-sm opacity-80">Humidity</p>
+<p class="font-bold">45%</p>
+</div>
+<div class="text-center">
+<p class="text-label-sm opacity-80">Wind</p>
+<p class="font-bold">12km/h</p>
+</div>
+<div class="text-center">
+<p class="text-label-sm opacity-80">UV Index</p>
+<p class="font-bold">Moderate</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-lg right-lg w-16 h-16 bg-primary text-on-primary rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</body></html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Traveloop | Trip Notes &amp; Journal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .clay-card {
+            background: linear-gradient(145deg, #ffffff, #f8fafd);
+            box-shadow: 0 20px 40px rgba(0, 96, 172, 0.08), 
+                        inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .clay-input {
+            background: #eff4ff;
+            box-shadow: inset 2px 2px 6px rgba(0, 96, 172, 0.06);
+            border: none;
+        }
+        .clay-button-primary {
+            background: #005da7;
+            box-shadow: 0 4px 12px rgba(0, 96, 172, 0.2),
+                        inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8f9ff;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#d6e3fb",
+                      "primary-container": "#2976c7",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-secondary-fixed": "#151c22",
+                      "secondary": "#585f66",
+                      "on-primary-container": "#fdfcff",
+                      "error": "#ba1a1a",
+                      "surface-container": "#e6eeff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#5e656c",
+                      "on-tertiary-container": "#fcfcfc",
+                      "tertiary-fixed": "#e2e2e2",
+                      "primary-fixed": "#d4e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#d6e3fb",
+                      "surface-tint": "#0060ac",
+                      "outline": "#717783",
+                      "surface-bright": "#f8f9ff",
+                      "secondary-fixed": "#dce3eb",
+                      "primary-fixed-dim": "#a4c9ff",
+                      "on-error-container": "#93000a",
+                      "surface": "#f8f9ff",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "secondary-fixed-dim": "#c0c7cf",
+                      "primary": "#005da7",
+                      "on-surface": "#0f1c2d",
+                      "inverse-primary": "#a4c9ff",
+                      "outline-variant": "#c1c7d3",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#737575",
+                      "on-primary-fixed-variant": "#004883",
+                      "inverse-surface": "#243143",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "on-background": "#0f1c2d",
+                      "on-secondary-fixed-variant": "#40484e",
+                      "on-primary-fixed": "#001c39",
+                      "background": "#f8f9ff",
+                      "tertiary": "#5a5c5c",
+                      "secondary-container": "#dce3eb",
+                      "on-surface-variant": "#414751",
+                      "surface-dim": "#cddbf2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "unit": "4px",
+                      "max-width": "1280px",
+                      "margin-desktop": "64px",
+                      "xxl": "80px",
+                      "xl": "48px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "body-md": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-lg py-sm">
+<div class="flex items-center gap-md">
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Traveloop</h1>
+<div class="hidden md:flex gap-md ml-xl">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 px-md py-xs rounded-xl" href="#">Home</a>
+<a class="text-primary font-bold border-b-2 border-primary px-md py-xs" href="#">Trips</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-200 px-md py-xs rounded-xl" href="#">Explore</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User avatar" data-alt="A professional headshot of a smiling man with a warm, approachable expression. He is set against a clean, soft-focus architectural background that hints at a modern office space. The lighting is soft and natural, emphasizing high-key tones consistent with a premium travel application's light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOp0mt6JGc5hH2moEPuhlxMcgFt1bMImZ3zEXKoScl82Ktl5o-RdJZ9HxtLua9_LB4kbhAqiX_G-iH0jzU8bXhY36bmrLAgUGRaIGGPcs1_IamS_nZf-3RaHz3IwI1ajcjUvq92PZfR6EG_fr-hU23q1uAPkr8zZxM344ctGbeUrvnP7C9bLGYhbi1BpDmfvopYVtaEtbvUasMyPcEBOuC368pvhiYzIl0zrBQuSpJskNuBKh6YbukFPFt-hrDp1G6G6Tb78RmqSg9"/>
+</div>
+</div>
+</header>
+<main class="pt-[72px] h-screen flex overflow-hidden">
+<!-- Left Sidebar: Entry History -->
+<aside class="w-80 flex-shrink-0 bg-surface border-r border-outline-variant/20 flex flex-col p-md gap-md overflow-y-auto">
+<div class="flex items-center justify-between px-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface">Journals</h2>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container clay-button-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="space-y-sm">
+<!-- Search Recessed Input -->
+<div class="clay-input flex items-center px-md py-sm rounded-xl gap-sm mb-lg">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-full" placeholder="Search memories..." type="text"/>
+</div>
+<!-- Active Journal Entry Card -->
+<div class="clay-card p-md rounded-xl cursor-pointer border-primary/20 bg-primary-container/5">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-sm font-label-sm text-primary uppercase tracking-wider">Today</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface mb-xs">Sunset at Santorini Cliffs</h3>
+<p class="text-label-sm text-on-surface-variant line-clamp-2">The light was hitting the white walls perfectly as the sun dipped below the horizon...</p>
+</div>
+<!-- Past Entry Card -->
+<div class="hover:bg-surface-container-high transition-all duration-300 p-md rounded-xl cursor-pointer group">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Oct 14, 2023</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors mb-xs">Athens Market Breakfast</h3>
+<p class="text-label-sm text-on-surface-variant line-clamp-2">The smell of fresh herbs and roasting coffee beans filled the narrow streets early this morning...</p>
+</div>
+<!-- Past Entry Card -->
+<div class="hover:bg-surface-container-high transition-all duration-300 p-md rounded-xl cursor-pointer group">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-sm font-label-sm text-outline uppercase tracking-wider">Oct 12, 2023</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors mb-xs">Lost in Plaka District</h3>
+<p class="text-label-sm text-on-surface-variant line-clamp-2">Walking through the winding blue and white streets felt like a dream. Found a small cat...</p>
+</div>
+</div>
+</aside>
+<!-- Main Area: Rich Text Editing -->
+<section class="flex-1 bg-surface-container-lowest overflow-y-auto px-xxl py-xl">
+<div class="max-w-3xl mx-auto space-y-xl">
+<!-- Editor Header -->
+<div class="space-y-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="text-label-md font-label-md text-primary">Oia, Santorini, Greece</span>
+</div>
+<h2 class="text-headline-xl font-headline-xl text-on-surface">Sunset at Santorini Cliffs</h2>
+<div class="flex items-center gap-md border-y border-outline-variant/30 py-sm">
+<button class="p-sm hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined">format_bold</span></button>
+<button class="p-sm hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined">format_italic</span></button>
+<button class="p-sm hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined">format_list_bulleted</span></button>
+<button class="p-sm hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined">image</span></button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<button class="p-sm hover:bg-surface-container rounded-lg transition-colors"><span class="material-symbols-outlined">share</span></button>
+</div>
+</div>
+<!-- Writing Canvas -->
+<article class="prose prose-slate max-w-none">
+<p class="text-body-lg font-body-lg text-on-surface leading-relaxed">
+                        There's a specific kind of quiet that settles over Oia just before the tourist crowds gasp in unison. Standing on the edge of the volcanic caldera, the wind carries the faint scent of salt and grilled octopus from the tavernas below. 
+                    </p>
+<p class="text-body-lg font-body-lg text-on-surface leading-relaxed mt-lg">
+                        The architecture here feels like it was poured into place—smooth, white-washed clay that catches the light like a soft pearl. We found a small corner near the old windmill where the path narrows. It's the perfect vantage point. As the sun began its final descent, the blue domes of the churches turned a deep sapphire, contrasting against the orange-pink sky.
+                    </p>
+<div class="my-xl clay-card rounded-2xl overflow-hidden aspect-[16/9]">
+<img alt="Santorini Sunset" class="w-full h-full object-cover" data-alt="A breathtaking wide-angle shot of the Oia cliffs in Santorini during the golden hour. The iconic white-washed buildings with blue domes are bathed in soft, warm sunlight, creating high-contrast shadows. The Aegean Sea stretches into the horizon under a gradient sky of soft orange and pastel purple. The overall mood is peaceful, luxurious, and serene, mirroring the Professional Clay aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG4CawvVkqmPHGj-E5ErUxTtMG-bBdiRBFGIRcJVqRPRylC86gkfr62eEVBgWJJa7nEADS5fnT1W2Y3wxTKePapJVCzuGSjB9SRyjBL1L39iCmCjWfHaxU8ubYNnr7vgXbyt_1az1zDMiW-eTw1W_nf4H7rOsYZbOm4po2zBhWlz_SVD1pujFc0-zvkWHz1FSjgUwzGLYQNNErxLhQskt2mmSH1xS7feLEUTqjyZTYaXP-6ioPoi9cvb7UAtWHM6LszFsu0G2Fsxci"/>
+</div>
+<p class="text-body-lg font-body-lg text-on-surface leading-relaxed mt-lg italic text-secondary">
+                        "Travel is the only thing you buy that makes you richer." - I felt that today. Every step up those stone stairs was a reminder of why we plan these trips. Tomorrow we head to the hidden coves by boat.
+                    </p>
+</article>
+</div>
+</section>
+<!-- Right Sidebar: Tags and Photos -->
+<aside class="w-80 flex-shrink-0 bg-surface border-l border-outline-variant/20 flex flex-col p-md gap-xl overflow-y-auto">
+<!-- Tags Section -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">sell</span> Categories
+                </h3>
+<div class="flex flex-wrap gap-sm">
+<span class="px-md py-xs rounded-full bg-surface-container-low text-primary text-label-sm font-label-md border border-primary/10">#LuxuryTravel</span>
+<span class="px-md py-xs rounded-full bg-surface-container-low text-primary text-label-sm font-label-md border border-primary/10">#Santorini</span>
+<span class="px-md py-xs rounded-full bg-surface-container-low text-primary text-label-sm font-label-md border border-primary/10">#Sunset</span>
+<span class="px-md py-xs rounded-full bg-surface-container-low text-primary text-label-sm font-label-md border border-primary/10">#Architecture</span>
+<button class="w-8 h-8 rounded-full border border-dashed border-outline flex items-center justify-center text-outline hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</section>
+<!-- Quick Photos Grid -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-label-md text-label-md text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">photo_library</span> Gallery
+                    </h3>
+<button class="text-primary text-label-sm font-label-md">View All</button>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="aspect-square rounded-xl overflow-hidden clay-card group relative">
+<img alt="Italy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A close-up shot of a rustic Italian balcony adorned with vibrant pink flowers, overlooking a narrow cobblestone street. The lighting is bright and cheerful, capturing the essence of a warm summer morning. The colors are saturated yet natural, fitting the airy and premium minimalist style of the Traveloop brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKYwrdsa7XSsLJjWpiPoVd5ncRZCImXIIikqDYHgv6M8SaRXq18F-b2VVMzhBiWUhTlz_NwmEL--qUgQxMSNfNngGwLOUn4fgIHr__CaCkD6blq0sV9HBh_jTlP7qf4XKgidEQURk2cR3Y7shyfDdwEUqMKxnHGRKjDztTA5irJ2xXZ9LOEpJEr19lrnuMeqV9NPWVmnnmnX5509yVfPLvKZ6BLjUt8cFNC5OJSIN-U9unQdrFqdkzhiRd9EbrfQtJaRVO54ECRqB_"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">fullscreen</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden clay-card group relative">
+<img alt="Venice" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A serene view of a Venetian canal with a single gondola floating peacefully. The historic buildings lining the water are painted in soft terracotta and ochre tones, reflecting beautifully in the calm green water. The scene is illuminated by the soft light of early morning, creating a dreamy and aspirational atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADiZllNcVmaYjFCdRB0uq2PYBhPRbVYgGjxJKzadZlatlc4bK8qLzRBz_RNb4T4c65EC6RG_dAnOOES1p6ijrxeZYQPTOdxiLdZZYRCr3kYoXZSBSYGHicvA8hXfIpB_O_tsHRQOLR3ex20wb0lHn6GXW9bn5cKmSC-F8060nvCOhddxnPrrPeQJvrrL95884-n4RqMtQa7TkAdG1vv9-f1PwM_HxhoSXq5kFFM2hBJGQibDUtfsGo2v-wdrrfEkIqCDVh4I-Z9qdS"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">fullscreen</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden clay-card group relative">
+<img alt="Mountains" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A majestic mountain range with snow-capped peaks under a clear, crisp blue sky. In the foreground, a lush green alpine meadow is dotted with tiny wildflowers. The lighting is sharp and clear, emphasizing the vastness and purity of the natural landscape, consistent with a high-end architectural model aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4HNZW5Og5aqYZ7HzsC5jwK_OKj8LU_fy_88vbjCO8iqrJG7TXpOcbJk58tNZ_ejz_Ln3wof4UQGogPbuieyBWgPiZuXk3DqJ946pC8z5sHl6M8mTJj0wjDC7ASD1zUxTGWmWBuL7P2SDn98uDWvm5qzkUakVJS_rAQ4fyqsuytVrFkGxwp9EmrpyY92A6CqddqxgRXwx1c4TalQxA4azJAY6EXMxf0l7wz81b7PXhFz4uQuLjSNPzhNNN7DOJcAbh2PqVVS8EFw3C"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">fullscreen</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl border-2 border-dashed border-outline-variant flex flex-col items-center justify-center gap-xs text-outline-variant hover:text-primary hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined">add_a_photo</span>
+<span class="text-label-sm">Add</span>
+</div>
+</div>
+</section>
+<!-- Travel Stats Bento -->
+<section class="clay-card p-md rounded-2xl space-y-md">
+<h3 class="font-label-md text-label-md text-on-surface">Trip Metadata</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-low p-sm rounded-xl">
+<span class="text-label-sm text-outline block">Distance</span>
+<span class="font-bold text-primary">12.4 km</span>
+</div>
+<div class="bg-surface-container-low p-sm rounded-xl">
+<span class="text-label-sm text-outline block">Steps</span>
+<span class="font-bold text-primary">18,430</span>
+</div>
+</div>
+<div class="flex items-center gap-md pt-sm">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-[10px] text-white">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-secondary flex items-center justify-center text-[10px] text-white">AS</div>
+</div>
+<span class="text-label-sm text-on-surface-variant">Shared with 2 others</span>
+</div>
+</section>
+</aside>
+</main>
+<!-- FAB Action (Suppressed on details, but keeping for journal creation intent) -->
+<button class="fixed bottom-lg right-lg w-14 h-14 rounded-2xl clay-button-primary text-on-primary flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">edit_square</span>
+</button>
+</body></html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Traveloop - Create Your Journey</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .clay-surface {
+            background: linear-gradient(145deg, #ffffff, #f8fafd);
+            box-shadow: 
+                0 10px 30px rgba(0, 93, 167, 0.05),
+                0 4px 8px rgba(0, 93, 167, 0.02);
+            position: relative;
+        }
+        .clay-surface::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .clay-inset {
+            background: #f1f5f9;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05), inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+        .clay-button-primary {
+            background: #005da7;
+            box-shadow: 
+                0 4px 12px rgba(0, 93, 167, 0.2),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+        .clay-button-primary:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 4px rgba(0, 93, 167, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#d6e3fb",
+                      "primary-container": "#2976c7",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-secondary-fixed": "#151c22",
+                      "secondary": "#585f66",
+                      "on-primary-container": "#fdfcff",
+                      "error": "#ba1a1a",
+                      "surface-container": "#e6eeff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container-low": "#eff4ff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#5e656c",
+                      "on-tertiary-container": "#fcfcfc",
+                      "tertiary-fixed": "#e2e2e2",
+                      "primary-fixed": "#d4e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#d6e3fb",
+                      "surface-tint": "#0060ac",
+                      "outline": "#717783",
+                      "surface-bright": "#f8f9ff",
+                      "secondary-fixed": "#dce3eb",
+                      "primary-fixed-dim": "#a4c9ff",
+                      "on-error-container": "#93000a",
+                      "surface": "#f8f9ff",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "secondary-fixed-dim": "#c0c7cf",
+                      "primary": "#005da7",
+                      "on-surface": "#0f1c2d",
+                      "inverse-primary": "#a4c9ff",
+                      "outline-variant": "#c1c7d3",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#737575",
+                      "on-primary-fixed-variant": "#004883",
+                      "inverse-surface": "#243143",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "on-background": "#0f1c2d",
+                      "on-secondary-fixed-variant": "#40484e",
+                      "on-primary-fixed": "#001c39",
+                      "background": "#f8f9ff",
+                      "tertiary": "#5a5c5c",
+                      "secondary-container": "#dce3eb",
+                      "on-surface-variant": "#414751",
+                      "surface-dim": "#cddbf2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "unit": "4px",
+                      "max-width": "1280px",
+                      "margin-desktop": "64px",
+                      "xxl": "80px",
+                      "xl": "48px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "body-md": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "label-sm": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 glass-nav bg-surface/80 border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-lg py-sm">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Traveloop</span>
+</div>
+<div class="hidden md:flex items-center gap-xl">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low px-md py-xs rounded-xl transition-colors duration-200" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low px-md py-xs rounded-xl transition-colors duration-200" href="#">Trips</a>
+<a class="text-primary font-bold border-b-2 border-primary px-md py-xs" href="#">Create</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low px-md py-xs rounded-xl transition-colors duration-200" href="#">Profile</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-sm rounded-full transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full overflow-hidden clay-surface border-2 border-white">
+<img alt="User avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_BwR97J-ch-YEFGx2R8N86xjQpxyhM-YgPNwYS9EI9B4RZoLI1WcIv8kRCYZQFW_rZm8hi5wKnt9s4feXvXr1TuYkyRDfX4RDpkHx_cvDcjfSVE8J_CrfRIVKtx9UZaLOsuUI0VkYtf64Ch7M05TtV4Zad99BA5XiK5N3Y9BLcCbaMEIwnnV6v9tJIiexvY5s7CP04skWJ7xHHvlzBYOh7ELutCZWAJpWm2sWT_nVoCyVdMs3afETPLs4YnbrNI2vfLhlqQthO6HK"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-xxl px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto">
+<!-- Header Section -->
+<div class="mb-xl text-center md:text-left">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-sm">Start Your Next Adventure</h1>
+<p class="text-body-lg text-on-surface-variant max-w-2xl">Design a bespoke itinerary tailored to your travel style. Every detail crafted for perfection.</p>
+</div>
+<!-- Multi-Step Content Flow -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Form Steps -->
+<div class="lg:col-span-8 space-y-lg">
+<!-- Step 1: Destination & Mood -->
+<section class="clay-surface rounded-3xl p-xl">
+<div class="flex items-center gap-md mb-lg">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">1</div>
+<h2 class="font-headline-md text-headline-md">Where and how?</h2>
+</div>
+<div class="space-y-lg">
+<!-- Destination Search -->
+<div class="relative group">
+<label class="font-label-md text-on-surface-variant mb-xs block">Destination City</label>
+<div class="clay-inset rounded-2xl flex items-center px-md py-sm group-focus-within:ring-2 ring-primary transition-all">
+<span class="material-symbols-outlined text-primary mr-sm">location_on</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-md font-medium text-on-surface placeholder:text-outline" placeholder="e.g. Santorini, Greece" type="text"/>
+</div>
+</div>
+<!-- Trip Categories -->
+<div>
+<label class="font-label-md text-on-surface-variant mb-md block">Trip Type &amp; Vibe</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-md">
+<button class="clay-surface rounded-2xl p-md flex flex-col items-center gap-sm border-2 border-primary bg-surface-container-low transition-transform active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl">beach_access</span>
+<span class="font-label-md">Beach</span>
+</button>
+<button class="clay-surface rounded-2xl p-md flex flex-col items-center gap-sm hover:translate-y-[-4px] transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">apartment</span>
+<span class="font-label-md">City</span>
+</button>
+<button class="clay-surface rounded-2xl p-md flex flex-col items-center gap-sm hover:translate-y-[-4px] transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">terrain</span>
+<span class="font-label-md">Mountain</span>
+</button>
+<button class="clay-surface rounded-2xl p-md flex flex-col items-center gap-sm hover:translate-y-[-4px] transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">spa</span>
+<span class="font-label-md">Wellness</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 2: Date Selection -->
+<section class="clay-surface rounded-3xl p-xl">
+<div class="flex items-center gap-md mb-lg">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+<h2 class="font-headline-md text-headline-md">Set the dates</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="clay-inset rounded-2xl p-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<div>
+<p class="text-label-sm text-on-surface-variant">Check-in</p>
+<p class="font-label-md">Sep 12, 2024</p>
+</div>
+</div>
+<div class="clay-inset rounded-2xl p-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+<div>
+<p class="text-label-sm text-on-surface-variant">Check-out</p>
+<p class="font-label-md">Sep 19, 2024</p>
+</div>
+</div>
+</div>
+<div class="mt-lg p-md clay-inset rounded-2xl">
+<div class="grid grid-cols-7 gap-xs text-center">
+<span class="text-label-sm text-outline">S</span><span class="text-label-sm text-outline">M</span><span class="text-label-sm text-outline">T</span><span class="text-label-sm text-outline">W</span><span class="text-label-sm text-outline">T</span><span class="text-label-sm text-outline">F</span><span class="text-label-sm text-outline">S</span>
+<!-- Placeholder Calendar Days -->
+<div class="py-sm rounded-lg text-label-md text-outline">28</div>
+<div class="py-sm rounded-lg text-label-md text-outline">29</div>
+<div class="py-sm rounded-lg text-label-md text-outline">30</div>
+<div class="py-sm rounded-lg text-label-md text-outline">31</div>
+<div class="py-sm rounded-lg text-label-md font-bold">1</div>
+<div class="py-sm rounded-lg text-label-md font-bold">2</div>
+<div class="py-sm rounded-lg text-label-md font-bold">3</div>
+<!-- Selection Range -->
+<div class="py-sm rounded-lg text-label-md font-bold">4</div>
+<div class="py-sm rounded-lg text-label-md font-bold">5</div>
+<div class="py-sm rounded-lg text-label-md font-bold">6</div>
+<div class="py-sm rounded-lg text-label-md font-bold">7</div>
+<div class="py-sm rounded-lg text-label-md font-bold">8</div>
+<div class="py-sm rounded-lg text-label-md font-bold">9</div>
+<div class="py-sm rounded-lg text-label-md font-bold">10</div>
+<div class="py-sm rounded-lg text-label-md font-bold">11</div>
+<div class="py-sm bg-primary text-white rounded-lg text-label-md font-bold shadow-md">12</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">13</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">14</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">15</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">16</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">17</div>
+<div class="py-sm bg-primary-fixed text-primary rounded-lg text-label-md font-bold">18</div>
+<div class="py-sm bg-primary text-white rounded-lg text-label-md font-bold shadow-md">19</div>
+<div class="py-sm rounded-lg text-label-md font-bold">20</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Visual Summary / Sticky Preview -->
+<div class="lg:col-span-4 lg:sticky lg:top-32 space-y-lg">
+<div class="clay-surface rounded-3xl overflow-hidden shadow-xl">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover" data-alt="A serene luxury travel destination scene featuring a crystal-clear turquoise ocean meeting a pristine white sand beach. Soft, warm sunlight glows across the water, creating a calm and peaceful atmosphere typical of an elite tropical resort. The image is captured in a high-key, airy style with subtle pastel blue and cream tones that align with a professional minimalist clay aesthetic. The horizon is sharp and clean, emphasizing a sense of endless possibility and relaxation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSGBY35s07dElfu8efPvHh3TU1n6EvB5WDjIcEWmh6E4klUK4QGJtOp8ITd_syM1vVbtueuBhFC7cfTOlpaxrO0Hkhr4RomfNIbmv9DE2yzEdGXq8paIP7ZiAT4HmGZrK1rdUXHFi-2QwAljUnZsjh7G_5F3l9AiIj838yWH_1h9yiC1xkNxUWxSZjbRrvfyMN_c_cfr9GK_vvA7SJwuGPZup1PJyZk8asOCZK6q37NlexVRAN1QXnMlRmkli9T9--By_5A13DJmnz"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+<div class="absolute bottom-md left-md">
+<span class="bg-primary/90 text-white text-label-sm px-sm py-xs rounded-full backdrop-blur-md">Featured Experience</span>
+<h3 class="text-white font-headline-md mt-xs">Coastal Escape</h3>
+</div>
+</div>
+<div class="p-xl space-y-md">
+<h4 class="font-label-md text-on-surface-variant uppercase tracking-wider">Trip Summary</h4>
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">Destination</span>
+<span class="font-bold text-primary">Santorini, GR</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">Duration</span>
+<span class="font-bold">7 Nights</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">Travelers</span>
+<span class="font-bold">2 Adults</span>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant/30">
+<div class="flex justify-between items-center mb-lg">
+<span class="font-headline-md">Est. Budget</span>
+<span class="font-headline-md text-primary">$3,240</span>
+</div>
+<button class="clay-button-primary w-full py-md rounded-2xl text-white font-bold text-lg flex items-center justify-center gap-sm">
+                                Create Itinerary
+                                <span class="material-symbols-outlined">auto_awesome</span>
+</button>
+</div>
+</div>
+</div>
+<div class="clay-surface rounded-3xl p-md flex items-center gap-md border border-primary/10">
+<div class="bg-surface-container-high p-sm rounded-xl">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<div>
+<p class="font-label-md">Elite Protection</p>
+<p class="text-label-sm text-on-surface-variant">Flexible cancellations included</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Asymmetric Bento-style Layout for Inspiration -->
+<div class="mt-xxl">
+<h2 class="font-headline-lg text-headline-lg mb-xl">Curated Destinations</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter h-[600px]">
+<div class="md:col-span-2 md:row-span-2 clay-surface rounded-3xl overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A modern architectural marvel nestled in a lush, foggy mountain landscape, showcasing sleek glass and concrete lines. The lighting is moody and overcast, creating a sense of sophisticated seclusion and architectural luxury. This visual represents an elite mountain retreat with high-contrast textures and a palette of cool grays, deep greens, and crisp whites. The aesthetic is clean and structural, mirroring a high-end travel brand's precision and style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZfyyXs86-4B8bB3f9Uko3f8QU2X2kCNjlBvJQawOdVA61s8QZB5bjx7bbisLxhioDu9c35duoOnNiLo-sHwk7WfQP3swUoHUr9CPu86Kq3iDpZZWxOxJfUMpVfzKKFessm7PSUnMGV0MU5Vfbi-4ehUQYvCG8D0rx8aYCGPoHyRmQGf-pqVNaV0Ok2eslhtIscK_dX-S9--v_fzKKzwj8pehgfcNNKUiu0Xl7Q_GC8qn8RxNEHjs1aCdzgSGvKth-lXlYoKg3x8Ln"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+<div class="absolute bottom-lg left-lg text-white">
+<p class="font-label-md mb-xs opacity-80">Nordic Getaways</p>
+<h4 class="font-headline-lg">Lofoten Islands</h4>
+</div>
+</div>
+<div class="clay-surface rounded-3xl overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A boutique hotel room in a vibrant city, featuring soft velvet textures and mid-century modern furniture. Large floor-to-ceiling windows reveal a glowing cityscape at dusk, with golden hour light spilling into the room. The color palette is rich with warm ochres, deep blues, and soft creams, conveying an atmosphere of urban elegance and high-end comfort. This scene captures the essence of a sophisticated city trip, emphasizing tactile materials and airy, breathable space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLyDTB4qC721qD8PHCpf7B04oAYqF_EEfrU6tWRWeUN01zXc2tq2djQ2jaXSTkAEbA8HzvkLXPV0O6upSI3N328MsTG5Ac7-jQ7g5ofVVL4rQYOqKIUGJdBtmKNP52BzHZHRHq8ff5Y0zPu2VKchqsErJGeSNFMTHGm-510SKOG_pO2PJfnLQsMsAqqKICFaLHrylqFU2KFyMfEYjRV5LMpaWYd6gttV2E8_P0kUzwpJl6ZrBgEQu8LlNnzke4BlggNW8TlEqK9bpf"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors"></div>
+<div class="absolute bottom-md left-md text-white">
+<h4 class="font-label-md">Paris Stays</h4>
+</div>
+</div>
+<div class="clay-surface rounded-3xl overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A luxury yacht gliding through deep azure waters under a clear summer sky, representing the pinnacle of Mediterranean travel. The composition focuses on the sleek white hull of the vessel against the vibrant, saturated blue of the sea. Natural, bright lighting highlights the textures of the water and the polished surfaces of the yacht. The overall mood is aspirational and premium, utilizing a color scheme of nautical blues, stark whites, and sun-kissed wood tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzRQlAJGb-biD45YIGcM_Wn4RvE-xDTe1vLAq6eWRWjTvJoymPY8hzvHgCm9Pg5a1dwRtOawd-IigGWaZsE6GZesx8QHwIvMZZ2hZQrqslSncE_9qM7XE6eFm6M3s6duY9iH7gChsl2W_Mpyznmmia_Kaq1WiwrUCzCLahcIpPe6K0WScI6R1uQ2rahIuf2J0v5NdGbJtAC_-MPG8dYilZJKc1Bmzp3icACIfPcpWQz10xyYZKZu2Q5Vq7-rl3QUnWXZaaCZvZpVJ3"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors"></div>
+<div class="absolute bottom-md left-md text-white">
+<h4 class="font-label-md">Private Charters</h4>
+</div>
+</div>
+<div class="md:col-span-2 clay-surface rounded-3xl overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="An infinite pool overlooking a lush jungle valley during sunrise, where the water surface perfectly reflects the orange and pink hues of the sky. The setting is one of absolute tranquility and wellness, embodying a high-end spa retreat experience. The lighting is soft and ethereal, emphasizing the mist rising from the valley below. The visual style is focused on serene minimalism, with a color palette of warm dawn tones and vibrant tropical greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkURuLC8VA3LghL6DkningLi2PD3Rd4x2LRtO3t4181mwV8NnbiY7WDgRFOQuKqcHsAx7tfW7lJcP7bd1-2r_wHh6EfmQMxrzI6kxE3PvnQZnmk2UcnBjdjx8CtvxVayQbq2LYxL21IAH4z1JeSyT-E58Fh2tHG_cZnlT8L8KIhHjbbHZo7i3CULzeKSaYU-kpAgN-MxfAOHiTsCYnJxwqwsQ18lJQn0zlDvlRDGyEPg5mEKDuwKV1IdlgpcVXrox-xPmrtUutpjSQ"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+<div class="absolute bottom-md left-md text-white">
+<h4 class="font-headline-md">Wellness Retreats</h4>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20 flex justify-around items-center py-md z-50">
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-sm">Trips</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-primary font-bold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="text-label-sm">Create</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>

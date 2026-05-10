@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fdfcff",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-container": "#dce3eb",
+                        "tertiary-fixed": "#e2e2e2",
+                        "primary-fixed-dim": "#a4c9ff",
+                        "outline-variant": "#c1c7d3",
+                        "background": "#f8f9ff",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#737575",
+                        "secondary-fixed-dim": "#c0c7cf",
+                        "outline": "#717783",
+                        "on-surface-variant": "#414751",
+                        "on-secondary-fixed-variant": "#40484e",
+                        "on-background": "#0f1c2d",
+                        "on-surface": "#0f1c2d",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#e6eeff",
+                        "primary-container": "#2976c7",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed-variant": "#004883",
+                        "surface-container-highest": "#d6e3fb",
+                        "secondary-fixed": "#dce3eb",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "inverse-surface": "#243143",
+                        "surface-tint": "#0060ac",
+                        "primary-fixed": "#d4e3ff",
+                        "on-tertiary-container": "#fcfcfc",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-dim": "#cddbf2",
+                        "tertiary": "#5a5c5c",
+                        "on-secondary-container": "#5e656c",
+                        "on-secondary-fixed": "#151c22",
+                        "on-primary-fixed": "#001c39",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d6e3fb",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "secondary": "#585f66",
+                        "primary": "#005da7",
+                        "inverse-primary": "#a4c9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "sm": "8px",
+                        "max-width": "1280px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "margin-desktop": "64px",
+                        "md": "16px",
+                        "xxl": "80px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "xl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .clay-surface {
+            background: linear-gradient(145deg, #ffffff, #f8fafd);
+            box-shadow: 
+                0 12px 24px rgba(0, 0, 0, 0.08),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+        .clay-recessed {
+            box-shadow: 
+                inset 4px 4px 12px rgba(0, 0, 0, 0.05),
+                inset -4px -4px 12px rgba(255, 255, 255, 0.8);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<header class="sticky top-0 z-50 flex items-center justify-between w-full max-w-7xl mx-auto bg-surface-container-lowest/80 backdrop-blur-xl mx-margin-mobile mt-4 rounded-lg px-6 py-4 shadow-[0_12px_24px_rgba(0,0,0,0.08)]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden clay-surface border-2 border-white">
+<img alt="User avatar" data-alt="A professional high-end headshot of a friendly man with a warm smile, set against a clean, soft-focus architectural background. The lighting is bright and airy, reflecting a luxury travel brand aesthetic. The color palette is dominated by soft whites and gentle blues, consistent with a modern, high-key light-mode user interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtA1J_kcWphCvm2a1Tv1--FXvuKk96S4DlCAyPdXIkii-eLBddGJEnPCyvGYpPvcUEqX7qVkr-uR0633E0vW-1JLaKOn9cMkqCPAl6_MAB9B4bHZ1AmznyQzWvGf-txR3lyuokzkT4EBTLALcx8WL-zY2Xpmrfgh6KMetHnibCh9C-LwlwUrk42UlRO0JwEHR1yF1FlKV4RnWOpImPOQwlxVmRGChIcvIduzpwZIkK7QTreWc65T6R8juNo4-iPVadPJDt4XI_WQoI"/>
+</div>
+<span class="font-display-lg text-primary font-extrabold text-headline-md tracking-tight">Traveloop</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl clay-surface text-primary active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile mt-8 space-y-8">
+<section>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-1">Hello, Explorer!</h1>
+<p class="font-body-md text-on-surface-variant">Your next adventure is calling.</p>
+</section>
+<section class="clay-surface rounded-3xl p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="flight_takeoff">flight_takeoff</span>
+</div>
+<div class="relative z-10">
+<span class="font-label-md text-primary bg-primary-container/20 px-3 py-1 rounded-full mb-4 inline-block uppercase tracking-widest text-[10px]">Upcoming Trip</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Tokyo, Japan</h2>
+<div class="flex items-center gap-6 mt-6">
+<div class="text-center">
+<div class="text-headline-lg font-bold text-primary">12</div>
+<div class="text-label-sm text-on-surface-variant uppercase">Days</div>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/30"></div>
+<div class="text-center">
+<div class="text-headline-lg font-bold text-primary">08</div>
+<div class="text-label-sm text-on-surface-variant uppercase">Hrs</div>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/30"></div>
+<div class="text-center">
+<div class="text-headline-lg font-bold text-primary">45</div>
+<div class="text-label-sm text-on-surface-variant uppercase">Mins</div>
+</div>
+</div>
+<button class="mt-8 w-full py-4 bg-primary text-on-primary rounded-2xl font-label-md shadow-[0_8px_16px_rgba(0,93,167,0.25)] active:scale-95 transition-all">
+                    View Itinerary
+                </button>
+</div>
+</section>
+<section class="grid grid-cols-2 gap-4">
+<div class="clay-surface rounded-3xl p-5 flex flex-col justify-between aspect-square">
+<div>
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary mb-4 clay-recessed">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h3 class="font-label-md text-on-surface-variant">Budget Status</h3>
+</div>
+<div>
+<div class="text-headline-md font-bold text-on-surface">$4,250</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[65%] rounded-full"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2">65% of $6,500 target</p>
+</div>
+</div>
+<div class="clay-surface rounded-3xl p-5 flex flex-col justify-between aspect-square">
+<div>
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary mb-4 clay-recessed">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+</div>
+<h3 class="font-label-md text-on-surface-variant">Destinations</h3>
+</div>
+<div>
+<div class="text-headline-md font-bold text-on-surface">14</div>
+<p class="text-[10px] text-on-surface-variant mt-2 uppercase tracking-tighter">Visited across 3 continents</p>
+<div class="flex -space-x-2 mt-3">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-primary-container text-[8px] flex items-center justify-center">+11</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-on-surface">Dream Destinations</h3>
+<button class="text-primary font-label-md flex items-center gap-1">
+                    See all <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="flex overflow-x-auto gap-6 pb-8 -mx-margin-mobile px-margin-mobile snap-x scrollbar-hide">
+<div class="min-w-[280px] snap-center">
+<div class="clay-surface rounded-[32px] p-2 aspect-[4/5] flex flex-col">
+<div class="flex-1 rounded-[26px] overflow-hidden relative">
+<img alt="Santorini, Greece" class="w-full h-full object-cover" data-alt="A breathtaking view of white-washed buildings and blue-domed churches in Santorini, Greece, overlooking the deep blue Aegean Sea at sunset. The lighting is warm and golden, casting long, soft shadows over the architectural details. The aesthetic is clean and luxurious, perfectly matching a premium travel platform with a high-key, airy light-mode design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl7USGSWFUA5ujCDe88IXdmK3yhDC-mlljAuDfw_mrUMF97lVVMsYSakQxT4D9jriFkbDniJNlTL-GQA-TxBGsmIkrKtQG5rHCvls2a4Mk7uGQ_Ucokcq1kdsD5KbTlcoJJCqz8XKK647Nz2rnmL2FleHJITWfBDb_0f5_BwceNp-boCT8NhH69dlqia_HjuP7twg_E1RxaDC5hhe-ePJzYYPsjfbf68Pvw5BTKAwi337DFUMOWCXusLrUoOWSmiJkX6o7t6OtEdl4"/>
+<div class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
+<span class="material-symbols-outlined" data-icon="favorite" data-weight="fill">favorite</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-on-surface text-lg">Santorini</h4>
+<p class="text-label-sm text-on-surface-variant">Greece</p>
+</div>
+<div class="text-right">
+<div class="text-primary font-bold">$1,200</div>
+<p class="text-[10px] text-on-surface-variant">Avg. flight</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="min-w-[280px] snap-center">
+<div class="clay-surface rounded-[32px] p-2 aspect-[4/5] flex flex-col">
+<div class="flex-1 rounded-[26px] overflow-hidden relative">
+<img alt="Bali, Indonesia" class="w-full h-full object-cover" data-alt="A lush, vibrant green landscape in Bali, Indonesia, featuring terraced rice fields and tropical palm trees under a bright morning sun. The air feels humid and tropical, with soft rays of light filtering through the foliage. The image maintains a pristine, high-end travel aesthetic with balanced saturation and clear, crisp details suitable for a professional UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMyDeTqoAGKnO5pnWaXZTNspqNv6PX6f8hRsVYPz9yIB5zyqv1XNr7QwA8G_8h_uGKdxWXxPkPB1mlEATtyNLY9KBny_TklkAKGEdr8U3ByVniLcxex4PgICEYiOE_Tosa55KAD4s1Nnnmm3QeN8foAqR2ffyialeG6MeGis5JnJI21wvIqt6oV3p51h2drDq_-8D1-egj_Fzb697N-sw4VQKEo5uOJzgA0BaHINq9lzv-1wzZbhJdbEzsy6MkFg_ODbx4CCWS6gtH"/>
+<div class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-md text-on-surface text-lg">Bali</h4>
+<p class="text-label-sm text-on-surface-variant">Indonesia</p>
+</div>
+<div class="text-right">
+<div class="text-primary font-bold">$950</div>
+<p class="text-[10px] text-on-surface-variant">Avg. flight</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex justify-around items-center gap-2 bg-surface-container-low/90 backdrop-blur-xl w-[92%] max-w-md rounded-full px-6 py-3 shadow-[0_20px_40px_rgba(0,96,172,0.15)] border border-white/50">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-2 shadow-[inset_4px_4px_8px_rgba(255,255,255,0.4),inset_-4px_-4px_8px_rgba(0,0,0,0.1)] scale-110" href="#">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest mt-1">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest mt-1">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 p-2 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>
