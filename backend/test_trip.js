@@ -27,14 +27,14 @@ function post(url, data, token) {
 
 async function test() {
   try {
-    const login = await post('http://localhost:5000/api/auth/login', { email: 'alex@traveloop.com', password: 'password123' });
+    const login = await post('http://localhost:5001/api/auth/login', { email: 'alex@traveloop.com', password: 'password123' });
     console.log("Login Status:", login.status);
     if (!login.body.token) {
       console.log("Login failed", login.body);
       return;
     }
 
-    const trip = await post('http://localhost:5000/api/trips', {
+    const trip = await post('http://localhost:5001/api/trips', {
       destination: 'Test City',
       startDate: '2026-06-01',
       endDate: '2026-06-10',
