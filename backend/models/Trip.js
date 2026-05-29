@@ -51,6 +51,14 @@ const tripSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
+  travelPace: {
+    type: String,
+    enum: ['slow', 'balanced', 'fast'],
+    default: 'balanced'
+  },
+  interests: [{
+    type: String
+  }],
   budgetBreakdown: {
     accommodation: { type: Number, default: 0 },
     food: { type: Number, default: 0 },
