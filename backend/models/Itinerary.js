@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
-  time: { type: String, required: true },
-  title: { type: String, required: true },
-  type: { type: String, required: true, enum: ['flight', 'activity', 'lodging', 'dining', 'attractions', 'other'] },
+  startTime: { type: String, required: true },
+  name: { type: String, required: true },
+  type: { type: String, required: true, enum: ['flight', 'activity', 'lodging', 'dining', 'attractions', 'other', 'transport', 'food', 'explore'] },
   cost: { type: Number, default: 0 },
-  location: { type: String }
+  description: { type: String },
+  duration: { type: String }
 });
 
 const itinerarySchema = new mongoose.Schema({
