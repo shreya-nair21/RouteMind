@@ -1,0 +1,8 @@
+{
+  "name": "traveloop-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx -y concurrently \"npm run dev --prefix frontend\" \"npm run server --prefix backend\""
+  }
+}
