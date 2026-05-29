@@ -28,40 +28,40 @@ const SharedTrip = () => {
     fetchSharedData();
   }, [id]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white italic font-black uppercase tracking-widest">Decoding Transmission...</div>;
-  if (!trip) return <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white italic font-black uppercase tracking-widest">Access Denied: Itinerary Private</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary italic font-bold uppercase tracking-wider">Decoding Transmission...</div>;
+  if (!trip) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary italic font-bold uppercase tracking-wider">Access Denied: Itinerary Private</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-background pb-20 selection:bg-primary/20 selection:text-primary">
       {/* Visual Banner */}
-      <div className="h-[60vh] relative overflow-hidden">
+      <div className="h-[50vh] relative overflow-hidden">
         <img 
           src={trip.image || `https://source.unsplash.com/1600x900/?${trip.destination}`} 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover grayscale opacity-90" 
           alt={trip.destination} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent"></div>
         
-        <div className="absolute top-10 left-10 md:left-20 flex items-center gap-4">
-           <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-2xl">
-              <span className="material-symbols-outlined filled">flight_takeoff</span>
+        <div className="absolute top-10 left-10 md:left-20 flex items-center gap-3">
+           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+              <span className="material-symbols-outlined text-md">flight_takeoff</span>
            </div>
-           <span className="text-2xl font-black tracking-tighter text-white italic uppercase">Traveloop</span>
+           <span className="text-lg font-black tracking-tight text-white uppercase italic">RouteMind</span>
         </div>
 
-        <div className="absolute bottom-20 left-10 md:left-20 right-10 md:right-20">
-           <p className="text-blue-400 font-black tracking-[0.4em] uppercase text-xs mb-4 animate-fade-in">Shared Expedition Record</p>
-           <h1 className="text-6xl md:text-9xl font-black text-white tracking-tighter italic uppercase leading-none animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <div className="absolute bottom-16 left-10 md:left-20 right-10 md:right-20">
+           <p className="text-primary font-bold tracking-[0.25em] uppercase text-xs mb-3 animate-fade-in">Shared Expedition Record</p>
+           <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none animate-fade-in" style={{ animationDelay: '0.1s' }}>
               {trip.destination}
            </h1>
-           <div className="mt-12 flex gap-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+           <div className="mt-8 flex gap-10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <div>
-                 <p className="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Departure</p>
-                 <p className="text-xl font-bold text-white">{new Date(trip.startDate).toLocaleDateString()}</p>
+                 <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-1">Departure</p>
+                 <p className="text-sm font-bold text-white">{new Date(trip.startDate).toLocaleDateString()}</p>
               </div>
               <div>
-                 <p className="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Duration</p>
-                 <p className="text-xl font-bold text-white italic uppercase">Premium Log</p>
+                 <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-1">Duration</p>
+                 <p className="text-sm font-bold text-white italic uppercase">Premium Log</p>
               </div>
            </div>
         </div>
@@ -69,27 +69,27 @@ const SharedTrip = () => {
 
       {/* Shared Itinerary View */}
       <div className="max-w-4xl mx-auto px-6 -mt-10 relative z-10 space-y-8">
-         <div className="pro-card p-10 bg-white shadow-2xl border-none">
-            <h2 className="text-3xl font-black tracking-tighter text-slate-900 italic uppercase mb-12">Sequenced Maneuvers</h2>
+         <div className="bg-surface border border-slate-200 p-8 rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold tracking-tight text-secondary uppercase mb-8">Sequenced Maneuvers</h2>
             
-            <div className="space-y-12 relative before:absolute before:left-10 before:top-10 before:bottom-10 before:w-px before:bg-slate-100">
+            <div className="space-y-8 relative before:absolute before:left-10 before:top-6 before:bottom-6 before:w-px before:bg-slate-200/60">
                {activities.map((act, index) => (
-                 <div key={act._id} className="relative pl-24 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className="absolute left-0 top-6 w-20 text-right">
-                       <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter leading-none">{act.startTime}</p>
-                    </div>
-                    <div className="absolute left-[39px] top-6 w-3 h-3 rounded-full bg-slate-900 border-4 border-white shadow-sm z-10"></div>
-                    
-                    <div className="pro-card p-8 bg-slate-50/50 hover:bg-white transition-all border-slate-100">
-                       <div className="flex items-center gap-3 mb-4">
-                          <span className="material-symbols-outlined text-blue-600 text-lg filled">
-                             {act.type === 'food' ? 'restaurant' : act.type === 'transport' ? 'flight' : 'explore'}
-                          </span>
-                          <h4 className="text-lg font-black text-slate-900 tracking-tight italic uppercase">{act.name}</h4>
-                       </div>
-                       <p className="text-slate-500 font-medium text-sm leading-relaxed">{act.description}</p>
-                    </div>
-                 </div>
+                  <div key={act._id} className="relative pl-20 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                     <div className="absolute left-0 top-5 w-16 text-right">
+                        <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter leading-none">{act.startTime}</p>
+                     </div>
+                     <div className="absolute left-[39px] top-5 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-white shadow-sm z-10"></div>
+                     
+                     <div className="bg-slate-50/50 border border-slate-200/60 p-5 rounded-lg hover:bg-surface hover:shadow-sm hover:border-slate-300 transition-all">
+                        <div className="flex items-center gap-3 mb-2">
+                           <span className="material-symbols-outlined text-supporting text-lg">
+                              {act.type === 'food' ? 'restaurant' : act.type === 'transport' ? 'flight' : 'explore'}
+                           </span>
+                           <h4 className="text-sm font-bold text-secondary tracking-tight uppercase">{act.name}</h4>
+                        </div>
+                        <p className="text-slate-500 font-normal text-xs leading-relaxed">{act.description}</p>
+                     </div>
+                  </div>
                ))}
             </div>
          </div>
@@ -97,7 +97,7 @@ const SharedTrip = () => {
          <div className="text-center pt-10">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Want to craft your own journey?</p>
             <a href="/" className="inline-block px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-2xl shadow-slate-900/20">
-               Join Traveloop Elite
+               Join RouteMind Elite
             </a>
          </div>
       </div>

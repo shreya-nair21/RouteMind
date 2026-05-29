@@ -10,6 +10,9 @@ const CreateTrip = () => {
   const [transportMode, setTransportMode] = useState('flight');
   const [isGenerating, setIsGenerating] = useState(false);
   const [destImage, setDestImage] = useState('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop');
+  const [tripType, setTripType] = useState('City');
+  const [travelPace, setTravelPace] = useState('balanced');
+  const [interests, setInterests] = useState([]);
   
   // Budget Breakdown State
   const [breakdown, setBreakdown] = useState({
@@ -22,7 +25,6 @@ const CreateTrip = () => {
 
   const navigate = useNavigate();
 
-  // Dynamic image fetching
   useEffect(() => {
     if (destination.length > 3) {
       const timer = setTimeout(() => {
@@ -32,7 +34,6 @@ const CreateTrip = () => {
     }
   }, [destination]);
 
-  // Sync breakdown when budget changes (initial suggestion)
   useEffect(() => {
     const transFactor = transportMode === 'flight' ? 0.35 : transportMode === 'train' ? 0.15 : 0.10;
     setBreakdown({
@@ -67,13 +68,14 @@ const CreateTrip = () => {
           travelerCount,
           transportMode,
           image: destImage,
-          budgetBreakdown: breakdown
+          budgetBreakdown: breakdown,
+          travelPace,
+          interests
         })
       });
 
       if (response.ok) {
         const data = await response.json();
-        // Automatically trigger AI generation for the first time
         await fetch(`http://localhost:5001/api/trips/${data._id}/generate-ai`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -88,203 +90,289 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-20">
-      <div className="flex justify-between items-end border-b border-slate-200 pb-10">
-        <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Expedition Architect</p>
-          <h1 className="text-5xl font-extrabold tracking-tighter text-slate-900">Initialize Journey</h1>
-        </div>
-        <div className="hidden md:flex items-center gap-3 bg-slate-900 px-6 py-3 rounded-full text-white">
-           <span className="material-symbols-outlined text-sm animate-pulse text-blue-400">memory</span>
-           <span className="text-[10px] font-black uppercase tracking-widest">AI Engine Ready</span>
-        </div>
+    <div className="pt-32 pb-xxl px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto font-body-md text-on-surface">
+      <div className="mb-xl text-center md:text-left">
+        <h1 className="font-headline-xl text-[48px] font-bold text-primary mb-sm leading-tight">Start Your Next Adventure</h1>
+        <p className="text-[18px] text-on-surface-variant max-w-2xl">Design a bespoke itinerary tailored to your travel style. Every detail crafted for perfection.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        {/* Configuration Form */}
-        <div className="space-y-12">
-          <form onSubmit={handleSubmit} className="space-y-12">
-            <div className="space-y-8">
-               <div className="space-y-3">
-                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Core Destination</label>
-                 <div className="relative group">
-                    <span className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">location_on</span>
-                    <input
-                      type="text"
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[24px] items-start">
+        {/* Left Column: Form Steps */}
+        <div className="lg:col-span-8 space-y-[24px]">
+          <form onSubmit={handleSubmit} className="space-y-[24px]">
+            {/* Step 1: Destination */}
+            <section className="clay-surface rounded-3xl p-[48px]">
+              <div className="flex items-center gap-[16px] mb-[24px]">
+                <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">1</div>
+                <h2 className="text-[24px] font-bold">Where and how?</h2>
+              </div>
+              <div className="space-y-[24px]">
+                <div className="relative group">
+                  <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Destination City</label>
+                  <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
+                    <span className="material-symbols-outlined text-primary mr-[8px]">location_on</span>
+                    <input 
                       required
                       value={destination}
                       onChange={(e) => setDestination(e.target.value)}
-                      className="pro-input pl-14 h-16 text-lg font-black tracking-tight"
-                      placeholder="e.g. Kyoto, Japan"
-                    />
-                 </div>
-               </div>
-
-               <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Departure</label>
-                    <input
-                      type="date"
-                      required
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="pro-input h-16 font-bold"
+                      className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface placeholder:text-outline" 
+                      placeholder="e.g. Santorini, Greece" 
+                      type="text"
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Return</label>
-                    <input
-                      type="date"
-                      required
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="pro-input h-16 font-bold"
-                    />
-                  </div>
-               </div>
+                </div>
 
-               <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Total Budget (₹)</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
                     <div className="relative group">
-                       <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-slate-300 group-focus-within:text-blue-600">₹</span>
-                       <input
-                        type="number"
-                        required
-                        value={budget}
-                        onChange={(e) => setBudget(e.target.value)}
-                        className="pro-input pl-12 h-16 font-black tracking-tight"
-                      />
+                      <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Total Budget (₹)</label>
+                      <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
+                        <span className="text-primary mr-[8px] font-bold">₹</span>
+                        <input 
+                          required
+                          type="number"
+                          value={budget}
+                          onChange={(e) => setBudget(e.target.value)}
+                          className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface" 
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Group Size</label>
                     <div className="relative group">
-                       <span className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600">group</span>
-                       <input
-                        type="number"
-                        min="1"
-                        required
-                        value={travelerCount}
-                        onChange={(e) => setTravelerCount(e.target.value)}
-                        className="pro-input pl-14 h-16 font-black tracking-tight"
-                      />
+                      <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Group Size</label>
+                      <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
+                        <span className="material-symbols-outlined text-primary mr-[8px]">group</span>
+                        <input 
+                          required
+                          type="number"
+                          min="1"
+                          value={travelerCount}
+                          onChange={(e) => setTravelerCount(e.target.value)}
+                          className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface" 
+                        />
+                      </div>
                     </div>
-                  </div>
-               </div>
+                </div>
 
-               <div className="space-y-4 pt-4">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Transportation Logistics</label>
-                  <div className="grid grid-cols-4 gap-4">
-                     {['flight', 'train', 'bus', 'car'].map(mode => (
-                       <button
+                <div>
+                  <label className="text-[14px] font-semibold text-on-surface-variant mb-[16px] block">Transportation Choice</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-[16px]">
+                    {['flight', 'train', 'bus', 'car'].map(mode => (
+                      <button 
                         key={mode}
                         type="button"
                         onClick={() => setTransportMode(mode)}
-                        className={`py-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${
-                          transportMode === mode 
-                          ? 'bg-slate-900 border-slate-900 text-white shadow-xl scale-105' 
-                          : 'bg-white border-slate-100 text-slate-300 hover:border-slate-200'
+                        className={`clay-surface rounded-2xl p-[16px] flex flex-col items-center gap-[8px] transition-all ${
+                          transportMode === mode ? 'border-2 border-primary bg-surface-container-low scale-95' : 'hover:-translate-y-1'
                         }`}
-                       >
-                          <span className="material-symbols-outlined text-xl uppercase italic font-bold">
-                            {mode === 'car' ? 'directions_car' : mode}
-                          </span>
-                          <span className="text-[9px] font-black uppercase tracking-widest">{mode}</span>
-                       </button>
-                     ))}
+                      >
+                        <span className={`material-symbols-outlined text-3xl ${transportMode === mode ? 'text-primary' : 'text-on-surface-variant'}`}>
+                           {mode === 'car' ? 'directions_car' : mode}
+                        </span>
+                        <span className="text-[14px] font-semibold capitalize">{mode}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Step 2: Date Selection */}
+            <section className="clay-surface rounded-3xl p-[48px]">
+              <div className="flex items-center gap-[16px] mb-[24px]">
+                <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+                <h2 className="text-[24px] font-bold">Set the dates</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+                <div className="clay-inset rounded-2xl p-[16px] flex flex-col gap-2">
+                   <label className="text-[12px] font-medium text-on-surface-variant">Check-in</label>
+                   <div className="flex items-center gap-[16px]">
+                     <span className="material-symbols-outlined text-primary">calendar_today</span>
+                     <input 
+                        required
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="bg-transparent border-none p-0 focus:ring-0 text-[14px] font-semibold text-on-surface w-full"
+                     />
+                   </div>
+                </div>
+                <div className="clay-inset rounded-2xl p-[16px] flex flex-col gap-2">
+                   <label className="text-[12px] font-medium text-on-surface-variant">Check-out</label>
+                   <div className="flex items-center gap-[16px]">
+                     <span className="material-symbols-outlined text-primary">calendar_month</span>
+                     <input 
+                        required
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="bg-transparent border-none p-0 focus:ring-0 text-[14px] font-semibold text-on-surface w-full"
+                     />
+                   </div>
+                </div>
+              </div>
+            </section>
+            
+            {/* Step 3: Food & Budget */}
+            <section className="clay-surface rounded-3xl p-[48px]">
+               <div className="flex items-center gap-[16px] mb-[24px]">
+                  <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
+                  <h2 className="text-[24px] font-bold">Financial Strategy & Dining</h2>
+               </div>
+               
+               <div className="clay-surface rounded-2xl p-[16px] flex items-center gap-[16px] border border-primary/10 mb-[24px]">
+                  <div className="bg-surface-container-high p-[8px] rounded-xl">
+                    <span className="material-symbols-outlined text-primary">restaurant</span>
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-semibold">Gourmet Protocol Included</p>
+                    <p className="text-[12px] font-medium text-on-surface-variant">AI will automatically suggest local dining experiences daily.</p>
                   </div>
                </div>
-            </div>
 
-            {/* Budget Breakdown Suggestion */}
-            <div className="pro-card p-10 bg-slate-50 border-none shadow-sm space-y-8">
-               <div className="flex justify-between items-center border-b border-slate-200 pb-4">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 italic">Financial Strategy (Suggested)</h3>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI Optimized</span>
+               <div className="clay-inset p-[24px] rounded-2xl space-y-[24px]">
+                  <h3 className="text-[14px] font-semibold text-primary">Suggested Budget Breakdown</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[40px] gap-y-[16px]">
+                    {Object.entries(breakdown).map(([key, val]) => (
+                      <div key={key} className="space-y-[8px]">
+                        <div className="flex justify-between items-center text-[12px] font-semibold text-on-surface-variant capitalize">
+                           <span>{key}</span>
+                           <span className="text-on-surface font-bold">₹{val.toLocaleString()}</span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max={budget} 
+                          value={val} 
+                          onChange={(e) => handleBreakdownChange(key, e.target.value)}
+                          className="w-full h-2 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary"
+                        />
+                      </div>
+                    ))}
+                  </div>
                </div>
-               
-               <div className="grid grid-cols-2 gap-x-10 gap-y-6">
-                  {Object.entries(breakdown).map(([key, val]) => (
-                    <div key={key} className="space-y-2">
-                       <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex justify-between">
-                          <span>{key}</span>
-                          <span className="text-slate-900">₹{val.toLocaleString()}</span>
-                       </label>
-                       <input 
-                        type="range" 
-                        min="0" 
-                        max={budget} 
-                        value={val} 
-                        onChange={(e) => handleBreakdownChange(key, e.target.value)}
-                        className="w-full accent-slate-900 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
-                       />
-                    </div>
-                  ))}
-               </div>
-               
-               <div className="pt-4 flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                  <span className="text-slate-400">Total Allocation</span>
-                  <span className={`${Object.values(breakdown).reduce((a, b) => a + b, 0) > budget ? 'text-red-600' : 'text-green-600'}`}>
-                     ₹{Object.values(breakdown).reduce((a, b) => a + b, 0).toLocaleString()} / ₹{budget.toLocaleString()}
-                  </span>
-               </div>
-            </div>
+             </section>
 
-            <button
-              type="submit"
-              disabled={isGenerating}
-              className="w-full btn-primary h-20 text-sm font-black uppercase tracking-[0.3em] shadow-2xl shadow-blue-600/30 disabled:opacity-50"
-            >
-              {isGenerating ? (
-                <div className="flex items-center gap-4">
-                   <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                   <span>Generating Itinerary...</span>
+             {/* Step 4: AI Personalization Engine */}
+             <section className="clay-surface rounded-3xl p-[48px] space-y-[24px]">
+                <div className="flex items-center gap-[16px] mb-[24px]">
+                   <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">4</div>
+                   <h2 className="text-[24px] font-bold">AI Personalization Engine</h2>
                 </div>
-              ) : (
-                'Construct Journey'
-              )}
-            </button>
+                
+                <div className="space-y-[24px]">
+                  <div>
+                    <label className="text-[14px] font-semibold text-on-surface-variant mb-[12px] block">Travel Pace</label>
+                    <div className="grid grid-cols-3 gap-[16px]">
+                      {['slow', 'balanced', 'fast'].map(pace => (
+                        <button 
+                          key={pace}
+                          type="button"
+                          onClick={() => setTravelPace(pace)}
+                          className={`clay-surface rounded-2xl p-[16px] flex flex-col items-center gap-[8px] transition-all capitalize font-bold ${
+                            travelPace === pace ? 'border-2 border-primary bg-surface-container-low scale-95 text-primary' : 'hover:-translate-y-0.5'
+                          }`}
+                        >
+                          {pace}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[14px] font-semibold text-on-surface-variant mb-[12px] block">Voyage Vibe & Interests</label>
+                    <div className="flex flex-wrap gap-[12px]">
+                      {['Culture', 'Nature', 'Adventure', 'Food', 'Shopping', 'Relaxation', 'Nightlife', 'History', 'Family Friendly'].map(interest => {
+                        const isSelected = interests.includes(interest);
+                        return (
+                          <button 
+                            key={interest}
+                            type="button"
+                            onClick={() => {
+                              if (isSelected) {
+                                setInterests(interests.filter(i => i !== interest));
+                              } else {
+                                setInterests([...interests, interest]);
+                              }
+                            }}
+                            className={`px-[20px] py-[10px] rounded-full text-[14px] font-semibold transition-all border ${
+                              isSelected 
+                              ? 'bg-primary text-white border-primary shadow-md scale-95' 
+                              : 'clay-surface text-on-surface hover:border-slate-300'
+                            }`}
+                          >
+                            {interest}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+             </section>
+
           </form>
         </div>
 
-        {/* Visual Spotlight */}
-        <div className="relative group">
-          <div className="sticky top-40 space-y-8 animate-fade-in">
-             <div className="pro-card h-[600px] overflow-hidden border-none shadow-2xl relative rounded-[40px]">
-                <img 
-                  src={destImage} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]" 
-                  alt="Destination"
-                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
-                <div className="absolute bottom-12 left-12 right-12">
-                   <p className="text-blue-400 font-black tracking-[0.3em] uppercase text-[10px] mb-4">Spotlight Destination</p>
-                   <h2 className="text-6xl font-black text-white tracking-tighter uppercase italic leading-none">
-                      {destination || 'The Unknown'}
-                   </h2>
-                   <div className="mt-8 flex gap-6">
-                      <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/10 flex items-center gap-2">
-                         <span className="material-symbols-outlined text-xs text-white">calendar_month</span>
-                         <span className="text-[9px] font-black text-white uppercase tracking-widest">{startDate || 'TBD'}</span>
-                      </div>
-                      <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/10 flex items-center gap-2">
-                         <span className="material-symbols-outlined text-xs text-white">payments</span>
-                         <span className="text-[9px] font-black text-white uppercase tracking-widest">₹{budget.toLocaleString()}</span>
-                      </div>
-                   </div>
+        {/* Right Column: Visual Summary */}
+        <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-[24px]">
+          <div className="clay-surface rounded-3xl overflow-hidden shadow-xl">
+            <div className="h-48 relative">
+              <img 
+                className="w-full h-full object-cover" 
+                src={destImage} 
+                alt="Destination"
+                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute bottom-[16px] left-[16px]">
+                <span className="bg-primary/90 text-white text-[12px] font-medium px-[8px] py-[4px] rounded-full backdrop-blur-md">Dynamic Preview</span>
+                <h3 className="text-white text-[24px] font-bold mt-[4px]">{destination || 'Select Destination'}</h3>
+              </div>
+            </div>
+            <div className="p-[48px] space-y-[16px]">
+              <h4 className="text-[14px] font-semibold text-on-surface-variant uppercase tracking-wider">Trip Summary</h4>
+              <div className="space-y-[8px]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[16px] text-on-surface-variant">Destination</span>
+                  <span className="font-bold text-primary">{destination || '—'}</span>
                 </div>
-             </div>
-             <div className="p-8 bg-slate-900 rounded-[32px] text-white shadow-2xl flex items-center gap-6 border border-white/5">
-                <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center shrink-0">
-                   <span className="material-symbols-outlined text-3xl filled">restaurant</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-[16px] text-on-surface-variant">Dates</span>
+                  <span className="font-bold text-[14px]">
+                     {startDate && endDate ? `${startDate.substring(5)} to ${endDate.substring(5)}` : '—'}
+                  </span>
                 </div>
-                <div>
-                   <h4 className="text-lg font-black tracking-tight italic uppercase">Gourmet Protocol Active</h4>
-                   <p className="text-slate-500 text-xs font-medium leading-relaxed">Our engine is configured to identify and prioritize local culinary landmarks and luxury dining experiences in {destination || 'your destination'}.</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[16px] text-on-surface-variant">Travelers</span>
+                  <span className="font-bold">{travelerCount}</span>
                 </div>
-             </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[16px] text-on-surface-variant">Transport</span>
+                  <span className="font-bold capitalize">{transportMode}</span>
+                </div>
+              </div>
+              <div className="pt-[16px] border-t border-outline-variant/30">
+                <div className="flex justify-between items-center mb-[24px]">
+                  <span className="text-[24px] font-semibold">Total Budget</span>
+                  <span className="text-[24px] font-semibold text-primary">₹{budget.toLocaleString()}</span>
+                </div>
+                <button 
+                  onClick={handleSubmit}
+                  disabled={isGenerating || !destination || !startDate || !endDate}
+                  className="clay-button-primary w-full py-[16px] rounded-2xl text-white font-bold text-lg flex items-center justify-center gap-[8px] disabled:opacity-50"
+                >
+                  {isGenerating ? 'Generating Itinerary...' : 'Create Itinerary'}
+                  {!isGenerating && <span className="material-symbols-outlined">auto_awesome</span>}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="clay-surface rounded-3xl p-[16px] flex items-center gap-[16px] border border-primary/10">
+            <div className="bg-surface-container-high p-[8px] rounded-xl">
+              <span className="material-symbols-outlined text-primary">verified_user</span>
+            </div>
+            <div>
+              <p className="text-[14px] font-semibold">Elite Protection</p>
+              <p className="text-[12px] font-medium text-on-surface-variant">AI Engine respects exact duration</p>
+            </div>
           </div>
         </div>
       </div>

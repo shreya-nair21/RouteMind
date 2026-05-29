@@ -45,123 +45,154 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
-      {/* Left Side: Brand Imagery */}
-      <div className="hidden md:flex md:w-1/2 bg-slate-900 relative items-center justify-center p-12">
-        <div className="absolute inset-0 opacity-40">
-           <img 
-            src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop" 
-            className="w-full h-full object-cover"
-            alt="Travel background"
-           />
-           <div className="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
+    <div className="bg-background text-secondary min-h-screen relative overflow-x-hidden flex flex-col items-center justify-center py-12 px-6">
+      {/* Decorative Minimal Accents */}
+      <div className="absolute top-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-supporting/5 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      <main className="relative z-10 flex flex-col items-center justify-center w-full max-w-md">
+        {/* Brand Identity */}
+        <div className="mb-8 text-center flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+              <span className="material-symbols-outlined text-lg">flight_takeoff</span>
+            </div>
+            <h1 className="text-secondary text-2xl font-black tracking-tight uppercase italic leading-none">RouteMind</h1>
+          </div>
+          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Cognitive Voyage Planning & Logistics</p>
         </div>
         
-        <div className="relative z-10 text-center space-y-8 animate-fade-in">
-           <div className="w-20 h-20 rounded-3xl bg-blue-600 mx-auto flex items-center justify-center shadow-2xl shadow-blue-600/40">
-              <span className="material-symbols-outlined text-white text-4xl filled">flight_takeoff</span>
-           </div>
-           <div>
-              <h2 className="text-4xl font-black tracking-tighter text-white mb-4 italic">TRAVELOOP</h2>
-              <p className="text-slate-400 font-medium max-w-sm mx-auto leading-relaxed">
-                Unlock the world's most sophisticated travel planning intelligence. Your journey begins here.
-              </p>
-           </div>
-        </div>
-      </div>
-
-      {/* Right Side: Auth Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-20 bg-slate-50/50">
-        <div className="w-full max-w-md space-y-12 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-          <div className="text-center md:text-left">
-            <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-2">
-              {isLogin ? 'Welcome Back' : 'Join the Elite'}
-            </h1>
-            <p className="text-slate-500 font-medium italic">
-              {isLogin ? 'Secure access to your global itineraries.' : 'Create your professional travel profile.'}
+        {/* Auth Card Container */}
+        <div className="w-full bg-surface border border-slate-200 rounded-xl p-8 shadow-sm flex flex-col gap-6">
+          <div className="space-y-2 text-center mb-2">
+            <h2 className="text-2xl font-bold text-secondary">{isLogin ? 'Welcome Back' : 'Join the Elite'}</h2>
+            <p className="text-slate-500 text-sm">
+              {isLogin ? 'Sign in to continue your next journey' : 'Create your professional travel profile'}
             </p>
           </div>
+          
+          {/* Social Logins */}
+          <div className="grid grid-cols-2 gap-4">
+            <button className="flex items-center justify-center gap-2 py-3 px-4 bg-surface border border-slate-200 rounded-lg hover:bg-slate-50 transition-all active:scale-[0.98] group">
+              <img alt="Google" className="w-4 h-4 opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxXkUhRX4szoxRmP9JvyqLlNfgVjrOmFDw2kvxpt44mBgoDCxDoEXGrArq_PgYXNZXOLDXo1xGyKCrN-LrqHc7RZEeUOaj-IPQDQlkzGV1aW5nUz4zf3B0SC8se2jiAFr66wFi-XSSCujoOtqd0N2RAebtWruWpTy2sOKg0dMtEDdTnQHtWs6-jWTpHp3xTm1HxMHzuIGiyyJSVpL7NTT7SnHCV6U3HHfv22SyIPjBgCZQwdkYszAchgd6ITcjLwGmBqjSZlLB8rXn"/>
+              <span className="text-sm font-semibold text-secondary">Google</span>
+            </button>
+            <button className="flex items-center justify-center gap-2 py-3 px-4 bg-surface border border-slate-200 rounded-lg hover:bg-slate-50 transition-all active:scale-[0.98] group">
+              <span className="material-symbols-outlined text-lg text-secondary opacity-80 group-hover:opacity-100">ios</span>
+              <span className="text-sm font-semibold text-secondary">Apple</span>
+            </button>
+          </div>
+          
+          {/* Divider */}
+          <div className="flex items-center gap-4 py-2">
+            <div className="h-[1px] flex-1 bg-slate-200"></div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">or email</span>
+            <div className="h-[1px] flex-1 bg-slate-200"></div>
+          </div>
+          
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
+              
+              {!isLogin && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</label>
+                  <div className="relative group">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">person</span>
+                    <input 
+                      required
+                      type="text" 
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="pro-input pl-10" 
+                      placeholder="Enter your name" 
+                    />
+                  </div>
+                </div>
+              )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {!isLogin && (
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
                 <div className="relative group">
-                   <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl group-focus-within:text-blue-600 transition-colors">person</span>
-                   <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="pro-input pl-12 h-14 font-bold"
-                    placeholder="Enter your name"
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">mail</span>
+                  <input 
+                    required
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pro-input pl-10" 
+                    placeholder="explorer@routemind.com" 
                   />
                 </div>
               </div>
-            )}
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Access Email</label>
-              <div className="relative group">
-                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl group-focus-within:text-blue-600 transition-colors">alternate_email</span>
-                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pro-input pl-12 h-14 font-bold"
-                  placeholder="admin@gmail.com"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Security Code</label>
-                {isLogin && <button type="button" className="text-[10px] font-bold text-blue-600 uppercase tracking-widest hover:underline">Forgot?</button>}
-              </div>
-              <div className="relative group">
-                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl group-focus-within:text-blue-600 transition-colors">lock</span>
-                 <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pro-input pl-12 h-14 font-bold"
-                  placeholder="••••••••"
-                  required
-                />
+              
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Password</label>
+                  {isLogin && <a href="#" className="text-primary text-xs font-bold hover:underline">Forgot?</a>}
+                </div>
+                <div className="relative group">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">lock</span>
+                  <input 
+                    required
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pro-input pl-10" 
+                    placeholder="••••••••" 
+                  />
+                </div>
               </div>
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-600 animate-fade-in">
-                <span className="material-symbols-outlined text-xl">error</span>
-                <p className="text-xs font-bold">{error}</p>
+              <div className="p-4 bg-red-50 text-red-600 border border-red-100 rounded-lg text-xs font-bold flex items-center gap-2">
+                 <span className="material-symbols-outlined text-sm">error</span>
+                 {error}
               </div>
             )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full btn-primary h-14 text-sm font-black uppercase tracking-widest shadow-2xl shadow-blue-600/20 disabled:opacity-50"
-            >
-              {isSubmitting ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                isLogin ? 'Authenticate' : 'Establish Profile'
-              )}
-            </button>
-          </form>
-
-          <div className="text-center">
-            <p className="text-slate-400 font-medium text-sm">
-              {isLogin ? "Don't have an elite account?" : "Already an elite member?"}{' '}
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-blue-600 font-bold hover:underline"
+            
+            <div className="flex flex-col gap-4 mt-2">
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="btn-primary w-full py-3 text-xs uppercase tracking-wider"
               >
-                {isLogin ? 'Join Traveloop' : 'Sign In'}
+                {isSubmitting ? 'Authenticating...' : (isLogin ? 'Sign In' : 'Establish Profile')}
               </button>
-            </p>
+              <p className="text-center text-xs text-slate-500">
+                {isLogin ? "Don't have an account?" : "Already an elite member?"}{' '}
+                <button 
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary font-bold hover:underline ml-1"
+                >
+                  {isLogin ? 'Create Account' : 'Sign In'}
+                </button>
+              </p>
+            </div>
+          </form>
+        </div>
+        
+        {/* Footer / Support links */}
+        <div className="mt-12 flex gap-6 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+          <a href="#" className="hover:text-secondary transition-colors">Privacy Policy</a>
+          <span className="opacity-30">•</span>
+          <a href="#" className="hover:text-secondary transition-colors">Terms of Service</a>
+          <span className="opacity-30">•</span>
+          <a href="#" className="hover:text-secondary transition-colors">Support</a>
+        </div>
+      </main>
+
+      {/* Decorative Illustration Element */}
+      <div className="hidden xl:block fixed bottom-12 right-12 w-64 h-64">
+        <div className="relative w-full h-full">
+          <div className="absolute inset-0 bg-surface border border-slate-200 rounded-xl rotate-6 overflow-hidden shadow-sm">
+            <img className="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 transition-all duration-300" alt="Alps" src="https://images.unsplash.com/photo-1531366936337-77cf5e084ce6?q=80&w=2070&auto=format&fit=crop"/>
+            <div className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-md p-4 rounded-lg border border-slate-200">
+              <p className="text-[9px] font-bold text-primary uppercase tracking-widest">Featured Destination</p>
+              <p className="text-lg font-bold text-secondary">Swiss Alps</p>
+            </div>
           </div>
         </div>
       </div>

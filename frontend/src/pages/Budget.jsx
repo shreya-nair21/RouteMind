@@ -62,57 +62,55 @@ const Budget = () => {
            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 italic">Total Allocation</p>
            <p className="text-3xl font-black text-slate-900 tracking-tighter italic">₹{(trip.budget || 0).toLocaleString()}</p>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      </div>      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Stats */}
         <div className="lg:col-span-2 space-y-8">
-           <div className="grid grid-cols-2 gap-8">
-              <div className="pro-card p-10 bg-slate-900 text-white shadow-2xl">
-                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 italic">Capital Deployed</p>
-                 <h3 className="text-4xl font-black tracking-tighter italic">₹{totalSpent.toLocaleString()}</h3>
-                 <div className="mt-8 flex items-center gap-2">
-                    <div className="h-1 bg-white/10 flex-1 rounded-full overflow-hidden">
-                       <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min(100, (totalSpent / trip.budget) * 100)}%` }}></div>
-                    </div>
-                    <span className="text-[10px] font-black text-blue-400">{Math.round((totalSpent / trip.budget) * 100)}%</span>
-                 </div>
+           <div className="grid grid-cols-2 gap-6">
+              <div className="bg-gradient-to-tr from-primary to-[#FEB47B] text-white p-6 rounded-xl shadow-sm">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 italic">Capital Deployed</p>
+                  <h3 className="text-3xl font-black tracking-tight">₹{totalSpent.toLocaleString()}</h3>
+                  <div className="mt-6 flex items-center gap-2">
+                     <div className="h-1 bg-white/10 flex-1 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min(100, (totalSpent / trip.budget) * 100)}%` }}></div>
+                     </div>
+                     <span className="text-[10px] font-bold text-primary">{Math.round((totalSpent / trip.budget) * 100)}%</span>
+                  </div>
               </div>
-              <div className="pro-card p-10 bg-white shadow-xl">
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 italic">Liquid Reserve</p>
-                 <h3 className="text-4xl font-black text-slate-900 tracking-tighter italic">₹{Math.max(0, remaining).toLocaleString()}</h3>
-                 <div className="mt-8 flex items-center gap-2">
-                    <span className={`material-symbols-outlined text-sm ${remaining >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                       {remaining >= 0 ? 'trending_up' : 'trending_down'}
-                    </span>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                       {remaining >= 0 ? 'Within Allocation' : 'Excess Detected'}
-                    </span>
-                 </div>
+              <div className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 italic">Liquid Reserve</p>
+                  <h3 className="text-3xl font-black text-secondary tracking-tight">₹{Math.max(0, remaining).toLocaleString()}</h3>
+                  <div className="mt-6 flex items-center gap-2">
+                     <span className={`material-symbols-outlined text-sm ${remaining >= 0 ? 'text-supporting' : 'text-red-500'}`}>
+                        {remaining >= 0 ? 'trending_up' : 'trending_down'}
+                     </span>
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        {remaining >= 0 ? 'Within Allocation' : 'Excess Detected'}
+                     </span>
+                  </div>
               </div>
            </div>
 
            {/* List of expenses */}
-           <div className="pro-card p-10 bg-white shadow-xl">
-              <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-50">
-                 <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 italic">Allocation Ledger</h3>
-                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activities.length} Line Items</span>
+           <div className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm">
+              <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                 <h3 className="text-xs font-bold uppercase tracking-wider text-secondary">Allocation Ledger</h3>
+                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{activities.length} Line Items</span>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                  {activities.map(act => (
-                    <div key={act._id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all">
-                       <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400">
+                    <div key={act._id} className="flex items-center justify-between p-4 bg-slate-50/50 rounded-lg border border-slate-200/60 hover:border-slate-300 transition-all">
+                       <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded bg-white border border-slate-200 flex items-center justify-center text-slate-400">
                              <span className="material-symbols-outlined text-sm">
                                 {act.type === 'food' ? 'restaurant' : act.type === 'transport' ? 'flight' : 'explore'}
                              </span>
                           </div>
                           <div>
-                             <p className="text-sm font-bold text-slate-900">{act.name}</p>
-                             <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Day {act.day}</p>
+                             <p className="text-xs font-bold text-secondary">{act.name}</p>
+                             <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Day {act.day}</p>
                           </div>
                        </div>
-                       <p className="font-black text-slate-900 italic tracking-tighter">₹{act.cost?.toLocaleString()}</p>
+                       <p className="font-bold text-secondary tracking-tight">₹{act.cost?.toLocaleString()}</p>
                     </div>
                  ))}
               </div>
@@ -120,49 +118,52 @@ const Budget = () => {
         </div>
 
         {/* Breakdown Visualization */}
-        <div className="pro-card p-10 bg-white shadow-xl flex flex-col items-center">
-           <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 italic mb-10 w-full text-left border-b border-slate-50 pb-4">Strategy breakdown</h3>
-           <div className="w-full h-80">
+        <div className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col items-center">
+           <h3 className="text-xs font-bold uppercase tracking-wider text-secondary mb-6 w-full text-left border-b border-slate-100 pb-4">Strategy breakdown</h3>
+           <div className="w-full h-64">
               <ResponsiveContainer width="100%" height="100%">
                  <PieChart>
                     <Pie
-                      data={typeData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
+                       data={typeData}
+                       cx="50%"
+                       cy="50%"
+                       innerRadius={50}
+                       outerRadius={70}
+                       paddingAngle={5}
+                       dataKey="value"
                     >
-                      {typeData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                       {typeData.map((entry, index) => {
+                         let color = '#6366F1';
+                         if (entry.name === 'Dining') color = '#10B981';
+                         else if (entry.name === 'Transport') color = '#FF6B35';
+                         else if (entry.name === 'Activities') color = '#FF4B72';
+                         return <Cell key={`cell-${index}`} fill={color} />;
+                       })}
                     </Pie>
-                    <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                    <Legend verticalAlign="bottom" height={36}/>
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }} />
+                    <Legend verticalAlign="bottom" height={36} iconType="circle"/>
                  </PieChart>
               </ResponsiveContainer>
            </div>
 
-           <div className="w-full mt-12 p-8 bg-slate-50 rounded-[32px] space-y-6">
+           <div className="w-full mt-8 p-5 bg-slate-50/50 border border-slate-200/60 rounded-lg space-y-4">
               <div>
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 italic">Group Specifics</p>
+                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 italic">Group Specifics</p>
                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-bold text-slate-900 uppercase">Per Person Cost</span>
-                    <span className="text-xl font-black text-blue-600 italic tracking-tighter">₹{Math.round(totalSpent / (trip.travelerCount || 1)).toLocaleString()}</span>
+                    <span className="text-xs font-bold text-secondary uppercase">Per Person Cost</span>
+                    <span className="text-lg font-black text-primary tracking-tight">₹{Math.round(totalSpent / (trip.travelerCount || 1)).toLocaleString()}</span>
                  </div>
               </div>
-              <div className="pt-6 border-t border-slate-200">
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 italic">Transport Logistics</p>
+              <div className="pt-4 border-t border-slate-200/60">
+                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 italic">Transport Logistics</p>
                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-bold text-slate-900 uppercase">{trip.transportMode || 'Flight'} Protocol</span>
-                    <span className="material-symbols-outlined text-slate-400">verified</span>
+                    <span className="text-xs font-bold text-secondary uppercase">{trip.transportMode || 'Flight'} Protocol</span>
+                    <span className="material-symbols-outlined text-primary text-sm">verified</span>
                  </div>
               </div>
            </div>
         </div>
-      </div>
-    </div>
+      </div>    </div>
   );
 };
 
