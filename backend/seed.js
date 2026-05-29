@@ -100,9 +100,9 @@ const seedDatabase = async () => {
       dayNumber: 1,
       date: new Date('2026-05-15'),
       activities: [
-        { time: '10:00', title: 'Arrival at Narita', type: 'flight', cost: 0, location: 'NRT Airport' },
-        { time: '14:00', title: 'Check-in Hotel Sunroute', type: 'lodging', cost: 150, location: 'Shinjuku' },
-        { time: '19:00', title: 'Ramen Dinner in Omoide Yokocho', type: 'dining', cost: 20, location: 'Shinjuku' }
+        { startTime: '10:00', name: 'Arrival at Narita', type: 'flight', cost: 0, description: 'NRT Airport', duration: 'Flexible' },
+        { startTime: '14:00', name: 'Check-in Hotel Sunroute', type: 'lodging', cost: 150, description: 'Shinjuku', duration: 'Flexible' },
+        { startTime: '19:00', name: 'Ramen Dinner in Omoide Yokocho', type: 'dining', cost: 20, description: 'Shinjuku', duration: '2h' }
       ]
     });
 
