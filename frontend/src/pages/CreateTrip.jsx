@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { countryData, popularCities } from '../utils/countryData';
 
 const CreateTrip = () => {
   const [destination, setDestination] = useState('');
@@ -24,6 +25,122 @@ const CreateTrip = () => {
   });
 
   const navigate = useNavigate();
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const autocompleteRef = useRef(null);
+
+  // Click outside listener for autocomplete
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Suggestions search logic (local popular cities fallback + OSM Nominatim public query)
+  useEffect(() => {
+    if (!destination.trim() || destination.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const term = destination.toLowerCase().trim();
+    
+    // Local filter matching
+    const localFiltered = popularCities.filter(item => 
+      item.city.toLowerCase().includes(term) || 
+      item.country.toLowerCase().includes(term)
+    ).map(item => {
+      const cDetails = countryData[item.country.toLowerCase()] || {};
+      return {
+        display: `${item.city}, ${item.country}`,
+        city: item.city,
+        country: item.country,
+        emoji: cDetails.emoji || '📍',
+        iso: cDetails.iso || null
+      };
+    });
+
+    const countryFiltered = [];
+    for (const key in countryData) {
+      const country = countryData[key];
+      if (country.name.toLowerCase().includes(term)) {
+        const alreadyExists = localFiltered.some(item => item.country.toLowerCase() === key);
+        if (!alreadyExists) {
+          countryFiltered.push({
+            display: country.name,
+            city: '',
+            country: country.name,
+            emoji: country.emoji,
+            iso: country.iso
+          });
+        }
+      }
+    }
+
+    const initialSuggestions = [...localFiltered, ...countryFiltered].slice(0, 6);
+    setSuggestions(initialSuggestions);
+
+    // Dynamic fetch from Nominatim (OpenStreetMap) debounced
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}&addressdetails=1&limit=5`, {
+          headers: {
+            'User-Agent': 'RouteMind-Travel-Planner'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const apiSuggestions = data.map(item => {
+            const address = item.address || {};
+            const city = address.city || address.town || address.village || address.municipality || address.state || '';
+            const country = address.country || '';
+            const countryCode = (address.country_code || '').toLowerCase();
+            
+            const cDetails = countryData[country.toLowerCase()] || {};
+            
+            if (city && country) {
+              return {
+                display: `${city}, ${country}`,
+                city,
+                country,
+                emoji: cDetails.emoji || '📍',
+                iso: countryCode || cDetails.iso || null
+              };
+            } else {
+              return {
+                display: item.display_name.split(',').slice(0, 3).join(',').trim(),
+                city: city || item.display_name.split(',')[0].trim(),
+                country,
+                emoji: cDetails.emoji || '📍',
+                iso: countryCode || cDetails.iso || null
+              };
+            }
+          });
+
+          // Merge unique entries
+          setSuggestions(prev => {
+            const seen = new Set(prev.map(p => p.display.toLowerCase()));
+            const merged = [...prev];
+            apiSuggestions.forEach(apiItem => {
+              if (!seen.has(apiItem.display.toLowerCase())) {
+                merged.push(apiItem);
+                seen.add(apiItem.display.toLowerCase());
+              }
+            });
+            return merged.slice(0, 8);
+          });
+        }
+      } catch (err) {
+        console.error('OSM Autocomplete error:', err);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [destination]);
 
   useEffect(() => {
     if (destination.length > 3) {
@@ -107,19 +224,82 @@ const CreateTrip = () => {
                 <h2 className="text-[24px] font-bold">Where and how?</h2>
               </div>
               <div className="space-y-[24px]">
-                <div className="relative group">
+                <div className="relative group" ref={autocompleteRef}>
                   <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Destination City</label>
-                  <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
+                  <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all relative">
                     <span className="material-symbols-outlined text-primary mr-[8px]">location_on</span>
                     <input 
                       required
                       value={destination}
-                      onChange={(e) => setDestination(e.target.value)}
+                      onChange={(e) => {
+                        setDestination(e.target.value);
+                        setShowSuggestions(true);
+                      }}
+                      onFocus={() => setShowSuggestions(true)}
                       className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface placeholder:text-outline" 
                       placeholder="e.g. Santorini, Greece" 
                       type="text"
+                      autoComplete="off"
                     />
+                    {/* Tiny inline flag indicator if destination matches a known country suffix */}
+                    {(() => {
+                      const parts = destination.split(',');
+                      const countryPart = parts[parts.length - 1].trim().toLowerCase();
+                      const cDetails = countryData[countryPart];
+                      if (cDetails && cDetails.iso) {
+                        return (
+                          <img 
+                            src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                            alt={cDetails.name}
+                            className="w-6 h-4 object-cover rounded shadow-sm border border-slate-200/50 mr-2"
+                          />
+                        );
+                      }
+                      return null;
+                    })()}
                   </div>
+
+                  {/* Autocomplete Dropdown List */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white/95 backdrop-blur-xl border border-slate-200/60 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
+                      <div className="py-2 max-h-[280px] overflow-y-auto">
+                        {suggestions.map((suggestion, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={() => {
+                              setDestination(suggestion.display);
+                              setShowSuggestions(false);
+                            }}
+                            className="px-5 py-3 hover:bg-slate-50 flex items-center gap-3 cursor-pointer transition-all duration-150 border-b border-slate-100 last:border-0"
+                          >
+                            {suggestion.iso ? (
+                              <img 
+                                src={`https://flagcdn.com/w40/${suggestion.iso}.png`} 
+                                alt={suggestion.country}
+                                className="w-5.5 h-4 object-cover rounded shadow-sm border border-slate-200/50 shrink-0"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            ) : (
+                              <span className="text-lg shrink-0 filter drop-shadow">{suggestion.emoji}</span>
+                            )}
+                            <div className="flex-1 text-left">
+                              <p className="text-[14px] font-bold text-slate-800 leading-tight">
+                                {suggestion.city ? suggestion.city : suggestion.country}
+                              </p>
+                              {suggestion.city && (
+                                <p className="text-[10px] font-semibold text-slate-450 uppercase tracking-wider mt-0.5">
+                                  {suggestion.country}
+                                </p>
+                              )}
+                            </div>
+                            <span className="material-symbols-outlined text-slate-300 text-xs shrink-0 hover:translate-x-0.5 transition-transform">
+                              arrow_forward
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
