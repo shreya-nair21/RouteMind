@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { countryData, popularCities } from '../utils/countryData';
 
 const CreateTrip = () => {
+  // Core Trip states
   const [destination, setDestination] = useState('');
+  const [cities, setCities] = useState('');
+  const [durationDays, setDurationDays] = useState(3);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [budget, setBudget] = useState(50000);
@@ -11,10 +14,17 @@ const CreateTrip = () => {
   const [transportMode, setTransportMode] = useState('flight');
   const [isGenerating, setIsGenerating] = useState(false);
   const [destImage, setDestImage] = useState('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop');
-  const [tripType, setTripType] = useState('City');
-  const [travelPace, setTravelPace] = useState('balanced');
   const [interests, setInterests] = useState([]);
+  const [travelPace, setTravelPace] = useState('balanced');
   
+  // Form Wizard progress state
+  const [step, setStep] = useState(1);
+
+  // Autocomplete UI states
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const autocompleteRef = useRef(null);
+
   // Budget Breakdown State
   const [breakdown, setBreakdown] = useState({
     accommodation: 15000,
@@ -25,9 +35,6 @@ const CreateTrip = () => {
   });
 
   const navigate = useNavigate();
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const autocompleteRef = useRef(null);
 
   // Click outside listener for autocomplete
   useEffect(() => {
@@ -142,15 +149,27 @@ const CreateTrip = () => {
     return () => clearTimeout(timer);
   }, [destination]);
 
+  // Fetch a gorgeous cover image for the destination
   useEffect(() => {
     if (destination.length > 3) {
       const timer = setTimeout(() => {
-        setDestImage(`https://source.unsplash.com/1600x900/?${encodeURIComponent(destination)},city,landmark`);
+        setDestImage(`https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop`);
       }, 1000);
       return () => clearTimeout(timer);
     }
   }, [destination]);
 
+  // Dynamic End Date calculations based on Start Date & Number of Days
+  useEffect(() => {
+    if (startDate && durationDays) {
+      const start = new Date(startDate);
+      const end = new Date(start);
+      end.setDate(start.getDate() + Number(durationDays) - 1);
+      setEndDate(end.toISOString().split('T')[0]);
+    }
+  }, [startDate, durationDays]);
+
+  // Dynamic Budget breakdown tracking
   useEffect(() => {
     const transFactor = transportMode === 'flight' ? 0.35 : transportMode === 'train' ? 0.15 : 0.10;
     setBreakdown({
@@ -167,7 +186,7 @@ const CreateTrip = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setIsGenerating(true);
 
     try {
@@ -187,7 +206,8 @@ const CreateTrip = () => {
           image: destImage,
           budgetBreakdown: breakdown,
           travelPace,
-          interests
+          interests,
+          stops: cities ? cities.split(',').map(c => c.trim()) : []
         })
       });
 
@@ -206,28 +226,79 @@ const CreateTrip = () => {
     }
   };
 
+  // Step Navigations
+  const nextStep = () => {
+    if (step === 1 && !destination) return;
+    if (step === 2 && (!startDate || !durationDays)) return;
+    setStep(prev => Math.min(prev + 1, 4));
+  };
+
+  const prevStep = () => {
+    setStep(prev => Math.max(prev - 1, 1));
+  };
+
   return (
-    <div className="pt-32 pb-xxl px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto font-body-md text-on-surface">
-      <div className="mb-xl text-center md:text-left">
-        <h1 className="font-headline-xl text-[48px] font-bold text-primary mb-sm leading-tight">Start Your Next Adventure</h1>
-        <p className="text-[18px] text-on-surface-variant max-w-2xl">Design a bespoke itinerary tailored to your travel style. Every detail crafted for perfection.</p>
+    <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto font-body-md text-slate-800">
+      
+      {/* Wizard Header */}
+      <div className="mb-12 text-center md:text-left">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 leading-tight">
+          Initialize Voyage Planner
+        </h1>
+        <p className="text-sm md:text-base text-slate-500 font-medium max-w-2xl">
+          Complete the sequential configurations below to instigate RouteMind's AI Itinerary compiler.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[24px] items-start">
-        {/* Left Column: Form Steps */}
-        <div className="lg:col-span-8 space-y-[24px]">
-          <form onSubmit={handleSubmit} className="space-y-[24px]">
-            {/* Step 1: Destination */}
-            <section className="clay-surface rounded-3xl p-[48px]">
-              <div className="flex items-center gap-[16px] mb-[24px]">
-                <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">1</div>
-                <h2 className="text-[24px] font-bold">Where and how?</h2>
-              </div>
-              <div className="space-y-[24px]">
+      {/* Progressive Step Progress Bar */}
+      <div className="max-w-xl mx-auto md:mx-0 mb-12 bg-slate-100 p-2.5 rounded-2xl border border-slate-200/50 flex justify-between items-center gap-1">
+        {[
+          { label: 'Destination', num: 1 },
+          { label: 'Dates & Days', num: 2 },
+          { label: 'Transit & Budget', num: 3 },
+          { label: 'Vibe & Group', num: 4 }
+        ].map((item) => (
+          <div 
+            key={item.num}
+            onClick={() => {
+              // Only allow navigation to steps that are validated
+              if (item.num === 1) setStep(1);
+              if (item.num === 2 && destination) setStep(2);
+              if (item.num === 3 && destination && startDate && durationDays) setStep(3);
+              if (item.num === 4 && destination && startDate && durationDays) setStep(4);
+            }}
+            className={`flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${
+              step === item.num 
+                ? 'bg-primary text-white shadow-md' 
+                : step > item.num 
+                  ? 'bg-slate-200 text-slate-700' 
+                  : 'text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            {item.label}
+          </div>
+        ))}
+      </div>
+
+      {/* Main Layout Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Left Form Panel */}
+        <div className="lg:col-span-8 space-y-6">
+          <div className="clay-surface rounded-3xl p-8 md:p-12">
+            
+            {/* STEP 1: DESTINATION & CITIES */}
+            {step === 1 && (
+              <div className="space-y-6 animate-fade-in text-left">
+                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">1</div>
+                  <h3 className="text-xl font-bold text-slate-800">Specify Target Location</h3>
+                </div>
+                
                 <div className="relative group" ref={autocompleteRef}>
-                  <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Destination City</label>
-                  <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all relative">
-                    <span className="material-symbols-outlined text-primary mr-[8px]">location_on</span>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Destination Country / City</label>
+                  <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all relative">
+                    <span className="material-symbols-outlined text-primary mr-3 text-lg">location_on</span>
                     <input 
                       required
                       value={destination}
@@ -236,8 +307,8 @@ const CreateTrip = () => {
                         setShowSuggestions(true);
                       }}
                       onFocus={() => setShowSuggestions(true)}
-                      className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface placeholder:text-outline" 
-                      placeholder="e.g. Santorini, Greece" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 placeholder:text-slate-400 outline-none" 
+                      placeholder="e.g. Kyoto, Japan or Santorini, Greece" 
                       type="text"
                       autoComplete="off"
                     />
@@ -251,7 +322,7 @@ const CreateTrip = () => {
                           <img 
                             src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
                             alt={cDetails.name}
-                            className="w-6 h-4 object-cover rounded shadow-sm border border-slate-200/50 mr-2"
+                            className="w-5.5 h-3.5 object-cover rounded shadow-sm border border-slate-200/50 mr-1.5"
                           />
                         );
                       }
@@ -261,8 +332,8 @@ const CreateTrip = () => {
 
                   {/* Autocomplete Dropdown List */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white/95 backdrop-blur-xl border border-slate-200/60 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
-                      <div className="py-2 max-h-[280px] overflow-y-auto">
+                    <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
+                      <div className="py-2.5 max-h-[250px] overflow-y-auto">
                         {suggestions.map((suggestion, idx) => (
                           <div 
                             key={idx}
@@ -283,11 +354,11 @@ const CreateTrip = () => {
                               <span className="text-lg shrink-0 filter drop-shadow">{suggestion.emoji}</span>
                             )}
                             <div className="flex-1 text-left">
-                              <p className="text-[14px] font-bold text-slate-800 leading-tight">
+                              <p className="text-[13px] font-bold text-slate-800 leading-tight">
                                 {suggestion.city ? suggestion.city : suggestion.country}
                               </p>
                               {suggestion.city && (
-                                <p className="text-[10px] font-semibold text-slate-450 uppercase tracking-wider mt-0.5">
+                                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">
                                   {suggestion.country}
                                 </p>
                               )}
@@ -302,259 +373,332 @@ const CreateTrip = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
-                    <div className="relative group">
-                      <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Total Budget (₹)</label>
-                      <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
-                        <span className="text-primary mr-[8px] font-bold">₹</span>
-                        <input 
-                          required
-                          type="number"
-                          value={budget}
-                          onChange={(e) => setBudget(e.target.value)}
-                          className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface" 
-                        />
-                      </div>
-                    </div>
-                    <div className="relative group">
-                      <label className="text-[14px] font-semibold text-on-surface-variant mb-[4px] block">Group Size</label>
-                      <div className="clay-inset rounded-2xl flex items-center px-[16px] py-[8px] group-focus-within:ring-2 ring-primary transition-all">
-                        <span className="material-symbols-outlined text-primary mr-[8px]">group</span>
-                        <input 
-                          required
-                          type="number"
-                          min="1"
-                          value={travelerCount}
-                          onChange={(e) => setTravelerCount(e.target.value)}
-                          className="bg-transparent border-none focus:ring-0 w-full text-[16px] font-medium text-on-surface" 
-                        />
-                      </div>
-                    </div>
+                <div className="relative group">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Stops or Specific Cities to Explore (Optional)</label>
+                  <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
+                    <span className="material-symbols-outlined text-primary mr-3 text-lg">explore</span>
+                    <input 
+                      value={cities}
+                      onChange={(e) => setCities(e.target.value)}
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 placeholder:text-slate-400 outline-none" 
+                      placeholder="e.g. Tokyo, Gion, Shibuya" 
+                      type="text"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: TRIP DURATION & CALENDAR */}
+            {step === 2 && (
+              <div className="space-y-6 animate-fade-in text-left">
+                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">2</div>
+                  <h3 className="text-xl font-bold text-slate-800">Timeline & Calendar Setup</h3>
                 </div>
 
-                <div>
-                  <label className="text-[14px] font-semibold text-on-surface-variant mb-[16px] block">Transportation Choice</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-[16px]">
+                <div className="relative group">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Number of Days</label>
+                  <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
+                    <span className="material-symbols-outlined text-primary mr-3 text-lg">hourglass_bottom</span>
+                    <input 
+                      required
+                      type="number"
+                      min="1"
+                      value={durationDays}
+                      onChange={(e) => setDurationDays(Number(e.target.value))}
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none"
+                    />
+                  </div>
+                </div>
+
+                {durationDays > 0 && (
+                  <div className="space-y-4 animate-fade-in">
+                    <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Select Start Date</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase">Check-In Date</label>
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-primary text-lg">calendar_today</span>
+                          <input 
+                            required
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-800 w-full outline-none"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left opacity-80 bg-slate-100/50">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase">Check-Out Date (Auto-Calculated)</label>
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-slate-400 text-lg">calendar_month</span>
+                          <input 
+                            disabled
+                            type="date"
+                            value={endDate}
+                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-500 w-full outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* STEP 3: TRANSIT & BUDGET */}
+            {step === 3 && (
+              <div className="space-y-6 animate-fade-in text-left">
+                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">3</div>
+                  <h3 className="text-xl font-bold text-slate-800">Transportation & Financial Allocations</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Transit Mode</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {['flight', 'train', 'bus', 'car'].map(mode => (
                       <button 
                         key={mode}
                         type="button"
                         onClick={() => setTransportMode(mode)}
-                        className={`clay-surface rounded-2xl p-[16px] flex flex-col items-center gap-[8px] transition-all ${
-                          transportMode === mode ? 'border-2 border-primary bg-surface-container-low scale-95' : 'hover:-translate-y-1'
+                        className={`clay-surface rounded-2xl p-4 flex flex-col items-center gap-2 transition-all ${
+                          transportMode === mode ? 'border-2 border-primary bg-primary/5' : 'hover:translate-y-[-2px]'
                         }`}
                       >
-                        <span className={`material-symbols-outlined text-3xl ${transportMode === mode ? 'text-primary' : 'text-on-surface-variant'}`}>
-                           {mode === 'car' ? 'directions_car' : mode}
+                        <span className={`material-symbols-outlined text-2xl ${transportMode === mode ? 'text-primary' : 'text-slate-450'}`}>
+                          {mode === 'car' ? 'directions_car' : mode}
                         </span>
-                        <span className="text-[14px] font-semibold capitalize">{mode}</span>
+                        <span className="text-xs font-bold capitalize">{mode}</span>
                       </button>
                     ))}
                   </div>
                 </div>
-              </div>
-            </section>
 
-            {/* Step 2: Date Selection */}
-            <section className="clay-surface rounded-3xl p-[48px]">
-              <div className="flex items-center gap-[16px] mb-[24px]">
-                <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
-                <h2 className="text-[24px] font-bold">Set the dates</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
-                <div className="clay-inset rounded-2xl p-[16px] flex flex-col gap-2">
-                   <label className="text-[12px] font-medium text-on-surface-variant">Check-in</label>
-                   <div className="flex items-center gap-[16px]">
-                     <span className="material-symbols-outlined text-primary">calendar_today</span>
-                     <input 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative group">
+                    <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Approximate Budget (₹)</label>
+                    <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
+                      <span className="text-primary mr-2 font-black text-sm">₹</span>
+                      <input 
                         required
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-transparent border-none p-0 focus:ring-0 text-[14px] font-semibold text-on-surface w-full"
-                     />
-                   </div>
-                </div>
-                <div className="clay-inset rounded-2xl p-[16px] flex flex-col gap-2">
-                   <label className="text-[12px] font-medium text-on-surface-variant">Check-out</label>
-                   <div className="flex items-center gap-[16px]">
-                     <span className="material-symbols-outlined text-primary">calendar_month</span>
-                     <input 
-                        required
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="bg-transparent border-none p-0 focus:ring-0 text-[14px] font-semibold text-on-surface w-full"
-                     />
-                   </div>
-                </div>
-              </div>
-            </section>
-            
-            {/* Step 3: Food & Budget */}
-            <section className="clay-surface rounded-3xl p-[48px]">
-               <div className="flex items-center gap-[16px] mb-[24px]">
-                  <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
-                  <h2 className="text-[24px] font-bold">Financial Strategy & Dining</h2>
-               </div>
-               
-               <div className="clay-surface rounded-2xl p-[16px] flex items-center gap-[16px] border border-primary/10 mb-[24px]">
-                  <div className="bg-surface-container-high p-[8px] rounded-xl">
-                    <span className="material-symbols-outlined text-primary">restaurant</span>
+                        type="number"
+                        value={budget}
+                        onChange={(e) => setBudget(Number(e.target.value))}
+                        className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none" 
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[14px] font-semibold">Gourmet Protocol Included</p>
-                    <p className="text-[12px] font-medium text-on-surface-variant">AI will automatically suggest local dining experiences daily.</p>
-                  </div>
-               </div>
 
-               <div className="clay-inset p-[24px] rounded-2xl space-y-[24px]">
-                  <h3 className="text-[14px] font-semibold text-primary">Suggested Budget Breakdown</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[40px] gap-y-[16px]">
-                    {Object.entries(breakdown).map(([key, val]) => (
-                      <div key={key} className="space-y-[8px]">
-                        <div className="flex justify-between items-center text-[12px] font-semibold text-on-surface-variant capitalize">
-                           <span>{key}</span>
-                           <span className="text-on-surface font-bold">₹{val.toLocaleString()}</span>
-                        </div>
-                        <input 
-                          type="range" 
-                          min="0" 
-                          max={budget} 
-                          value={val} 
-                          onChange={(e) => handleBreakdownChange(key, e.target.value)}
-                          className="w-full h-2 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary"
-                        />
+                  <div className="relative group flex flex-col justify-end">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Financial Breakdown Strategy</span>
+                    <div className="rounded-xl border border-slate-200/80 p-3.5 bg-slate-50 flex items-center justify-between text-xs font-semibold text-slate-500">
+                      <div>
+                        <span>Hotel: ₹{breakdown.accommodation.toLocaleString()}</span>
                       </div>
-                    ))}
+                      <div>
+                        <span>Transit: ₹{breakdown.transport.toLocaleString()}</span>
+                      </div>
+                    </div>
                   </div>
-               </div>
-             </section>
-
-             {/* Step 4: AI Personalization Engine */}
-             <section className="clay-surface rounded-3xl p-[48px] space-y-[24px]">
-                <div className="flex items-center gap-[16px] mb-[24px]">
-                   <div className="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center font-bold">4</div>
-                   <h2 className="text-[24px] font-bold">AI Personalization Engine</h2>
                 </div>
-                
-                <div className="space-y-[24px]">
-                  <div>
-                    <label className="text-[14px] font-semibold text-on-surface-variant mb-[12px] block">Travel Pace</label>
-                    <div className="grid grid-cols-3 gap-[16px]">
-                      {['slow', 'balanced', 'fast'].map(pace => (
+              </div>
+            )}
+
+            {/* STEP 4: NATURE OF TRIP & GROUP SIZE */}
+            {step === 4 && (
+              <div className="space-y-6 animate-fade-in text-left">
+                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">4</div>
+                  <h3 className="text-xl font-bold text-slate-800">Personalization & Personal Details</h3>
+                </div>
+
+                <div className="relative group">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Group Size (Number of People)</label>
+                  <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
+                    <span className="material-symbols-outlined text-primary mr-3 text-lg">group</span>
+                    <input 
+                      required
+                      type="number"
+                      min="1"
+                      value={travelerCount}
+                      onChange={(e) => setTravelerCount(Number(e.target.value))}
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none" 
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Nature of Trip / Voyage Vibe</label>
+                  <div className="flex flex-wrap gap-2.5">
+                    {['Culture', 'Nature', 'Adventure', 'Food', 'Shopping', 'Relaxation', 'Nightlife', 'History', 'Family Friendly'].map(interest => {
+                      const isSelected = interests.includes(interest);
+                      return (
                         <button 
-                          key={pace}
+                          key={interest}
                           type="button"
-                          onClick={() => setTravelPace(pace)}
-                          className={`clay-surface rounded-2xl p-[16px] flex flex-col items-center gap-[8px] transition-all capitalize font-bold ${
-                            travelPace === pace ? 'border-2 border-primary bg-surface-container-low scale-95 text-primary' : 'hover:-translate-y-0.5'
+                          onClick={() => {
+                            if (isSelected) {
+                              setInterests(interests.filter(i => i !== interest));
+                            } else {
+                              setInterests([...interests, interest]);
+                            }
+                          }}
+                          className={`px-4.5 py-2.5 rounded-full text-xs font-bold transition-all border ${
+                            isSelected 
+                              ? 'bg-primary text-white border-primary shadow-sm scale-95' 
+                              : 'clay-surface text-slate-600 hover:border-slate-350'
                           }`}
                         >
-                          {pace}
+                          {interest}
                         </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-[14px] font-semibold text-on-surface-variant mb-[12px] block">Voyage Vibe & Interests</label>
-                    <div className="flex flex-wrap gap-[12px]">
-                      {['Culture', 'Nature', 'Adventure', 'Food', 'Shopping', 'Relaxation', 'Nightlife', 'History', 'Family Friendly'].map(interest => {
-                        const isSelected = interests.includes(interest);
-                        return (
-                          <button 
-                            key={interest}
-                            type="button"
-                            onClick={() => {
-                              if (isSelected) {
-                                setInterests(interests.filter(i => i !== interest));
-                              } else {
-                                setInterests([...interests, interest]);
-                              }
-                            }}
-                            className={`px-[20px] py-[10px] rounded-full text-[14px] font-semibold transition-all border ${
-                              isSelected 
-                              ? 'bg-primary text-white border-primary shadow-md scale-95' 
-                              : 'clay-surface text-on-surface hover:border-slate-300'
-                            }`}
-                          >
-                            {interest}
-                          </button>
-                        );
-                      })}
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
-             </section>
+              </div>
+            )}
 
-          </form>
+            {/* Navigation buttons at the bottom */}
+            <div className="mt-12 flex justify-between items-center border-t border-slate-100 pt-6">
+              {step > 1 ? (
+                <button 
+                  type="button"
+                  onClick={prevStep}
+                  className="clay-button-secondary py-3 px-6 rounded-xl text-xs flex items-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-xs">arrow_back</span> Back
+                </button>
+              ) : (
+                <div></div>
+              )}
+
+              {step < 4 ? (
+                <button 
+                  type="button"
+                  onClick={nextStep}
+                  disabled={(step === 1 && !destination) || (step === 2 && (!startDate || !durationDays))}
+                  className="clay-button-primary py-3 px-8 rounded-xl text-xs flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Continue <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                </button>
+              ) : (
+                <button 
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isGenerating || !destination || !startDate || !durationDays}
+                  className="clay-button-primary py-3 px-8 rounded-xl text-xs flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  {isGenerating ? 'Compiling Itinerary...' : 'Instigate AI Planner'}
+                  {!isGenerating && <span className="material-symbols-outlined text-xs">auto_awesome</span>}
+                </button>
+              )}
+            </div>
+
+          </div>
         </div>
 
-        {/* Right Column: Visual Summary */}
-        <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-[24px]">
-          <div className="clay-surface rounded-3xl overflow-hidden shadow-xl">
-            <div className="h-48 relative">
+        {/* Right Dynamic Summary Panel */}
+        <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
+          <div className="clay-surface rounded-3xl overflow-hidden shadow-xl border border-slate-200/60 bg-white">
+            <div className="h-44 relative bg-slate-100 shrink-0">
               <img 
                 className="w-full h-full object-cover" 
                 src={destImage} 
-                alt="Destination"
+                alt="Destination Preview"
                 onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div className="absolute bottom-[16px] left-[16px]">
-                <span className="bg-primary/90 text-white text-[12px] font-medium px-[8px] py-[4px] rounded-full backdrop-blur-md">Dynamic Preview</span>
-                <h3 className="text-white text-[24px] font-bold mt-[4px]">{destination || 'Select Destination'}</h3>
+              <div className="absolute bottom-4 left-5 flex items-center gap-2">
+                {(() => {
+                  const parts = destination.split(',');
+                  const countryPart = parts[parts.length - 1].trim().toLowerCase();
+                  const cDetails = countryData[countryPart];
+                  if (cDetails && cDetails.iso) {
+                    return (
+                      <img 
+                        src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                        alt={cDetails.name}
+                        className="w-5.5 h-3.5 object-cover rounded border border-white/60 shadow"
+                      />
+                    );
+                  }
+                  return null;
+                })()}
+                <h3 className="text-white text-lg font-black truncate max-w-[200px]">
+                  {destination ? destination.split(',')[0].trim() : 'Select Destination'}
+                </h3>
               </div>
             </div>
-            <div className="p-[48px] space-y-[16px]">
-              <h4 className="text-[14px] font-semibold text-on-surface-variant uppercase tracking-wider">Trip Summary</h4>
-              <div className="space-y-[8px]">
-                <div className="flex justify-between items-center">
-                  <span className="text-[16px] text-on-surface-variant">Destination</span>
-                  <span className="font-bold text-primary">{destination || '—'}</span>
+            <div className="p-8 space-y-5 text-left">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Voyage Parameters</h4>
+              
+              <div className="space-y-3.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Destination</span>
+                  <span className="font-extrabold text-primary max-w-[150px] truncate">{destination || '—'}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[16px] text-on-surface-variant">Dates</span>
-                  <span className="font-bold text-[14px]">
-                     {startDate && endDate ? `${startDate.substring(5)} to ${endDate.substring(5)}` : '—'}
+                
+                {cities && (
+                  <div className="flex justify-between items-center text-xs animate-fade-in">
+                    <span className="font-semibold text-slate-450 uppercase tracking-wider">Stops</span>
+                    <span className="font-bold text-slate-800 max-w-[150px] truncate">{cities}</span>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Duration</span>
+                  <span className="font-bold text-slate-800">{durationDays ? `${durationDays} Days` : '—'}</span>
+                </div>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Schedule</span>
+                  <span className="font-bold text-slate-800 text-[11px]">
+                    {startDate && endDate ? `${startDate.substring(5)} to ${endDate.substring(5)}` : '—'}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[16px] text-on-surface-variant">Travelers</span>
-                  <span className="font-bold">{travelerCount}</span>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Travelers</span>
+                  <span className="font-bold text-slate-800">{travelerCount} traveler(s)</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[16px] text-on-surface-variant">Transport</span>
-                  <span className="font-bold capitalize">{transportMode}</span>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Transit</span>
+                  <span className="font-bold text-slate-800 capitalize">{transportMode}</span>
                 </div>
               </div>
-              <div className="pt-[16px] border-t border-outline-variant/30">
-                <div className="flex justify-between items-center mb-[24px]">
-                  <span className="text-[24px] font-semibold">Total Budget</span>
-                  <span className="text-[24px] font-semibold text-primary">₹{budget.toLocaleString()}</span>
+
+              <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                <div>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 block">Total Budget</span>
+                  <span className="text-xl font-black text-slate-850">₹{budget.toLocaleString()}</span>
                 </div>
-                <button 
-                  onClick={handleSubmit}
-                  disabled={isGenerating || !destination || !startDate || !endDate}
-                  className="clay-button-primary w-full py-[16px] rounded-2xl text-white font-bold text-lg flex items-center justify-center gap-[8px] disabled:opacity-50"
-                >
-                  {isGenerating ? 'Generating Itinerary...' : 'Create Itinerary'}
-                  {!isGenerating && <span className="material-symbols-outlined">auto_awesome</span>}
-                </button>
+                
+                {step < 4 ? (
+                  <button 
+                    onClick={nextStep}
+                    disabled={(step === 1 && !destination) || (step === 2 && (!startDate || !durationDays))}
+                    className="clay-button-primary py-2.5 px-4 rounded-xl text-[10px] uppercase font-black tracking-widest disabled:opacity-50"
+                  >
+                    Next Step
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handleSubmit}
+                    disabled={isGenerating || !destination || !startDate || !durationDays}
+                    className="clay-button-primary py-2.5 px-4 rounded-xl text-[10px] uppercase font-black tracking-widest disabled:opacity-50"
+                  >
+                    Instigate
+                  </button>
+                )}
               </div>
-            </div>
-          </div>
-          <div className="clay-surface rounded-3xl p-[16px] flex items-center gap-[16px] border border-primary/10">
-            <div className="bg-surface-container-high p-[8px] rounded-xl">
-              <span className="material-symbols-outlined text-primary">verified_user</span>
-            </div>
-            <div>
-              <p className="text-[14px] font-semibold">Elite Protection</p>
-              <p className="text-[12px] font-medium text-on-surface-variant">AI Engine respects exact duration</p>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
