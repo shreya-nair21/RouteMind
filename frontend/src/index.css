@@ -30,9 +30,9 @@
   --surface-hover: #1E293B;
 
   /* Typography */
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --text-light: #64748B;
+  --text-main: #FFFFFF;
+  --text-muted: #CBD5E1;
+  --text-light: #E2E8F0;
 
   /* Borders */
   --border: rgba(255, 255, 255, 0.08);

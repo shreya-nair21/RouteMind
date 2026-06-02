@@ -48,11 +48,11 @@ const TripNotes = () => {
     }
   };
 
-  if (loading) return <div className="min-h-[60vh] flex items-center justify-center"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
+  if (loading) return <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-12 pb-20">
-      <div className="flex justify-between items-end border-b border-slate-100 pb-10">
+      <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Tactical Intelligence</p>
           <h1 className="text-4xl font-black text-secondary uppercase italic">Field Notes</h1>
@@ -79,7 +79,7 @@ const TripNotes = () => {
           <p className="text-center py-10 text-slate-400 text-sm font-medium italic">The archive is currently empty.</p>
         ) : (
           notes.map(note => (
-            <div key={note._id} className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm relative overflow-hidden group">
+            <div key={note._id} className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm relative overflow-hidden group">
                <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3 italic">
                   Recorded on {new Date(note.createdAt).toLocaleDateString()}

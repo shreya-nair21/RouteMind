@@ -85,11 +85,11 @@ const PackingChecklist = () => {
     }
   };
 
-  if (loading) return <div className="min-h-[60vh] flex items-center justify-center"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
+  if (loading) return <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-12 pb-20">
-      <div className="flex justify-between items-end border-b border-slate-100 pb-10">
+      <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Logistics Prep</p>
           <h1 className="text-4xl font-black text-secondary uppercase italic">Equipment List</h1>
@@ -119,7 +119,7 @@ const PackingChecklist = () => {
         </button>
       </div>
 
-      <div className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm space-y-3">
+      <div className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm space-y-3">
         {items.length === 0 ? (
           <p className="text-center py-10 text-slate-400 text-sm font-medium italic">No inventory specified yet.</p>
         ) : (
@@ -128,11 +128,11 @@ const PackingChecklist = () => {
               key={item._id} 
               onClick={() => toggleItem(item)}
               className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all border ${
-                item.packed ? 'bg-slate-50 border-slate-100 opacity-60' : 'bg-surface border-slate-200/80 hover:border-primary/30'
+                item.packed ? 'bg-[#0B0F19]/50 border-white/5 opacity-60' : 'bg-surface border-white/5 hover:border-primary/30'
               }`}
             >
               <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${
-                item.packed ? 'bg-primary border-primary' : 'border-slate-300'
+                item.packed ? 'bg-primary border-primary' : 'border-white/20'
               }`}>
                 {item.packed && <span className="material-symbols-outlined text-white text-[10px]">check</span>}
               </div>

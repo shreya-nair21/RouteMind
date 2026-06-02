@@ -69,25 +69,25 @@ const SharedTrip = () => {
 
       {/* Shared Itinerary View */}
       <div className="max-w-4xl mx-auto px-6 -mt-10 relative z-10 space-y-8">
-         <div className="bg-surface border border-slate-200 p-8 rounded-xl shadow-sm">
+         <div className="bg-surface border border-white/10 p-8 rounded-xl shadow-sm">
             <h2 className="text-xl font-bold tracking-tight text-secondary uppercase mb-8">Sequenced Maneuvers</h2>
             
-            <div className="space-y-8 relative before:absolute before:left-10 before:top-6 before:bottom-6 before:w-px before:bg-slate-200/60">
+            <div className="space-y-8 relative before:absolute before:left-10 before:top-6 before:bottom-6 before:w-px before:bg-white/10">
                {activities.map((act, index) => (
                   <div key={act._id} className="relative pl-20 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                      <div className="absolute left-0 top-5 w-16 text-right">
                         <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter leading-none">{act.startTime}</p>
                      </div>
-                     <div className="absolute left-[39px] top-5 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-white shadow-sm z-10"></div>
+                     <div className="absolute left-[39px] top-5 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-zinc-950 shadow-sm z-10"></div>
                      
-                     <div className="bg-slate-50/50 border border-slate-200/60 p-5 rounded-lg hover:bg-surface hover:shadow-sm hover:border-slate-300 transition-all">
+                     <div className="bg-[#0B0F19]/50 border border-white/5 p-5 rounded-lg hover:bg-zinc-900/50 hover:border-white/10 transition-all">
                         <div className="flex items-center gap-3 mb-2">
                            <span className="material-symbols-outlined text-supporting text-lg">
                               {act.type === 'food' ? 'restaurant' : act.type === 'transport' ? 'flight' : 'explore'}
                            </span>
                            <h4 className="text-sm font-bold text-secondary tracking-tight uppercase">{act.name}</h4>
                         </div>
-                        <p className="text-slate-500 font-normal text-xs leading-relaxed">{act.description}</p>
+                        <p className="text-slate-400 font-normal text-xs leading-relaxed">{act.description}</p>
                      </div>
                   </div>
                ))}
@@ -96,7 +96,7 @@ const SharedTrip = () => {
          
          <div className="text-center pt-10">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Want to craft your own journey?</p>
-            <a href="/" className="inline-block px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-2xl shadow-slate-900/20">
+            <a href="/" className="inline-block px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all shadow-2xl">
                Join RouteMind Elite
             </a>
          </div>

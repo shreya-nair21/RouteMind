@@ -63,17 +63,17 @@ const AdminDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-20">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-slate-100 pb-10">
+      <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Central Operations</p>
           <h1 className="text-4xl font-black text-secondary">Platform Analytics</h1>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-supporting rounded-full border border-green-100">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-full border border-green-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
             <span className="text-[9px] font-bold uppercase tracking-wider">Live Engine</span>
           </div>
-          <button onClick={fetchStats} className="w-8 h-8 rounded bg-secondary text-white flex items-center justify-center hover:bg-slate-800 transition-all">
+          <button onClick={fetchStats} className="w-8 h-8 rounded bg-white/5 text-white flex items-center justify-center hover:bg-white/10 transition-all">
             <span className="material-symbols-outlined text-sm">refresh</span>
           </button>
         </div>
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
           { label: 'Platform Capital', value: `₹${stats.totalBudget.toLocaleString()}`, icon: 'payments', color: 'primary' },
           { label: 'Avg Journey Budget', value: `₹${stats.avgBudget.toFixed(0)}`, icon: 'analytics', color: 'primary' }
         ].map((item, idx) => (
-          <div key={idx} className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm hover:translate-y-[-2px] transition-all duration-200">
+          <div key={idx} className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm hover:translate-y-[-2px] transition-all duration-200">
             <div className="flex justify-between items-start mb-6">
               <span className={`material-symbols-outlined text-2xl text-primary`}>{item.icon}</span>
               <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">Real-time</span>
@@ -101,7 +101,7 @@ const AdminDashboard = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Growth Chart */}
-        <div className="lg:col-span-2 bg-surface border border-slate-200 p-6 rounded-xl shadow-sm">
+        <div className="lg:col-span-2 bg-surface border border-white/10 p-6 rounded-xl shadow-sm">
           <div className="flex justify-between items-center mb-8">
              <h3 className="text-xs font-bold text-secondary uppercase tracking-wider">Growth Trajectory</h3>
              <div className="flex items-center gap-4">
@@ -112,19 +112,19 @@ const AdminDashboard = () => {
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.growth}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 500, fill: '#94a3b8' }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 500, fill: '#94a3b8' }} />
-                <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#0F172A', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', color: '#FFFFFF' }} />
                 <Line type="monotone" dataKey="users" stroke="#FF6B35" strokeWidth={3} dot={{ r: 3, fill: '#FF6B35' }} />
-                <Line type="monotone" dataKey="trips" stroke="#0F172A" strokeWidth={3} strokeDasharray="5 5" dot={{ r: 3, fill: '#0F172A' }} />
+                <Line type="monotone" dataKey="trips" stroke="#3B82F6" strokeWidth={3} strokeDasharray="5 5" dot={{ r: 3, fill: '#3B82F6' }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Transport Distribution */}
-        <div className="bg-surface border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+        <div className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm flex flex-col justify-between">
           <h3 className="text-xs font-bold text-secondary uppercase tracking-wider mb-6">Logistics Breakdown</h3>
           <div className="flex-1 h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -140,15 +140,15 @@ const AdminDashboard = () => {
                   nameKey="name"
                 >
                   {stats.transportData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={['#0F172A', '#FF6B35', '#25A18E', '#64748B'][index % 4]} />
+                    <Cell key={`cell-${index}`} fill={['#3B82F6', '#FF6B35', '#25A18E', '#64748B'][index % 4]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#0F172A', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', color: '#FFFFFF' }} />
                 <Legend verticalAlign="bottom" height={36} iconType="circle"/>
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-6 p-4 bg-slate-50/50 border border-slate-200/60 rounded-lg">
+          <div className="mt-6 p-4 bg-white/5 border border-white/10 rounded-lg">
              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Most Popular Mode</p>
              <p className="text-base font-bold text-secondary">
                 {stats.transportData.length > 0 ? stats.transportData.reduce((prev, current) => (prev.value > current.value) ? prev : current).name : 'N/A'}
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* User Table (Simplified) */}
-      <div className="bg-secondary text-white p-6 rounded-xl shadow-sm">
+      <div className="bg-surface border border-white/10 text-white p-6 rounded-xl shadow-sm">
          <div className="flex justify-between items-center mb-6">
             <h3 className="text-xs font-bold uppercase tracking-wider">Platform Integrity</h3>
             <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Audit Ready</span>

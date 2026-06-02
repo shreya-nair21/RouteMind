@@ -120,23 +120,23 @@ const ItineraryBuilder = () => {
   return (
     <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-32">
       {/* Header Panel */}
-      <div className="pro-card p-12 bg-white relative overflow-hidden flex flex-col md:flex-row justify-between items-end gap-8">
+      <div className="pro-card p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-end gap-8">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="material-symbols-outlined text-blue-600 filled">auto_awesome</span>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Neural Itinerary Engine</p>
           </div>
-          <h1 className="text-6xl font-black tracking-tighter text-slate-900 uppercase italic leading-none mb-6">
+          <h1 className="text-6xl font-black tracking-tighter text-white uppercase italic leading-none mb-6">
             {trip.destination}
           </h1>
           <div className="flex gap-10">
             <div className="flex flex-col">
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Duration</span>
-              <span className="text-sm font-bold">{daysCount} Elite Days</span>
+              <span className="text-sm font-bold text-white">{daysCount} Elite Days</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Capital Allocation</span>
-              <span className="text-sm font-bold">₹{trip.budget.toLocaleString()}</span>
+              <span className="text-sm font-bold text-white">₹{trip.budget.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -150,17 +150,17 @@ const ItineraryBuilder = () => {
             AI Re-Generate
           </button>
         </div>
-        <div className="absolute top-0 right-0 w-80 h-80 bg-slate-50 rounded-full -mr-40 -mt-40 -z-0"></div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full -mr-40 -mt-40 -z-0"></div>
       </div>
 
       {/* Navigation Sub-Bar */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-100 shadow-sm sticky top-24 z-30">
+      <div className="flex justify-between items-center bg-surface p-4 rounded-2xl border border-white/10 shadow-sm sticky top-24 z-30">
         <div className="flex gap-4">
           <button onClick={() => navigate(`/trips/${id}/budget`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Budget</button>
           <button onClick={() => navigate(`/trips/${id}/packing`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Packing</button>
           <button onClick={() => navigate(`/trips/${id}/notes`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Notes</button>
         </div>
-        <div className="flex items-center gap-4 px-6 border-l border-slate-100">
+        <div className="flex items-center gap-4 px-6 border-l border-white/10">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Platform Sync</p>
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
         </div>
@@ -177,7 +177,7 @@ const ItineraryBuilder = () => {
                 onClick={() => setActiveDay(i + 1)}
                 className={`flex-shrink-0 px-8 py-5 rounded-2xl text-sm font-black transition-all flex items-center justify-between border-2 ${activeDay === i + 1
                   ? 'bg-primary border-primary text-white shadow-2xl scale-105'
-                  : 'bg-surface border-slate-100 text-slate-400 hover:border-slate-300'
+                  : 'bg-surface border-white/5 text-slate-400 hover:border-white/20 hover:text-white'
                   }`}
               >
                 <span>Day {String(i + 1).padStart(2, '0')}</span>
@@ -190,56 +190,56 @@ const ItineraryBuilder = () => {
         {/* Activity Timeline */}
         <div className="lg:col-span-2 space-y-10">
           <div className="flex justify-between items-center">
-            <h2 className="text-3xl font-black tracking-tighter text-slate-900 italic uppercase">Sequence of Events</h2>
+            <h2 className="text-3xl font-black tracking-tighter text-white italic uppercase">Sequence of Events</h2>
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Day {activeDay} Strategy</span>
           </div>
 
           {currentDayActivities.length === 0 ? (
-            <div className="pro-card p-24 text-center bg-slate-50 border-dashed border-slate-300 flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-slate-200 mb-8 shadow-sm">
+            <div className="pro-card p-24 text-center bg-surface border-dashed border-white/10 flex flex-col items-center">
+              <div className="w-20 h-20 rounded-full bg-[#0B0F19]/50 flex items-center justify-center text-slate-500 mb-8 border border-white/5 shadow-sm">
                 <span className="material-symbols-outlined text-4xl">history_toggle_off</span>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4 uppercase italic">Timeline Void</h3>
+              <h3 className="text-xl font-bold text-white mb-4 uppercase italic">Timeline Void</h3>
               <p className="text-slate-400 font-medium mb-10 max-w-xs mx-auto">No maneuvers scheduled for this sector. Use the intelligence module to populate your itinerary.</p>
               <button onClick={handleGenerateAI} className="btn-primary px-10">Deploy AI Engine</button>
             </div>
           ) : (
-            <div className="space-y-8 relative before:absolute before:left-10 before:top-10 before:bottom-10 before:w-px before:bg-slate-100">
+            <div className="space-y-8 relative before:absolute before:left-10 before:top-10 before:bottom-10 before:w-px before:bg-white/10">
               {currentDayActivities.map((activity, index) => (
                 <div key={activity._id} className="relative pl-24 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                   {/* Time Indicator */}
                   <div className="absolute left-0 top-6 w-20 text-right">
-                    <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter leading-none">{activity.startTime}</p>
-                    <p className="text-[8px] font-bold text-slate-300 uppercase mt-1">EST</p>
+                    <p className="text-[10px] font-black text-slate-200 uppercase tracking-tighter leading-none">{activity.startTime}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase mt-1">EST</p>
                   </div>
                   {/* Node */}
                   <div className="absolute left-[39px] top-6 w-3 h-3 rounded-full bg-primary border-4 border-white shadow-[0_0_0_1px_rgba(255,126,95,0.2)] z-10 group-hover:scale-150 transition-all"></div>
 
-                  <div className="pro-card p-8 bg-white hover:border-[#0056B3]/30 transition-all flex justify-between items-start">
+                  <div className="pro-card p-8 hover:border-[#0056B3]/30 transition-all flex justify-between items-start">
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <span className="material-symbols-outlined text-blue-600 text-lg filled">
                           {activity.type === 'food' ? 'restaurant' : activity.type === 'transport' ? 'flight' : 'explore'}
                         </span>
-                        <h4 className="text-xl font-black text-slate-900 tracking-tight italic uppercase">{activity.name}</h4>
+                        <h4 className="text-xl font-black text-white tracking-tight italic uppercase">{activity.name}</h4>
                       </div>
-                      <p className="text-slate-500 font-medium text-sm leading-relaxed max-w-md">{activity.description}</p>
+                      <p className="text-slate-400 font-medium text-sm leading-relaxed max-w-md">{activity.description}</p>
                       <div className="flex gap-6 items-center">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Allocation</span>
-                          <span className="text-xs font-bold text-slate-900">₹{activity.cost?.toLocaleString()}</span>
+                          <span className="text-[10px] font-black text-slate-350 uppercase tracking-widest">Allocation</span>
+                          <span className="text-xs font-bold text-slate-200">₹{activity.cost?.toLocaleString()}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Duration</span>
-                          <span className="text-xs font-bold text-slate-900">{activity.duration}</span>
+                          <span className="text-[10px] font-black text-slate-350 uppercase tracking-widest">Duration</span>
+                          <span className="text-xs font-bold text-slate-200">{activity.duration}</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                      <button onClick={() => { setEditingActivity(activity); setIsModalOpen(true); }} className="btn-ghost w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50">
+                      <button onClick={() => { setEditingActivity(activity); setIsModalOpen(true); }} className="btn-ghost w-10 h-10 rounded-xl bg-white/5 text-slate-400 hover:text-blue-400 hover:bg-blue-600/20">
                         <span className="material-symbols-outlined text-lg">edit</span>
                       </button>
-                      <button onClick={() => deleteActivity(activity._id)} className="btn-ghost w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50">
+                      <button onClick={() => deleteActivity(activity._id)} className="btn-ghost w-10 h-10 rounded-xl bg-white/5 text-slate-400 hover:text-red-400 hover:bg-red-600/20">
                         <span className="material-symbols-outlined text-lg">delete</span>
                       </button>
                     </div>
@@ -252,14 +252,14 @@ const ItineraryBuilder = () => {
 
         {/* Sidebar Insights */}
         <div className="space-y-8">
-          <div className="pro-card p-10 bg-[#EDF3FC] text-slate-800 border-none relative overflow-hidden">
+          <div className="pro-card p-10 bg-blue-950/20 border border-blue-500/10 text-slate-200 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full -mr-10 -mt-10"></div>
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-6">
                 <span className="material-symbols-outlined text-primary filled">auto_awesome</span>
-                <h2 className="text-lg font-bold text-slate-850">Smart Insights</h2>
+                <h2 className="text-lg font-bold text-white">Smart Insights</h2>
               </div>
-              <p className="text-slate-500 text-sm leading-relaxed mb-10 font-medium">
+              <p className="text-slate-350 text-sm leading-relaxed mb-10 font-medium">
                 We've analyzed your {trip.destination} journey. For Day {activeDay}, we suggest prioritizing {activities.length === 0 ? 'any local activity' : 'cultural discovery'} to maximize your travel score.
               </p>
               <button onClick={() => setIsModalOpen(true)} className="btn-primary w-full py-4 text-xs tracking-widest uppercase">
@@ -268,15 +268,15 @@ const ItineraryBuilder = () => {
             </div>
           </div>
 
-          <div className="pro-card p-8 bg-white flex flex-col items-center text-center">
+          <div className="pro-card p-8 flex flex-col items-center text-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6">Platform Efficiency</p>
-            <div className="w-24 h-24 rounded-full border-8 border-slate-50 flex items-center justify-center relative">
+            <div className="w-24 h-24 rounded-full border-8 border-white/5 flex items-center justify-center relative">
               <svg className="absolute inset-0 w-full h-full -rotate-90">
                 <circle cx="48" cy="48" r="40" fill="transparent" stroke="#0056B3" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset={251.2 * (1 - 0.85)} />
               </svg>
-              <span className="text-xl font-black text-slate-900 italic">85%</span>
+              <span className="text-xl font-black text-white italic">85%</span>
             </div>
-            <p className="mt-6 text-sm font-bold text-slate-900">Optimization Level</p>
+            <p className="mt-6 text-sm font-bold text-white">Optimization Level</p>
             <p className="text-xs text-slate-400 font-medium mt-1">High Efficiency Detected</p>
           </div>
         </div>
@@ -300,23 +300,23 @@ const ItineraryBuilder = () => {
       {/* Share Modal */}
       {isShareModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[32px] w-full max-w-md p-10 space-y-8 animate-fade-in shadow-2xl">
+          <div className="bg-surface border border-white/10 rounded-[32px] w-full max-w-md p-10 space-y-8 animate-fade-in shadow-2xl">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight italic uppercase">Distribute Voyage</h3>
-                <p className="text-slate-500 font-medium text-sm">Allow associates to view your curated plans.</p>
+                <h3 className="text-2xl font-extrabold text-white tracking-tight italic uppercase">Distribute Voyage</h3>
+                <p className="text-slate-400 font-medium text-sm">Allow associates to view your curated plans.</p>
               </div>
-              <button onClick={() => setIsShareModalOpen(false)} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all">
+              <button onClick={() => setIsShareModalOpen(false)} className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
-            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+            <div className="p-6 bg-[#0B0F19]/50 rounded-2xl border border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className={`material-symbols-outlined ${trip.isPublic ? 'text-green-500' : 'text-slate-300'}`}>
+                <span className={`material-symbols-outlined ${trip.isPublic ? 'text-green-500' : 'text-slate-350'}`}>
                   {trip.isPublic ? 'visibility' : 'visibility_off'}
                 </span>
-                <span className="text-sm font-bold text-slate-900">{trip.isPublic ? 'Publicly Visible' : 'Private Access'}</span>
+                <span className="text-sm font-bold text-white">{trip.isPublic ? 'Publicly Visible' : 'Private Access'}</span>
               </div>
               <button className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline">Toggle Access</button>
             </div>
@@ -324,7 +324,7 @@ const ItineraryBuilder = () => {
             <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Universal Link</label>
               <div className="flex gap-2">
-                <input readOnly value={`http://localhost:5173/shared/${id}`} className="pro-input h-14 bg-slate-50 text-xs font-bold border-none" />
+                <input readOnly value={`http://localhost:5173/shared/${id}`} className="pro-input h-14 bg-slate-950/60 text-xs font-bold border border-white/5" />
                 <button className="btn-primary w-14 h-14 p-0 shrink-0"><span className="material-symbols-outlined">content_copy</span></button>
               </div>
             </div>

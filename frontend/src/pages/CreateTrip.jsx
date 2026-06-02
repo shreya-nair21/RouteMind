@@ -238,20 +238,20 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto font-body-md text-slate-800">
+    <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto font-body-md text-slate-100">
       
       {/* Wizard Header */}
       <div className="mb-12 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 leading-tight">
           Initialize Voyage Planner
         </h1>
-        <p className="text-sm md:text-base text-slate-500 font-medium max-w-2xl">
+        <p className="text-sm md:text-base text-slate-400 font-medium max-w-2xl">
           Complete the sequential configurations below to instigate RouteMind's AI Itinerary compiler.
         </p>
       </div>
 
       {/* Progressive Step Progress Bar */}
-      <div className="max-w-xl mx-auto md:mx-0 mb-12 bg-slate-100 p-2.5 rounded-2xl border border-slate-200/50 flex justify-between items-center gap-1">
+      <div className="max-w-xl mx-auto md:mx-0 mb-12 bg-[#0B0F19]/50 p-2.5 rounded-2xl border border-white/10 flex justify-between items-center gap-1">
         {[
           { label: 'Destination', num: 1 },
           { label: 'Dates & Days', num: 2 },
@@ -271,8 +271,8 @@ const CreateTrip = () => {
               step === item.num 
                 ? 'bg-primary text-white shadow-md' 
                 : step > item.num 
-                  ? 'bg-slate-200 text-slate-700' 
-                  : 'text-slate-400 hover:text-slate-600'
+                  ? 'bg-white/10 text-slate-200' 
+                  : 'text-slate-500 hover:text-slate-350'
             }`}
           >
             {item.label}
@@ -290,13 +290,13 @@ const CreateTrip = () => {
             {/* STEP 1: DESTINATION & CITIES */}
             {step === 1 && (
               <div className="space-y-6 animate-fade-in text-left">
-                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                <div className="flex items-center gap-4 border-b border-white/5 pb-4">
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">1</div>
-                  <h3 className="text-xl font-bold text-slate-800">Specify Target Location</h3>
+                  <h3 className="text-xl font-bold text-white">Specify Target Location</h3>
                 </div>
                 
                 <div className="relative group" ref={autocompleteRef}>
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Destination Country / City</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Destination Country / City</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all relative">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">location_on</span>
                     <input 
@@ -307,7 +307,7 @@ const CreateTrip = () => {
                         setShowSuggestions(true);
                       }}
                       onFocus={() => setShowSuggestions(true)}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 placeholder:text-slate-400 outline-none" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none" 
                       placeholder="e.g. Kyoto, Japan or Santorini, Greece" 
                       type="text"
                       autoComplete="off"
@@ -322,7 +322,7 @@ const CreateTrip = () => {
                           <img 
                             src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
                             alt={cDetails.name}
-                            className="w-5.5 h-3.5 object-cover rounded shadow-sm border border-slate-200/50 mr-1.5"
+                            className="w-5.5 h-3.5 object-cover rounded shadow-sm border border-white/10 mr-1.5"
                           />
                         );
                       }
@@ -332,7 +332,7 @@ const CreateTrip = () => {
 
                   {/* Autocomplete Dropdown List */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
+                    <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-surface border border-white/10 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
                       <div className="py-2.5 max-h-[250px] overflow-y-auto">
                         {suggestions.map((suggestion, idx) => (
                           <div 
@@ -341,29 +341,29 @@ const CreateTrip = () => {
                               setDestination(suggestion.display);
                               setShowSuggestions(false);
                             }}
-                            className="px-5 py-3 hover:bg-slate-50 flex items-center gap-3 cursor-pointer transition-all duration-150 border-b border-slate-100 last:border-0"
+                            className="px-5 py-3 hover:bg-white/5 flex items-center gap-3 cursor-pointer transition-all duration-150 border-b border-white/5 last:border-0"
                           >
                             {suggestion.iso ? (
                               <img 
                                 src={`https://flagcdn.com/w40/${suggestion.iso}.png`} 
                                 alt={suggestion.country}
-                                className="w-5.5 h-4 object-cover rounded shadow-sm border border-slate-200/50 shrink-0"
+                                className="w-5.5 h-4 object-cover rounded shadow-sm border border-white/10 shrink-0"
                                 onError={(e) => { e.target.style.display = 'none'; }}
                               />
                             ) : (
                               <span className="text-lg shrink-0 filter drop-shadow">{suggestion.emoji}</span>
                             )}
                             <div className="flex-1 text-left">
-                              <p className="text-[13px] font-bold text-slate-800 leading-tight">
+                              <p className="text-[13px] font-bold text-white leading-tight">
                                 {suggestion.city ? suggestion.city : suggestion.country}
                               </p>
                               {suggestion.city && (
-                                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">
+                                <p className="text-[9px] font-semibold text-slate-350 uppercase tracking-wider mt-0.5">
                                   {suggestion.country}
                                 </p>
                               )}
                             </div>
-                            <span className="material-symbols-outlined text-slate-300 text-xs shrink-0 hover:translate-x-0.5 transition-transform">
+                            <span className="material-symbols-outlined text-slate-400 text-xs shrink-0 hover:translate-x-0.5 transition-transform">
                               arrow_forward
                             </span>
                           </div>
@@ -374,13 +374,13 @@ const CreateTrip = () => {
                 </div>
 
                 <div className="relative group">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Stops or Specific Cities to Explore (Optional)</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Stops or Specific Cities to Explore (Optional)</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">explore</span>
                     <input 
                       value={cities}
                       onChange={(e) => setCities(e.target.value)}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 placeholder:text-slate-400 outline-none" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none" 
                       placeholder="e.g. Tokyo, Gion, Shibuya" 
                       type="text"
                     />
@@ -392,13 +392,13 @@ const CreateTrip = () => {
             {/* STEP 2: TRIP DURATION & CALENDAR */}
             {step === 2 && (
               <div className="space-y-6 animate-fade-in text-left">
-                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                <div className="flex items-center gap-4 border-b border-white/5 pb-4">
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">2</div>
-                  <h3 className="text-xl font-bold text-slate-800">Timeline & Calendar Setup</h3>
+                  <h3 className="text-xl font-bold text-white">Timeline & Calendar Setup</h3>
                 </div>
 
                 <div className="relative group">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Number of Days</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Number of Days</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">hourglass_bottom</span>
                     <input 
@@ -407,17 +407,17 @@ const CreateTrip = () => {
                       min="1"
                       value={durationDays}
                       onChange={(e) => setDurationDays(Number(e.target.value))}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none"
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none"
                     />
                   </div>
                 </div>
 
                 {durationDays > 0 && (
                   <div className="space-y-4 animate-fade-in">
-                    <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Select Start Date</label>
+                    <label className="text-xs font-black uppercase tracking-wider text-slate-400 block">Select Start Date</label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">Check-In Date</label>
+                        <label className="text-[10px] font-bold text-slate-450 uppercase">Check-In Date</label>
                         <div className="flex items-center gap-3">
                           <span className="material-symbols-outlined text-primary text-lg">calendar_today</span>
                           <input 
@@ -425,20 +425,20 @@ const CreateTrip = () => {
                             type="date"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-800 w-full outline-none"
+                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-200 w-full outline-none"
                           />
                         </div>
                       </div>
                       
-                      <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left opacity-80 bg-slate-100/50">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">Check-Out Date (Auto-Calculated)</label>
+                      <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left opacity-80">
+                        <label className="text-[10px] font-bold text-slate-450 uppercase">Check-Out Date (Auto-Calculated)</label>
                         <div className="flex items-center gap-3">
                           <span className="material-symbols-outlined text-slate-400 text-lg">calendar_month</span>
                           <input 
                             disabled
                             type="date"
                             value={endDate}
-                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-500 w-full outline-none"
+                            className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold text-slate-400 w-full outline-none"
                           />
                         </div>
                       </div>
@@ -451,13 +451,13 @@ const CreateTrip = () => {
             {/* STEP 3: TRANSIT & BUDGET */}
             {step === 3 && (
               <div className="space-y-6 animate-fade-in text-left">
-                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                <div className="flex items-center gap-4 border-b border-white/5 pb-4">
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">3</div>
-                  <h3 className="text-xl font-bold text-slate-800">Transportation & Financial Allocations</h3>
+                  <h3 className="text-xl font-bold text-white">Transportation & Financial Allocations</h3>
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Transit Mode</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 block">Transit Mode</label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {['flight', 'train', 'bus', 'car'].map(mode => (
                       <button 
@@ -468,7 +468,7 @@ const CreateTrip = () => {
                           transportMode === mode ? 'border-2 border-primary bg-primary/5' : 'hover:translate-y-[-2px]'
                         }`}
                       >
-                        <span className={`material-symbols-outlined text-2xl ${transportMode === mode ? 'text-primary' : 'text-slate-450'}`}>
+                        <span className={`material-symbols-outlined text-2xl ${transportMode === mode ? 'text-primary' : 'text-slate-400'}`}>
                           {mode === 'car' ? 'directions_car' : mode}
                         </span>
                         <span className="text-xs font-bold capitalize">{mode}</span>
@@ -479,7 +479,7 @@ const CreateTrip = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="relative group">
-                    <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Approximate Budget (₹)</label>
+                    <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Approximate Budget (₹)</label>
                     <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                       <span className="text-primary mr-2 font-black text-sm">₹</span>
                       <input 
@@ -487,14 +487,14 @@ const CreateTrip = () => {
                         type="number"
                         value={budget}
                         onChange={(e) => setBudget(Number(e.target.value))}
-                        className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none" 
+                        className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none" 
                       />
                     </div>
                   </div>
 
                   <div className="relative group flex flex-col justify-end">
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Financial Breakdown Strategy</span>
-                    <div className="rounded-xl border border-slate-200/80 p-3.5 bg-slate-50 flex items-center justify-between text-xs font-semibold text-slate-500">
+                    <div className="rounded-xl border border-white/10 p-3.5 bg-[#0B0F19]/50 flex items-center justify-between text-xs font-semibold text-slate-350">
                       <div>
                         <span>Hotel: ₹{breakdown.accommodation.toLocaleString()}</span>
                       </div>
@@ -510,13 +510,13 @@ const CreateTrip = () => {
             {/* STEP 4: NATURE OF TRIP & GROUP SIZE */}
             {step === 4 && (
               <div className="space-y-6 animate-fade-in text-left">
-                <div className="flex items-center gap-4 border-b border-slate-150 pb-4">
+                <div className="flex items-center gap-4 border-b border-white/5 pb-4">
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">4</div>
-                  <h3 className="text-xl font-bold text-slate-800">Personalization & Personal Details</h3>
+                  <h3 className="text-xl font-bold text-white">Personalization & Personal Details</h3>
                 </div>
 
                 <div className="relative group">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 mb-2 block">Group Size (Number of People)</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Group Size (Number of People)</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">group</span>
                     <input 
@@ -525,13 +525,13 @@ const CreateTrip = () => {
                       min="1"
                       value={travelerCount}
                       onChange={(e) => setTravelerCount(Number(e.target.value))}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-800 outline-none" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none" 
                     />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-xs font-black uppercase tracking-wider text-slate-450 block">Nature of Trip / Voyage Vibe</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-400 block">Nature of Trip / Voyage Vibe</label>
                   <div className="flex flex-wrap gap-2.5">
                     {['Culture', 'Nature', 'Adventure', 'Food', 'Shopping', 'Relaxation', 'Nightlife', 'History', 'Family Friendly'].map(interest => {
                       const isSelected = interests.includes(interest);
@@ -549,7 +549,7 @@ const CreateTrip = () => {
                           className={`px-4.5 py-2.5 rounded-full text-xs font-bold transition-all border ${
                             isSelected 
                               ? 'bg-primary text-white border-primary shadow-sm scale-95' 
-                              : 'clay-surface text-slate-600 hover:border-slate-350'
+                              : 'clay-surface text-slate-300 hover:border-white/20 hover:text-white'
                           }`}
                         >
                           {interest}
@@ -562,7 +562,7 @@ const CreateTrip = () => {
             )}
 
             {/* Navigation buttons at the bottom */}
-            <div className="mt-12 flex justify-between items-center border-t border-slate-100 pt-6">
+            <div className="mt-12 flex justify-between items-center border-t border-white/10 pt-6">
               {step > 1 ? (
                 <button 
                   type="button"
@@ -602,8 +602,8 @@ const CreateTrip = () => {
 
         {/* Right Dynamic Summary Panel */}
         <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
-          <div className="clay-surface rounded-3xl overflow-hidden shadow-xl border border-slate-200/60 bg-white">
-            <div className="h-44 relative bg-slate-100 shrink-0">
+          <div className="clay-surface rounded-3xl overflow-hidden shadow-xl border border-white/10">
+            <div className="h-44 relative bg-slate-900 shrink-0">
               <img 
                 className="w-full h-full object-cover" 
                 src={destImage} 
@@ -633,48 +633,48 @@ const CreateTrip = () => {
               </div>
             </div>
             <div className="p-8 space-y-5 text-left">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Voyage Parameters</h4>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-450">Voyage Parameters</h4>
               
               <div className="space-y-3.5">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Destination</span>
+                  <span className="font-semibold text-slate-400 uppercase tracking-wider">Destination</span>
                   <span className="font-extrabold text-primary max-w-[150px] truncate">{destination || '—'}</span>
                 </div>
                 
                 {cities && (
                   <div className="flex justify-between items-center text-xs animate-fade-in">
-                    <span className="font-semibold text-slate-450 uppercase tracking-wider">Stops</span>
-                    <span className="font-bold text-slate-800 max-w-[150px] truncate">{cities}</span>
+                    <span className="font-semibold text-slate-400 uppercase tracking-wider">Stops</span>
+                    <span className="font-bold text-slate-200 max-w-[150px] truncate">{cities}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Duration</span>
-                  <span className="font-bold text-slate-800">{durationDays ? `${durationDays} Days` : '—'}</span>
+                  <span className="font-semibold text-slate-400 uppercase tracking-wider">Duration</span>
+                  <span className="font-bold text-slate-200">{durationDays ? `${durationDays} Days` : '—'}</span>
                 </div>
 
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Schedule</span>
-                  <span className="font-bold text-slate-800 text-[11px]">
+                  <span className="font-semibold text-slate-400 uppercase tracking-wider">Schedule</span>
+                  <span className="font-bold text-slate-200 text-[11px]">
                     {startDate && endDate ? `${startDate.substring(5)} to ${endDate.substring(5)}` : '—'}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Travelers</span>
-                  <span className="font-bold text-slate-800">{travelerCount} traveler(s)</span>
+                  <span className="font-semibold text-slate-400 uppercase tracking-wider">Travelers</span>
+                  <span className="font-bold text-slate-200">{travelerCount} traveler(s)</span>
                 </div>
 
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-450 uppercase tracking-wider">Transit</span>
-                  <span className="font-bold text-slate-800 capitalize">{transportMode}</span>
+                  <span className="font-semibold text-slate-400 uppercase tracking-wider">Transit</span>
+                  <span className="font-bold text-slate-200 capitalize">{transportMode}</span>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+              <div className="pt-4 border-t border-white/10 flex justify-between items-center">
                 <div>
                   <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 block">Total Budget</span>
-                  <span className="text-xl font-black text-slate-850">₹{budget.toLocaleString()}</span>
+                  <span className="text-xl font-black text-white">₹{budget.toLocaleString()}</span>
                 </div>
                 
                 {step < 4 ? (
