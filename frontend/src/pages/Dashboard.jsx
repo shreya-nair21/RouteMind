@@ -391,8 +391,8 @@ const Dashboard = () => {
                       onMouseLeave={() => setHoveredCountry(null)}
                       onClick={() => setSelectedCountry(isActive ? null : c.name)}
                       className={`w-16 h-16 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 ${isActive
-                          ? 'border-blue-500 border-solid bg-blue-500/15 ring-4 ring-blue-500/10 shadow-md'
-                          : 'border-white/5 hover:border-blue-500/30 bg-zinc-900'
+                        ? 'border-blue-500 border-solid bg-blue-500/15 ring-4 ring-blue-500/10 shadow-md'
+                        : 'border-white/5 hover:border-blue-500/30 bg-zinc-900'
                         }`}
                     >
                       {c.iso ? (
@@ -459,7 +459,7 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Full-width Spending Chart */}
+      {/* Full-width Spending Chart
       {trips.length > 0 && (
         <section className="clay-surface rounded-3xl p-8 space-y-6">
           <div className="space-y-1">
@@ -532,7 +532,101 @@ const Dashboard = () => {
             </ResponsiveContainer>
           </div>
         </section>
-      )}
+      )} */}
+
+
+
+      {/* Active Trips Section */}
+      <section className="space-y-6">
+        <div className="flex justify-between items-end">
+          <div>
+            <h2 className="text-2xl font-extrabold text-white font-display">
+              {selectedCountry ? `${selectedCountry} Active Log` : 'Active Trips & Expeditions'}
+            </h2>
+            <p className="text-xs font-medium text-slate-400 mt-1">Your planned schedules.</p>
+          </div>
+          <button
+            onClick={() => navigate('/trips')}
+            className="text-blue-400 hover:text-blue-300 text-xs font-bold uppercase tracking-widest flex items-center gap-1 transition-colors group"
+          >
+            Explore all <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+          </button>
+        </div>
+
+        {filteredTrips.length === 0 ? (
+          <div className="clay-surface rounded-3xl p-16 flex flex-col items-center justify-center text-center border border-dashed border-white/10 bg-zinc-900/40">
+            <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+              <Compass className="h-7 w-7" />
+            </div>
+            <h3 className="text-xl font-extrabold text-white mb-2 font-display">No Expeditions Found</h3>
+            <p className="text-slate-400 max-w-sm font-medium mb-8 text-xs leading-relaxed">
+              {selectedCountry
+                ? `You have no active itineraries planned for ${selectedCountry} yet.`
+                : 'The world is waiting. Initialize your first luxury travel itinerary designed by RouteMind AI.'}
+            </p>
+            <button
+              onClick={() => {
+                if (selectedCountry) setSelectedCountry(null);
+                else navigate('/create-trip');
+              }}
+              className="clay-button-primary rounded-full px-8 py-3.5 text-xs font-bold uppercase tracking-widest"
+            >
+              {selectedCountry ? 'View All Expeditions' : 'Initialize First Journey'}
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredTrips.map(trip => (
+              <div
+                key={trip._id}
+                onClick={() => navigate(`/trips/${trip._id}/itinerary`)}
+                className="clay-surface rounded-[24px] overflow-hidden group cursor-pointer hover:border-blue-500/20 transition-all duration-300"
+              >
+                {/* Image */}
+                <div className="h-48 overflow-hidden relative bg-zinc-950">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    src={trip.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'}
+                    alt={trip.destination}
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute top-4 right-4">
+                    <div className="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white border border-white/10 group-hover:bg-blue-500/20 transition-colors">
+                      <Sparkles className="h-4 w-4 shrink-0 text-blue-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-4">
+                  <div className="space-y-1.5">
+                    <p className="text-[9px] font-semibold uppercase tracking-widest text-blue-400">Active Destination</p>
+                    <h4 className="text-base font-bold text-slate-100 truncate font-display">{trip.destination}</h4>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="px-2.5 py-0.5 bg-zinc-800 border border-white/5 rounded-full text-[9px] font-semibold text-slate-300 uppercase tracking-wider capitalize">
+                      {trip.transportMode}
+                    </span>
+                    <span className="px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/10 rounded-full text-[9px] font-semibold text-blue-400 uppercase tracking-wider">
+                      Luxury
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
+                    <span className="font-medium text-slate-400">
+                      {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                    <span className="font-extrabold text-blue-400">₹{trip.budget.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
 
       {/* Most Liked Packages Section */}
       <section className="space-y-6">
@@ -724,98 +818,6 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-
-      {/* Active Trips Section */}
-      <section className="space-y-6">
-        <div className="flex justify-between items-end">
-          <div>
-            <h2 className="text-2xl font-extrabold text-white font-display">
-              {selectedCountry ? `${selectedCountry} Active Log` : 'Active Trips & Expeditions'}
-            </h2>
-            <p className="text-xs font-medium text-slate-400 mt-1">Your planned schedules.</p>
-          </div>
-          <button
-            onClick={() => navigate('/trips')}
-            className="text-blue-400 hover:text-blue-300 text-xs font-bold uppercase tracking-widest flex items-center gap-1 transition-colors group"
-          >
-            Explore all <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </div>
-
-        {filteredTrips.length === 0 ? (
-          <div className="clay-surface rounded-3xl p-16 flex flex-col items-center justify-center text-center border border-dashed border-white/10 bg-zinc-900/40">
-            <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
-              <Compass className="h-7 w-7" />
-            </div>
-            <h3 className="text-xl font-extrabold text-white mb-2 font-display">No Expeditions Found</h3>
-            <p className="text-slate-400 max-w-sm font-medium mb-8 text-xs leading-relaxed">
-              {selectedCountry
-                ? `You have no active itineraries planned for ${selectedCountry} yet.`
-                : 'The world is waiting. Initialize your first luxury travel itinerary designed by RouteMind AI.'}
-            </p>
-            <button
-              onClick={() => {
-                if (selectedCountry) setSelectedCountry(null);
-                else navigate('/create-trip');
-              }}
-              className="clay-button-primary rounded-full px-8 py-3.5 text-xs font-bold uppercase tracking-widest"
-            >
-              {selectedCountry ? 'View All Expeditions' : 'Initialize First Journey'}
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredTrips.map(trip => (
-              <div
-                key={trip._id}
-                onClick={() => navigate(`/trips/${trip._id}/itinerary`)}
-                className="clay-surface rounded-[24px] overflow-hidden group cursor-pointer hover:border-blue-500/20 transition-all duration-300"
-              >
-                {/* Image */}
-                <div className="h-48 overflow-hidden relative bg-zinc-950">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    src={trip.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'}
-                    alt={trip.destination}
-                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute top-4 right-4">
-                    <div className="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white border border-white/10 group-hover:bg-blue-500/20 transition-colors">
-                      <Sparkles className="h-4 w-4 shrink-0 text-blue-400" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 space-y-4">
-                  <div className="space-y-1.5">
-                    <p className="text-[9px] font-semibold uppercase tracking-widest text-blue-400">Active Destination</p>
-                    <h4 className="text-base font-bold text-slate-100 truncate font-display">{trip.destination}</h4>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2.5 py-0.5 bg-zinc-800 border border-white/5 rounded-full text-[9px] font-semibold text-slate-300 uppercase tracking-wider capitalize">
-                      {trip.transportMode}
-                    </span>
-                    <span className="px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/10 rounded-full text-[9px] font-semibold text-blue-400 uppercase tracking-wider">
-                      Luxury
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
-                    <span className="font-medium text-slate-400">
-                      {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                    </span>
-                    <span className="font-extrabold text-blue-400">₹{trip.budget.toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
       {/* Floating Action Button */}
       <button
         onClick={() => navigate('/create-trip')}
