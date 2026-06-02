@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { countryData } from '../utils/countryData';
 import { AuthContext } from '../context/AuthContext';
-import { 
-  Plane, 
-  Globe, 
-  Compass, 
-  Award, 
-  Calendar, 
-  TrendingUp, 
+import {
+  Plane,
+  Globe,
+  Compass,
+  Award,
+  Calendar,
+  TrendingUp,
   Navigation,
   MapPin,
   ChevronRight,
@@ -193,10 +193,10 @@ const Dashboard = () => {
   }, []);
 
   if (loading) return (
-    <div className="min-h-[60vh] flex items-center justify-center bg-background text-on-surface">
-      <div className="flex flex-col items-center gap-4 animate-fade-in">
-        <div className="w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-on-surface-variant font-bold text-xs uppercase tracking-widest text-slate-500">Retrieving your ecosystem...</p>
+    <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="font-semibold text-xs uppercase tracking-widest text-slate-500">Retrieving your ecosystem...</p>
       </div>
     </div>
   );
@@ -205,7 +205,6 @@ const Dashboard = () => {
     if (!dest) return 'Unknown';
     const lowerDest = dest.trim().toLowerCase();
 
-    // 1. First, check if the string contains a comma (typical for "City, Country" e.g., "Paris, France" or "Auckland, New Zealand")
     const parts = dest.split(',');
     if (parts.length > 1) {
       const countryPart = parts[parts.length - 1].trim().toLowerCase();
@@ -214,7 +213,6 @@ const Dashboard = () => {
       }
     }
 
-    // 2. Search if any country name from the database is a substring of the destination
     for (const key in countryData) {
       const country = countryData[key];
       if (lowerDest.includes(key)) {
@@ -222,7 +220,6 @@ const Dashboard = () => {
       }
     }
 
-    // 3. Fallback: heuristics for popular cities/regions if not caught above
     if (lowerDest.includes('tokyo') || lowerDest.includes('kyoto')) return 'Japan';
     if (lowerDest.includes('paris')) return 'France';
     if (lowerDest.includes('rome') || lowerDest.includes('amalfi')) return 'Italy';
@@ -239,18 +236,16 @@ const Dashboard = () => {
     if (lowerDest.includes('bangkok') || lowerDest.includes('phuket')) return 'Thailand';
     if (lowerDest.includes('toronto') || lowerDest.includes('vancouver')) return 'Canada';
 
-    // 4. Default: return the last part of comma split or the whole string capitalized
     const defaultPart = parts.length > 1 ? parts[parts.length - 1].trim() : dest.trim();
     return defaultPart.charAt(0).toUpperCase() + defaultPart.slice(1);
   };
 
   // Dynamic travel statistics calculations
   const activeTripsCount = trips.length;
-  
-  // Aggregate unique visited countries & build passport stamps dynamically
+
   const getVisitedCountriesList = () => {
     if (trips.length === 0) return [];
-    
+
     const countryMap = {};
     trips.forEach(t => {
       const countryName = getCountryName(t.destination);
@@ -269,39 +264,33 @@ const Dashboard = () => {
       countryMap[key].tripsCount += 1;
       countryMap[key].totalSpent += t.budget;
     });
-    
+
     return Object.values(countryMap);
   };
-  
+
   const visitedCountries = getVisitedCountriesList();
   const countriesCount = visitedCountries.length;
-  
-  // Dynamic list filtered by clicked passport stamp
+
   const filteredTrips = selectedCountry
     ? trips.filter(t => getCountryName(t.destination).toLowerCase() === selectedCountry.toLowerCase())
     : trips;
 
-  // Calculate estimated flights taken based on active itineraries + completed logs
-  const flightsCount = trips.filter(t => 
-    t.transportMode?.toLowerCase() === 'flight' || 
-    t.transportMode?.toLowerCase() === 'plane' || 
+  const flightsCount = trips.filter(t =>
+    t.transportMode?.toLowerCase() === 'flight' ||
+    t.transportMode?.toLowerCase() === 'plane' ||
     t.transportMode?.toLowerCase() === 'airplane'
   ).length;
   const totalFlights = trips.length > 0 ? flightsCount + trips.length + 2 : 0;
 
-  // Estimated distance explored (in km)
   const totalDistance = trips.length > 0 ? (trips.length * 3240) + 1400 : 0;
-  
-  // Total budget tracking
+
   const totalBudget = trips.reduce((acc, t) => acc + t.budget, 0);
 
-  // Recharts spent data by destination
   const chartData = trips.map(t => ({
     name: t.destination.split(',')[0].trim(),
     budget: t.budget,
-  })).slice(0, 5); // display top 5 destinations for clean visual styling
+  })).slice(0, 5);
 
-  // Find info about hovered or selected stamp for interactive drawer
   const getActiveStampInfo = () => {
     const targetKey = (hoveredCountry || selectedCountry || '').toLowerCase();
     if (!targetKey) return null;
@@ -310,149 +299,113 @@ const Dashboard = () => {
 
   const activeStampInfo = getActiveStampInfo();
 
+  // Stat card config with themed dark/blue colors
+  const statCards = [
+    { label: 'Planned Trips', value: activeTripsCount, sub: 'Active expeditions logged', Icon: Calendar, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-500/10', iconColor: 'text-blue-400' },
+    { label: 'Flights Boarded', value: totalFlights, sub: 'Air transit legs logged', Icon: Plane, gradient: 'from-blue-400 to-blue-500', bg: 'bg-blue-500/10', iconColor: 'text-blue-400' },
+    { label: 'Countries Visited', value: countriesCount, sub: 'Unique nations visited', Icon: Globe, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-500/10', iconColor: 'text-blue-400' },
+    { label: 'Distance Traveled', value: totalDistance, sub: 'Estimated route distance', Icon: Navigation, gradient: 'from-blue-400 to-blue-500', bg: 'bg-blue-500/10', iconColor: 'text-blue-400', suffix: ' km' },
+  ];
+
   return (
-    <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-xl bg-background text-on-surface font-body-md animate-fade-in space-y-12 select-none">
-      
+    <div className="max-w-[1280px] mx-auto py-2 space-y-10 select-none text-slate-100">
+
       {/* Welcome Header */}
       <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="font-headline-xl text-4xl md:text-5xl font-black text-slate-900 leading-tight tracking-tight font-display">
-            Hello, {user?.name?.split(' ')[0] || 'Explorer'}.
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight tracking-tight font-display">
+            Hello, <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">{user?.name?.split(' ')[0] || 'Explorer'}</span>.
           </h2>
-          <p className="font-body-lg text-sm md:text-base text-slate-500 mt-2 font-medium">
-            {trips.length > 0 
-              ? `You have ${trips.length} upcoming adventures planned in your active log.` 
+          <p className="text-sm text-slate-400 mt-2 font-medium">
+            {trips.length > 0
+              ? `You have ${trips.length} upcoming adventures planned in your active log.`
               : 'Your next-gen travel journey starts today.'}
           </p>
         </div>
-        
+
         {trips.length > 0 && (
-          <button 
+          <button
             onClick={() => navigate('/create-trip')}
-            className="flex items-center gap-2 rounded-full bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs uppercase tracking-widest px-6 py-3.5 shadow-lg active:scale-95 transition-all duration-300"
+            className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-widest px-6 py-3.5 shadow-lg shadow-blue-500/20 active:scale-95 transition-all group"
           >
-            Plan New Trip <Plus className="h-4 w-4 shrink-0" />
+            <span className="relative z-10 flex items-center gap-2">Plan New Trip <Plus className="h-4 w-4 shrink-0" /></span>
           </button>
         )}
       </section>
 
       {/* Bento Grid: Statistics & Visited Countries Passport */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        
-        {/* Left Side: 4 Stats Cards Bento Layout */}
+
+        {/* Left Side: 4 Stats Cards */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          
-          {/* Card 1: Active Expeditions */}
-          <div className="clay-surface rounded-3xl p-6 border border-white/40 flex flex-col justify-between min-h-[160px] relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute top-4 right-4 bg-slate-100 text-slate-650 p-2.5 rounded-2xl shrink-0">
-              <Calendar className="h-5 w-5" />
+          {statCards.map((card, i) => (
+            <div key={i} className="clay-surface rounded-3xl p-6 flex flex-col justify-between min-h-[160px] relative overflow-hidden group hover:border-blue-500/20 transition-all duration-300">
+              <div className={`absolute top-4 right-4 ${card.bg} p-2.5 rounded-2xl shrink-0`}>
+                <card.Icon className={`h-5 w-5 ${card.iconColor}`} />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{card.label}</p>
+                <h3 className={`text-3xl font-extrabold bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent mt-1 font-display`}>
+                  {card.suffix ? `${card.value.toLocaleString()}` : card.value}
+                  {card.suffix && <span className="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">{card.suffix.trim()}</span>}
+                </h3>
+              </div>
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-4">
+                {card.sub}
+              </p>
             </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Planned Trips</p>
-              <h3 className="text-3xl font-black text-slate-800 mt-1 font-display">{activeTripsCount}</h3>
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-4">
-              Active expeditions logged
-            </p>
-          </div>
-
-          {/* Card 2: Flights Taken */}
-          <div className="clay-surface rounded-3xl p-6 border border-white/40 flex flex-col justify-between min-h-[160px] relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute top-4 right-4 bg-slate-100 text-slate-650 p-2.5 rounded-2xl shrink-0">
-              <Plane className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Flights Boarded</p>
-              <h3 className="text-3xl font-black text-slate-800 mt-1 font-display">{totalFlights}</h3>
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-4">
-              Air transit legs logged
-            </p>
-          </div>
-
-          {/* Card 3: Countries Visited */}
-          <div className="clay-surface rounded-3xl p-6 border border-white/40 flex flex-col justify-between min-h-[160px] relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute top-4 right-4 bg-slate-100 text-slate-650 p-2.5 rounded-2xl shrink-0">
-              <Globe className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Countries Visited</p>
-              <h3 className="text-3xl font-black text-slate-800 mt-1 font-display">{countriesCount}</h3>
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-4">
-              Unique nations visited
-            </p>
-          </div>
-
-          {/* Card 4: Distance Explored */}
-          <div className="clay-surface rounded-3xl p-6 border border-white/40 flex flex-col justify-between min-h-[160px] relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-            <div className="absolute top-4 right-4 bg-slate-100 text-slate-650 p-2.5 rounded-2xl shrink-0">
-              <Navigation className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Distance Traveled</p>
-              <h3 className="text-3xl font-black text-slate-800 mt-1 font-display">
-                {totalDistance.toLocaleString()} <span className="text-xs font-bold uppercase tracking-wider text-slate-500">km</span>
-              </h3>
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-4">
-              Estimated route distance
-            </p>
-          </div>
-
+          ))}
         </div>
 
-        {/* Right Side: INTERACTIVE PASSPORT STAMPS (FLAGS) CARD */}
-        <div className="lg:col-span-5 clay-surface rounded-3xl p-8 border border-white/40 flex flex-col justify-between min-h-[340px] relative overflow-hidden">
-          
+        {/* Right Side: PASSPORT STAMPS CARD */}
+        <div className="lg:col-span-5 clay-surface rounded-3xl p-8 flex flex-col justify-between min-h-[340px] relative overflow-hidden">
+
           <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Passport Stamps Collection</p>
-            <h3 className="text-xl font-black text-slate-800 font-display flex items-center justify-between">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Passport Stamps Collection</p>
+            <h3 className="text-xl font-extrabold text-white font-display flex items-center justify-between">
               <span>My Visas & Flags</span>
               {selectedCountry && (
-                <button 
+                <button
                   onClick={() => setSelectedCountry(null)}
-                  className="text-[9px] font-extrabold bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-slate-200 transition-colors uppercase tracking-wider"
+                  className="text-[9px] font-bold bg-zinc-800 text-slate-300 border border-white/10 px-2 py-0.5 rounded flex items-center gap-1 hover:bg-zinc-700 transition-colors uppercase tracking-wider"
                 >
                   Clear <XCircle className="h-2.5 w-2.5 shrink-0" />
                 </button>
               )}
             </h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            <p className="text-xs font-medium text-slate-400">
               Hover details. Click to filter trip logs below.
             </p>
           </div>
 
           {visitedCountries.length > 0 ? (
             <div className="flex-1 flex flex-col justify-between mt-6 space-y-6">
-              
-              {/* Stamps Flex Row */}
+
               <div className="flex flex-wrap gap-4 items-center content-start">
                 {visitedCountries.map((c, i) => {
                   const isActive = selectedCountry?.toLowerCase() === c.name.toLowerCase();
                   return (
-                    <div 
+                    <div
                       key={i}
                       onMouseEnter={() => setHoveredCountry(c.name)}
                       onMouseLeave={() => setHoveredCountry(null)}
                       onClick={() => setSelectedCountry(isActive ? null : c.name)}
-                      className={`w-16 h-16 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${
-                        isActive 
-                          ? 'border-slate-800 border-solid bg-slate-50 ring-4 ring-slate-100 shadow-md' 
-                          : 'border-slate-200 hover:border-slate-400 bg-white'
-                      }`}
+                      className={`w-16 h-16 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 ${isActive
+                          ? 'border-blue-500 border-solid bg-blue-500/15 ring-4 ring-blue-500/10 shadow-md'
+                          : 'border-white/5 hover:border-blue-500/30 bg-zinc-900'
+                        }`}
                     >
                       {c.iso ? (
-                        <img 
-                          src={`https://flagcdn.com/w80/${c.iso}.png`} 
+                        <img
+                          src={`https://flagcdn.com/w80/${c.iso}.png`}
                           alt={c.name}
-                          className="w-9 h-6 object-cover rounded shadow-sm border border-slate-200/60"
+                          className="w-9 h-6 object-cover rounded shadow-sm border border-white/5"
                           onError={(e) => { e.target.style.display = 'none'; }}
                         />
                       ) : (
                         <span className="text-2xl filter drop-shadow">{c.emoji}</span>
                       )}
-                      <span className="text-[8px] font-black text-slate-450 mt-1 tracking-wider uppercase">
+                      <span className="text-[8px] font-bold text-slate-500 mt-1 tracking-wider uppercase">
                         {c.code}
                       </span>
                     </div>
@@ -460,44 +413,44 @@ const Dashboard = () => {
                 })}
               </div>
 
-              {/* Dynamic stamp statistics details (at the bottom) */}
-              <div className="rounded-2xl bg-slate-50 p-4 border border-slate-100/60 flex items-center justify-between">
+              {/* Stamp info bar */}
+              <div className="rounded-2xl bg-zinc-950 p-4 border border-white/5 flex items-center justify-between">
                 {activeStampInfo ? (
-                  <div className="w-full flex justify-between items-center animate-fade-in text-xs">
+                  <div className="w-full flex justify-between items-center text-xs">
                     <div>
-                      <p className="font-extrabold text-slate-800 flex items-center gap-1.5">
+                      <p className="font-bold text-slate-200 flex items-center gap-1.5">
                         {activeStampInfo.iso ? (
-                          <img 
-                            src={`https://flagcdn.com/w80/${activeStampInfo.iso}.png`} 
+                          <img
+                            src={`https://flagcdn.com/w80/${activeStampInfo.iso}.png`}
                             alt={activeStampInfo.name}
-                            className="w-5 h-3.5 object-cover rounded border border-slate-200/65 shadow-sm"
+                            className="w-5 h-3.5 object-cover rounded border border-white/5 shadow-sm"
                             onError={(e) => { e.target.style.display = 'none'; }}
                           />
                         ) : (
                           <span className="filter drop-shadow">{activeStampInfo.emoji}</span>
                         )}
-                        <MapPin className="h-3.5 w-3.5 text-slate-450 ml-0.5" /> {activeStampInfo.name}
+                        <MapPin className="h-3.5 w-3.5 text-blue-500 ml-0.5" /> {activeStampInfo.name}
                       </p>
-                      <p className="text-[10px] font-semibold text-slate-500 uppercase mt-0.5">
+                      <p className="text-[10px] font-medium text-slate-500 mt-0.5">
                         {activeStampInfo.tripsCount} planned expedition{activeStampInfo.tripsCount > 1 ? 's' : ''}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-black text-slate-900">₹{activeStampInfo.totalSpent.toLocaleString()}</p>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Spent</p>
+                      <p className="font-extrabold text-white">₹{activeStampInfo.totalSpent.toLocaleString()}</p>
+                      <p className="text-[9px] font-bold text-blue-400 uppercase tracking-widest">Spent</p>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-wider leading-relaxed text-center w-full py-1">
-                     Select a flag stamp to filter your trip log
+                  <p className="text-xs text-slate-400 font-medium text-center w-full py-1">
+                    Select a flag stamp to filter your trip log
                   </p>
                 )}
               </div>
 
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-center p-6 border border-dashed border-slate-200 rounded-2xl mt-4">
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+            <div className="flex-1 flex items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl mt-4 bg-zinc-900/40">
+              <p className="text-xs text-slate-400 font-medium">
                 Stamps will print dynamically upon logging trips
               </p>
             </div>
@@ -506,13 +459,13 @@ const Dashboard = () => {
 
       </div>
 
-      {/* Full-width Capital Spending Distribution Chart */}
+      {/* Full-width Spending Chart */}
       {trips.length > 0 && (
-        <section className="clay-surface rounded-3xl p-8 border border-white/40 space-y-6">
+        <section className="clay-surface rounded-3xl p-8 space-y-6">
           <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Capital Distribution Analytics</p>
-            <h3 className="text-xl font-black text-slate-800 font-display">Budget Allocation Breakdown</h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Capital Distribution Analytics</p>
+            <h3 className="text-xl font-extrabold text-white font-display">Budget Allocation Breakdown</h3>
+            <p className="text-xs font-medium text-slate-400">
               Spending distribution mapped across your active destinations.
             </p>
           </div>
@@ -520,58 +473,58 @@ const Dashboard = () => {
           <div className="w-full h-56 select-none mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fontSize: 10, fontWeight: 700, fill: '#64748B' }} 
-                  axisLine={false} 
-                  tickLine={false} 
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 10, fontWeight: 600, fill: '#64748B' }}
+                  axisLine={false}
+                  tickLine={false}
                 />
-                <YAxis 
-                  tick={{ fontSize: 10, fontWeight: 700, fill: '#64748B' }} 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tickFormatter={(tick) => `₹${tick >= 1000 ? (tick/1000) + 'k' : tick}`}
+                <YAxis
+                  tick={{ fontSize: 10, fontWeight: 600, fill: '#64748B' }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(tick) => `₹${tick >= 1000 ? (tick / 1000) + 'k' : tick}`}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#1E293B', 
-                    borderRadius: '12px', 
-                    border: 'none', 
-                    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', 
-                    fontSize: '11px', 
-                    fontWeight: 700,
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#0F172A',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(59,130,246,0.2)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                    fontSize: '11px',
+                    fontWeight: 600,
                     color: '#FFFFFF'
-                  }} 
+                  }}
                   formatter={(value) => [`₹${value.toLocaleString()}`, 'Budget']}
-                  labelStyle={{ color: '#94A3B8', fontWeight: 800, textTransform: 'uppercase', fontSize: '9px', tracking: 'widest' }}
+                  labelStyle={{ color: '#60A5FA', fontWeight: 700, textTransform: 'uppercase', fontSize: '9px' }}
                 />
                 <defs>
                   <linearGradient id="barGrad0" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0EA5E9" />
-                    <stop offset="100%" stopColor="#6366F1" />
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#1D4ED8" />
                   </linearGradient>
                   <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8B5CF6" />
-                    <stop offset="100%" stopColor="#EC4899" />
+                    <stop offset="0%" stopColor="#60A5FA" />
+                    <stop offset="100%" stopColor="#2563EB" />
                   </linearGradient>
                   <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10B981" />
-                    <stop offset="100%" stopColor="#059669" />
+                    <stop offset="0%" stopColor="#2563EB" />
+                    <stop offset="100%" stopColor="#1D4ED8" />
                   </linearGradient>
                   <linearGradient id="barGrad3" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#F59E0B" />
-                    <stop offset="100%" stopColor="#D97706" />
+                    <stop offset="0%" stopColor="#60A5FA" />
+                    <stop offset="100%" stopColor="#2563EB" />
                   </linearGradient>
                   <linearGradient id="barGrad4" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#EC4899" />
-                    <stop offset="100%" stopColor="#F43F5E" />
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#1D4ED8" />
                   </linearGradient>
                 </defs>
-                <Bar dataKey="budget" radius={[6, 6, 0, 0]}>
+                <Bar dataKey="budget" radius={[8, 8, 0, 0]}>
                   {chartData.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
-                      fill={`url(#barGrad${index % 5})`} 
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={`url(#barGrad${index % 5})`}
                     />
                   ))}
                 </Bar>
@@ -585,10 +538,10 @@ const Dashboard = () => {
       <section className="space-y-6">
         <div className="flex justify-between items-end">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 font-display">
+            <h2 className="text-2xl font-extrabold text-white font-display">
               Most Liked Luxury Packages
             </h2>
-            <p className="text-xs font-semibold text-slate-450 uppercase tracking-widest mt-1">Trending bespoke collections from our global community.</p>
+            <p className="text-xs font-medium text-slate-400 mt-1">Trending bespoke collections from our global community.</p>
           </div>
         </div>
 
@@ -597,32 +550,33 @@ const Dashboard = () => {
             const countryKey = pkg.country.toLowerCase();
             const cDetails = countryData[countryKey] || {};
             return (
-              <div 
-                key={pkg.id} 
-                onClick={() => setSelectedPackage(pkg)} 
-                className="clay-surface rounded-[28px] overflow-hidden group cursor-pointer border border-white/40 hover:shadow-xl transition-all duration-300 animate-fade-in"
+              <div
+                key={pkg.id}
+                onClick={() => setSelectedPackage(pkg)}
+                className="clay-surface rounded-[24px] overflow-hidden group cursor-pointer hover:border-blue-500/20 transition-all duration-300"
               >
-                {/* Visual Header */}
-                <div className="h-44 overflow-hidden relative bg-slate-100">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                {/* Image */}
+                <div className="h-44 overflow-hidden relative bg-zinc-950">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     src={pkg.image}
-                    alt={pkg.title} 
+                    alt={pkg.title}
                     onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800'; }}
                   />
-                  
-                  {/* Heart / Likes Badge */}
-                  <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-black text-slate-700 shadow-sm flex items-center gap-1">
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Heart Badge */}
+                  <div className="absolute top-4 left-4 bg-zinc-900/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-slate-300 shadow-sm flex items-center gap-1">
                     <span>❤️</span> <span>{pkg.likes}</span>
                   </div>
 
-                  {/* Flag Indicator */}
+                  {/* Flag */}
                   <div className="absolute bottom-3 right-4">
                     {cDetails.iso ? (
-                      <img 
-                        src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                      <img
+                        src={`https://flagcdn.com/w40/${cDetails.iso}.png`}
                         alt={pkg.country}
-                        className="w-6 h-4 object-cover rounded shadow-md border border-white/80"
+                        className="w-6 h-4 object-cover rounded shadow-md border border-white/10"
                         onError={(e) => { e.target.style.display = 'none'; }}
                       />
                     ) : (
@@ -631,20 +585,20 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                {/* Content Box */}
+                {/* Content */}
                 <div className="p-5 space-y-3">
                   <div className="space-y-1">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{pkg.country}</p>
-                    <h4 className="text-sm font-extrabold text-slate-800 truncate font-display">{pkg.title}</h4>
+                    <p className="text-[9px] font-semibold uppercase tracking-wider text-blue-400">{pkg.country}</p>
+                    <h4 className="text-sm font-bold text-slate-100 truncate font-display">{pkg.title}</h4>
                   </div>
-                  
-                  <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100/60">
+
+                  <div className="flex items-center justify-between text-xs pt-2 border-t border-white/5">
                     <div className="flex items-center gap-1">
                       <span className="text-yellow-500 font-bold">⭐</span>
-                      <span className="font-extrabold text-slate-700">{pkg.rating}</span>
-                      <span className="text-[9px] font-semibold text-slate-400 uppercase">({pkg.reviewsCount})</span>
+                      <span className="font-bold text-slate-300">{pkg.rating}</span>
+                      <span className="text-[9px] font-medium text-slate-500">({pkg.reviewsCount})</span>
                     </div>
-                    <span className="font-black text-slate-900 text-xs">₹{pkg.budget.toLocaleString()}</span>
+                    <span className="font-extrabold text-blue-400 text-xs">₹{pkg.budget.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -653,25 +607,25 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Package Detail Glassmorphic Modal */}
+      {/* Package Detail Modal */}
       {selectedPackage && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/40 backdrop-blur-sm animate-fade-in select-none">
-          <div className="bg-white/95 backdrop-blur-xl border-3 border-white rounded-[32px] w-full max-w-2xl shadow-2xl overflow-hidden animate-fade-in max-h-[85vh] flex flex-col">
-            
-            {/* Modal Image Header */}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md select-none">
+          <div className="bg-zinc-900 border border-white/10 rounded-[32px] w-full max-w-2xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col text-slate-200">
+
+            {/* Modal Image */}
             <div className="h-56 relative shrink-0">
-              <img 
-                src={selectedPackage.image} 
-                alt={selectedPackage.title} 
-                className="w-full h-full object-cover" 
+              <img
+                src={selectedPackage.image}
+                alt={selectedPackage.title}
+                className="w-full h-full object-cover"
                 onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800'; }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              
-              {/* Close Button */}
-              <button 
-                onClick={() => setSelectedPackage(null)} 
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white hover:bg-white/40 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-md"
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent"></div>
+
+              {/* Close */}
+              <button
+                onClick={() => setSelectedPackage(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-all cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm font-bold">close</span>
               </button>
@@ -679,17 +633,17 @@ const Dashboard = () => {
               <div className="absolute bottom-5 left-6 right-6 flex justify-between items-end">
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <span className="bg-primary px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white border border-white/20">
+                    <span className="bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-white">
                       Most Liked Package
                     </span>
                     <span className="text-sm">
                       {(() => {
                         const cDetails = countryData[selectedPackage.country.toLowerCase()] || {};
                         return cDetails.iso ? (
-                          <img 
-                            src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                          <img
+                            src={`https://flagcdn.com/w40/${cDetails.iso}.png`}
                             alt={selectedPackage.country}
-                            className="w-5 h-3.5 object-cover rounded border border-white/70"
+                            className="w-5 h-3.5 object-cover rounded border border-white/30"
                           />
                         ) : (
                           <span>{cDetails.emoji || '🌍'}</span>
@@ -697,53 +651,51 @@ const Dashboard = () => {
                       })()}
                     </span>
                   </div>
-                  <h3 className="text-white text-2xl font-black font-display leading-tight">{selectedPackage.title}</h3>
+                  <h3 className="text-white text-2xl font-extrabold font-display leading-tight">{selectedPackage.title}</h3>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-350">Package Budget</span>
-                  <p className="text-white text-xl font-black">₹{selectedPackage.budget.toLocaleString()}</p>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-blue-300">Package Budget</span>
+                  <p className="text-white text-xl font-extrabold">₹{selectedPackage.budget.toLocaleString()}</p>
                 </div>
               </div>
             </div>
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-6 flex-1 text-left">
-              {/* Description */}
               <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">About Destination</p>
-                <p className="text-slate-600 text-xs leading-relaxed font-semibold">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-blue-400">About Destination</p>
+                <p className="text-slate-400 text-xs leading-relaxed font-medium">
                   {selectedPackage.description}
                 </p>
               </div>
 
-              {/* Statistics Row */}
-              <div className="grid grid-cols-3 gap-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl shrink-0">
-                <div className="text-center border-r border-slate-100">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Rating</span>
-                  <span className="font-extrabold text-slate-800 text-xs block mt-0.5">⭐ {selectedPackage.rating} ({selectedPackage.reviewsCount})</span>
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 py-3 bg-zinc-950 border border-white/5 rounded-2xl shrink-0">
+                <div className="text-center border-r border-white/5">
+                  <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider block">Rating</span>
+                  <span className="font-bold text-slate-300 text-xs block mt-0.5">⭐ {selectedPackage.rating} ({selectedPackage.reviewsCount})</span>
                 </div>
-                <div className="text-center border-r border-slate-100">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Likes</span>
-                  <span className="font-extrabold text-slate-800 text-xs block mt-0.5">❤️ {selectedPackage.likes} travelers</span>
+                <div className="text-center border-r border-white/5">
+                  <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider block">Likes</span>
+                  <span className="font-bold text-slate-300 text-xs block mt-0.5">❤️ {selectedPackage.likes} travelers</span>
                 </div>
                 <div className="text-center">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Duration</span>
-                  <span className="font-extrabold text-slate-800 text-xs block mt-0.5">3 Days Expedition</span>
+                  <span className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider block">Duration</span>
+                  <span className="font-bold text-slate-300 text-xs block mt-0.5">3 Days Expedition</span>
                 </div>
               </div>
 
-              {/* Daily Itinerary */}
+              {/* Timeline */}
               <div className="space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Bespoke Daily Itinerary</p>
-                <div className="space-y-4 relative pl-3.5 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-blue-400">Bespoke Daily Itinerary</p>
+                <div className="space-y-4 relative pl-3.5 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:bg-zinc-800">
                   {selectedPackage.itinerary.map(dayPlan => (
                     <div key={dayPlan.day} className="relative space-y-1">
-                      {/* Timeline Dot */}
-                      <span className="absolute -left-[19.5px] top-1 w-2.5 h-2.5 rounded-full bg-primary border-2 border-white ring-4 ring-slate-100"></span>
-                      <h5 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                      <span className="absolute -left-[19.5px] top-1 w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 border-2 border-zinc-900 ring-4 ring-blue-500/5"></span>
+                      <h5 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         Day {dayPlan.day} — {dayPlan.title}
                       </h5>
-                      <p className="text-[11px] text-slate-500 font-semibold leading-relaxed">
+                      <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
                         {dayPlan.details}
                       </p>
                     </div>
@@ -753,20 +705,19 @@ const Dashboard = () => {
             </div>
 
             {/* Modal Actions */}
-            <div className="p-6 border-t border-slate-100/60 bg-slate-50/50 flex gap-4 shrink-0">
-              <button 
-                onClick={() => setSelectedPackage(null)} 
+            <div className="p-6 border-t border-white/5 bg-zinc-950 flex gap-4 shrink-0">
+              <button
+                onClick={() => setSelectedPackage(null)}
                 className="clay-button-secondary py-3 flex-1 rounded-2xl text-[10px]"
               >
                 Close Window
               </button>
-              <button 
+              <button
                 disabled={isCloning}
-                onClick={() => handleClonePackage(selectedPackage)} 
+                onClick={() => handleClonePackage(selectedPackage)}
                 className="clay-button-primary py-3 flex-[1.5] rounded-2xl text-[10px]"
               >
                 {isCloning ? 'Generating Expedition...' : 'Plan This Journey'}
-                {!isCloning && <span className="material-symbols-outlined text-[10px] font-black">auto_awesome</span>}
               </button>
             </div>
 
@@ -774,40 +725,40 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Active Trips & Expeditions Section */}
+      {/* Active Trips Section */}
       <section className="space-y-6">
         <div className="flex justify-between items-end">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 font-display">
+            <h2 className="text-2xl font-extrabold text-white font-display">
               {selectedCountry ? `${selectedCountry} Active Log` : 'Active Trips & Expeditions'}
             </h2>
-            <p className="text-xs font-semibold text-slate-450 uppercase tracking-widest mt-1">Your planned schedules.</p>
+            <p className="text-xs font-medium text-slate-400 mt-1">Your planned schedules.</p>
           </div>
-          <button 
-            onClick={() => navigate('/trips')} 
-            className="text-slate-500 hover:text-slate-800 text-xs font-extrabold uppercase tracking-widest flex items-center gap-1 transition-colors group"
+          <button
+            onClick={() => navigate('/trips')}
+            className="text-blue-400 hover:text-blue-300 text-xs font-bold uppercase tracking-widest flex items-center gap-1 transition-colors group"
           >
             Explore all <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
-        
+
         {filteredTrips.length === 0 ? (
-          <div className="clay-surface rounded-3xl p-16 flex flex-col items-center justify-center text-center border border-dashed border-slate-200">
-            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 mb-6 shadow-inner">
+          <div className="clay-surface rounded-3xl p-16 flex flex-col items-center justify-center text-center border border-dashed border-white/10 bg-zinc-900/40">
+            <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
               <Compass className="h-7 w-7" />
             </div>
-            <h3 className="text-xl font-black text-slate-800 mb-2 font-display">No Expeditions Found</h3>
-            <p className="text-slate-400 max-w-sm font-semibold mb-8 text-xs leading-relaxed">
-              {selectedCountry 
+            <h3 className="text-xl font-extrabold text-white mb-2 font-display">No Expeditions Found</h3>
+            <p className="text-slate-400 max-w-sm font-medium mb-8 text-xs leading-relaxed">
+              {selectedCountry
                 ? `You have no active itineraries planned for ${selectedCountry} yet.`
                 : 'The world is waiting. Initialize your first luxury travel itinerary designed by RouteMind AI.'}
             </p>
-            <button 
+            <button
               onClick={() => {
                 if (selectedCountry) setSelectedCountry(null);
                 else navigate('/create-trip');
-              }} 
-              className="clay-button-primary bg-slate-950 hover:bg-slate-900 text-white rounded-full px-8 py-3.5 text-xs font-extrabold uppercase tracking-widest shadow-md"
+              }}
+              className="clay-button-primary rounded-full px-8 py-3.5 text-xs font-bold uppercase tracking-widest"
             >
               {selectedCountry ? 'View All Expeditions' : 'Initialize First Journey'}
             </button>
@@ -815,47 +766,48 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredTrips.map(trip => (
-              <div 
-                key={trip._id} 
-                onClick={() => navigate(`/trips/${trip._id}/itinerary`)} 
-                className="clay-surface rounded-[28px] overflow-hidden group cursor-pointer border border-white/40 hover:shadow-xl transition-all duration-300 animate-fade-in"
+              <div
+                key={trip._id}
+                onClick={() => navigate(`/trips/${trip._id}/itinerary`)}
+                className="clay-surface rounded-[24px] overflow-hidden group cursor-pointer hover:border-blue-500/20 transition-all duration-300"
               >
-                {/* Visual Header */}
-                <div className="h-48 overflow-hidden relative bg-slate-100">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                {/* Image */}
+                <div className="h-48 overflow-hidden relative bg-zinc-950">
+                  <img
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     src={trip.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'}
-                    alt={trip.destination} 
+                    alt={trip.destination}
                     onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute top-4 right-4">
-                    <div className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
-                      <Sparkles className="h-4 w-4 shrink-0 filled" />
+                    <div className="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white border border-white/10 group-hover:bg-blue-500/20 transition-colors">
+                      <Sparkles className="h-4 w-4 shrink-0 text-blue-400" />
                     </div>
                   </div>
                 </div>
 
-                {/* Content Box */}
+                {/* Content */}
                 <div className="p-6 space-y-4">
                   <div className="space-y-1.5">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Active Destination</p>
-                    <h4 className="text-base font-extrabold text-slate-800 truncate font-display">{trip.destination}</h4>
+                    <p className="text-[9px] font-semibold uppercase tracking-widest text-blue-400">Active Destination</p>
+                    <h4 className="text-base font-bold text-slate-100 truncate font-display">{trip.destination}</h4>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2.5 py-0.5 bg-slate-50 border border-slate-200/50 rounded-full text-[9px] font-bold text-slate-500 uppercase tracking-wider capitalize">
+                    <span className="px-2.5 py-0.5 bg-zinc-800 border border-white/5 rounded-full text-[9px] font-semibold text-slate-300 uppercase tracking-wider capitalize">
                       {trip.transportMode}
                     </span>
-                    <span className="px-2.5 py-0.5 bg-slate-50 border border-slate-200/50 rounded-full text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/10 rounded-full text-[9px] font-semibold text-blue-400 uppercase tracking-wider">
                       Luxury
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t border-slate-100 text-xs">
-                    <span className="font-semibold text-slate-450 uppercase tracking-wider">
+                  <div className="flex justify-between items-center pt-4 border-t border-white/5 text-xs">
+                    <span className="font-medium text-slate-400">
                       {new Date(trip.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </span>
-                    <span className="font-black text-slate-850">₹{trip.budget.toLocaleString()}</span>
+                    <span className="font-extrabold text-blue-400">₹{trip.budget.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -863,11 +815,11 @@ const Dashboard = () => {
           </div>
         )}
       </section>
-      
-      {/* Floating Action Button for Create Expedition */}
-      <button 
+
+      {/* Floating Action Button */}
+      <button
         onClick={() => navigate('/create-trip')}
-        className="fixed bottom-12 right-12 w-14 h-14 bg-slate-950 hover:bg-slate-900 hover:scale-105 active:scale-95 text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-300 z-50 border border-white/10"
+        className="fixed bottom-12 right-12 w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-95 text-white rounded-full shadow-xl shadow-blue-500/20 flex items-center justify-center transition-all z-50 border border-white/5"
         aria-label="Construct Expedition"
       >
         <Plus className="h-6 w-6 shrink-0" />
