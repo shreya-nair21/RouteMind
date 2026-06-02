@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="light">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -12,66 +12,85 @@
           extend: {
             colors: {
               primary: {
-                DEFAULT: '#111827',
-                glow: 'rgba(17, 24, 39, 0.08)',
-                gradientStart: '#111827',
-                gradientEnd: '#374151',
+                DEFAULT: '#3B82F6',
+                glow: 'rgba(59, 130, 246, 0.15)',
+                hover: '#2563EB',
+                light: 'rgba(59, 130, 246, 0.1)',
+                gradientStart: '#3B82F6',
+                gradientEnd: '#1D4ED8',
               },
-              secondary: '#1F2937',
-              supporting: '#10B981',
-              background: '#F3F4F6',
-              surface: '#FFFFFF',
-              'on-surface': '#1F2937',
-              'on-surface-variant': '#4B5563',
+              accent: {
+                DEFAULT: '#2563EB',
+                hover: '#1D4ED8',
+                glow: 'rgba(37, 99, 235, 0.15)',
+                light: 'rgba(37, 99, 235, 0.1)',
+              },
+              secondary: '#F8FAFC',
+              supporting: '#3B82F6',
+              background: '#080C14',
+              surface: '#0F172A',
+              'surface-dark': '#070A13',
+              'on-surface': '#F8FAFC',
+              'on-surface-variant': '#94A3B8',
               travel: {
-                primary: '#FF385C',
-                'primary-hover': '#E31C5F',
-                secondary: '#00A699',
-                dark: '#222222',
-                muted: '#717171',
-                light: '#F7F7F7',
-                border: '#DDDDDD'
+                primary: '#3B82F6',
+                'primary-hover': '#2563EB',
+                accent: '#2563EB',
+                secondary: '#3B82F6',
+                dark: '#0F172A',
+                muted: '#94A3B8',
+                light: '#080C14',
+                border: 'rgba(255, 255, 255, 0.08)'
               },
               slate: {
-                50: '#F7FAFC',
-                100: '#EDF2F7',
+                50: '#F8FAFC',
+                100: '#F1F5F9',
                 200: '#E2E8F0',
                 300: '#CBD5E1',
-                400: '#A0AEC0',
-                500: '#718096',
-                600: '#4A5568',
-                700: '#2D3748',
-                800: '#1A202C',
-                900: '#111111',
+                400: '#94A3B8',
+                500: '#64748B',
+                600: '#475569',
+                700: '#334155',
+                800: '#1E293B',
+                900: '#0F172A',
+                950: '#020617',
               }
             },
             fontFamily: {
-              sans: ['Outfit', 'sans-serif'],
-              display: ['Outfit', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
+              display: ['Poppins', 'sans-serif'],
+              body: ['Inter', 'sans-serif'],
             },
             borderRadius: {
-              'travel-card': '12px',
-              'travel-btn': '8px',
+              'travel-card': '16px',
+              'travel-btn': '12px',
             },
             boxShadow: {
-              'travel-card': '0 6px 16px rgba(0, 0, 0, 0.12)',
-              'travel-pop': '0 1px 2px rgba(0, 0, 0, 0.08)',
+              'travel-card': '0 8px 32px rgba(0, 0, 0, 0.5)',
+              'travel-pop': '0 2px 8px rgba(0, 0, 0, 0.4)',
+              'travel-glow': '0 0 40px rgba(59, 130, 246, 0.25)',
             }
           }
         }
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Poppins for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #F3F4F6;
-            color: #111827;
+            font-family: 'Inter', sans-serif;
+            background-color: #080C14;
+            color: #F8FAFC;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
         }
     </style>
   </head>
-  <body class="bg-background text-secondary antialiased">
+  <body class="bg-[#080C14] text-[#F8FAFC] antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
