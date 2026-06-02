@@ -7,22 +7,28 @@ module.exports = {
     extend: {
       colors: {
         travel: {
-          primary: '#FF385C',
-          'primary-hover': '#E31C5F',
-          secondary: '#00A699',
-          dark: '#222222',
-          muted: '#717171',
-          light: '#F7F7F7',
-          border: '#DDDDDD'
+          primary: '#3B82F6',
+          'primary-hover': '#2563EB',
+          accent: '#60A5FA',
+          secondary: '#3B82F6',
+          dark: '#0F172A',
+          muted: '#94A3B8',
+          light: '#080C14',
+          border: 'rgba(255, 255, 255, 0.08)'
         }
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        display: ['Poppins', 'sans-serif'],
+      },
       borderRadius: {
-        'travel-card': '12px',
-        'travel-btn': '8px',
+        'travel-card': '16px',
+        'travel-btn': '12px',
       },
       boxShadow: {
-        'travel-card': '0 6px 16px rgba(0, 0, 0, 0.12)',
-        'travel-pop': '0 1px 2px rgba(0, 0, 0, 0.08)',
+        'travel-card': '0 8px 32px rgba(0, 0, 0, 0.5)',
+        'travel-pop': '0 2px 8px rgba(0, 0, 0, 0.4)',
+        'travel-glow': '0 0 40px rgba(59, 130, 246, 0.25)',
       }
     },
   },
