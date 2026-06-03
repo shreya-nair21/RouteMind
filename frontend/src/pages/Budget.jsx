@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
+const transportIcons = {
+  flight: 'flight',
+  train: 'train',
+  bus: 'directions_bus',
+  car: 'directions_car'
+};
+
 const Budget = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
@@ -100,11 +107,17 @@ const Budget = () => {
                  {activities.map(act => (
                     <div key={act._id} className="flex items-center justify-between p-4 bg-[#0B0F19]/50 rounded-lg border border-white/5 hover:border-white/10 transition-all">
                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded bg-zinc-950 border border-white/5 flex items-center justify-center text-slate-400">
-                             <span className="material-symbols-outlined text-sm">
-                                {act.type === 'food' ? 'restaurant' : act.type === 'transport' ? 'flight' : 'explore'}
-                             </span>
-                          </div>
+                           <div className="w-8 h-8 rounded bg-zinc-950 border border-white/5 flex items-center justify-center text-slate-400">
+                              {act.type === 'food' ? (
+                                 <span className="material-symbols-outlined text-sm">restaurant</span>
+                              ) : act.type === 'transport' ? (
+                                 <span className="material-symbols-outlined text-sm">
+                                    {transportIcons[trip.transportMode?.toLowerCase()] || 'flight'}
+                                 </span>
+                              ) : (
+                                 <span className="material-symbols-outlined text-sm">explore</span>
+                              )}
+                           </div>
                           <div>
                              <p className="text-xs font-bold text-secondary">{act.name}</p>
                              <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Day {act.day}</p>
@@ -156,10 +169,15 @@ const Budget = () => {
               </div>
               <div className="pt-4 border-t border-white/5">
                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 italic">Transport Logistics</p>
-                 <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-secondary uppercase">{trip.transportMode || 'Flight'} Protocol</span>
-                    <span className="material-symbols-outlined text-primary text-sm">verified</span>
-                 </div>
+                  <div className="flex justify-between items-center">
+                     <span className="text-xs font-bold text-secondary uppercase flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-sm text-blue-400">
+                           {transportIcons[trip.transportMode?.toLowerCase()] || 'flight'}
+                        </span>
+                        {trip.transportMode || 'Flight'} Protocol
+                     </span>
+                     <span className="material-symbols-outlined text-primary text-sm">verified</span>
+                  </div>
               </div>
            </div>
         </div>
