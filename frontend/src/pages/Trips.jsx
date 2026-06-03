@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const transportIcons = {
+  flight: 'flight',
+  train: 'train',
+  bus: 'directions_bus',
+  car: 'directions_car'
+};
+
 const Trips = () => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,8 +83,11 @@ const TripCard = ({ trip, onClick }) => (
       <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent"></div>
       
       <div className="absolute top-4 left-4">
-         <span className="px-2.5 py-1 bg-black/40 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest rounded-lg border border-white/10">
-            {trip.transportMode || 'Flight'}
+         <span className="px-2.5 py-1 bg-black/40 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest rounded-lg border border-white/10 flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[10px] text-blue-400">
+               {transportIcons[trip.transportMode?.toLowerCase()] || 'flight'}
+            </span>
+            <span>{trip.transportMode || 'Flight'}</span>
          </span>
       </div>
 
