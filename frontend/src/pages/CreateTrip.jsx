@@ -2,6 +2,71 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { countryData, popularCities } from '../utils/countryData';
 
+const getDestinationImage = (dest) => {
+  if (!dest) return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200';
+  const query = dest.toLowerCase();
+  
+  if (query.includes('china') || query.includes('beijing') || query.includes('shanghai') || query.includes('hong kong')) {
+    return 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=1200';
+  }
+  if (query.includes('japan') || query.includes('tokyo') || query.includes('kyoto') || query.includes('osaka')) {
+    return 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200';
+  }
+  if (query.includes('france') || query.includes('paris')) {
+    return 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200';
+  }
+  if (query.includes('italy') || query.includes('rome') || query.includes('venice') || query.includes('florence') || query.includes('amalfi')) {
+    return 'https://images.unsplash.com/photo-1529260839382-3f772127ef71?q=80&w=1200';
+  }
+  if (query.includes('united states') || query.includes('usa') || query.includes('new york') || query.includes('california')) {
+    return 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=1200';
+  }
+  if (query.includes('united kingdom') || query.includes('uk') || query.includes('london')) {
+    return 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200';
+  }
+  if (query.includes('australia') || query.includes('sydney') || query.includes('melbourne')) {
+    return 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=1200';
+  }
+  if (query.includes('india') || query.includes('mumbai') || query.includes('delhi') || query.includes('taj mahal')) {
+    return 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=1200';
+  }
+  if (query.includes('egypt') || query.includes('cairo')) {
+    return 'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=1200';
+  }
+  if (query.includes('turkey') || query.includes('istanbul') || query.includes('cappadocia')) {
+    return 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1200';
+  }
+  if (query.includes('greece') || query.includes('santorini') || query.includes('athens')) {
+    return 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200';
+  }
+  if (query.includes('spain') || query.includes('madrid') || query.includes('barcelona')) {
+    return 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=1200';
+  }
+  if (query.includes('switzerland') || query.includes('zurich') || query.includes('swiss')) {
+    return 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1200';
+  }
+  if (query.includes('singapore')) {
+    return 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=1200';
+  }
+  if (query.includes('thailand') || query.includes('bangkok') || query.includes('phuket')) {
+    return 'https://images.unsplash.com/photo-1528181304800-2f12585c7240?q=80&w=1200';
+  }
+  if (query.includes('indonesia') || query.includes('bali')) {
+    return 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1200';
+  }
+  if (query.includes('iceland') || query.includes('reykjavik')) {
+    return 'https://images.unsplash.com/photo-1520637102912-2df6bb2aec6d?q=80&w=1200';
+  }
+  return `https://loremflickr.com/1600/900/${encodeURIComponent(dest.split(',')[0].trim())}`;
+};
+
+const transportIcons = {
+  flight: 'flight',
+  train: 'train',
+  bus: 'directions_bus',
+  car: 'directions_car'
+};
+
 const CreateTrip = () => {
   // Core Trip states
   const [destination, setDestination] = useState('');
@@ -151,9 +216,9 @@ const CreateTrip = () => {
 
   // Fetch a gorgeous cover image for the destination
   useEffect(() => {
-    if (destination.length > 3) {
+    if (destination.length >= 2) {
       const timer = setTimeout(() => {
-        setDestImage(`https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop`);
+        setDestImage(getDestinationImage(destination));
       }, 1000);
       return () => clearTimeout(timer);
     }
@@ -203,7 +268,7 @@ const CreateTrip = () => {
           budget,
           travelerCount,
           transportMode,
-          image: destImage,
+          coverImage: destImage,
           budgetBreakdown: breakdown,
           travelPace,
           interests,
@@ -239,6 +304,34 @@ const CreateTrip = () => {
 
   return (
     <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto font-body-md text-slate-100">
+      {isGenerating && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080C14]/95 backdrop-blur-md animate-fade-in text-slate-100">
+          <div className="max-w-md text-center space-y-6 px-6">
+            <div className="relative w-24 h-24 mx-auto mb-8">
+              <div className="absolute inset-0 rounded-full border-4 border-blue-500/20"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
+              <span className="material-symbols-outlined text-3xl text-blue-400 absolute inset-0 flex items-center justify-center animate-pulse">auto_awesome</span>
+            </div>
+            
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Neural Itinerary Engine</p>
+            
+            <h2 className="text-3xl font-extrabold text-white leading-tight">
+              Compiling Custom Voyage to
+            </h2>
+            
+            <div 
+              className="text-5xl font-black italic tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
+              style={{ fontFamily: "'Roboto', sans-serif" }}
+            >
+              {destination ? destination.split(',')[0].trim() : 'Destination'}
+            </div>
+            
+            <p className="text-xs text-slate-450 leading-relaxed font-medium animate-pulse">
+              Synthesizing travel routes, checking transport links, and organizing budgets...
+            </p>
+          </div>
+        </div>
+      )}
       
       {/* Wizard Header */}
       <div className="mb-12 text-center md:text-left">
@@ -469,7 +562,7 @@ const CreateTrip = () => {
                         }`}
                       >
                         <span className={`material-symbols-outlined text-2xl ${transportMode === mode ? 'text-primary' : 'text-slate-400'}`}>
-                          {mode === 'car' ? 'directions_car' : mode}
+                          {transportIcons[mode]}
                         </span>
                         <span className="text-xs font-bold capitalize">{mode}</span>
                       </button>
@@ -546,7 +639,7 @@ const CreateTrip = () => {
                               setInterests([...interests, interest]);
                             }
                           }}
-                          className={`px-4.5 py-2.5 rounded-full text-xs font-bold transition-all border ${
+                          className={`px-6 py-3 rounded-full text-xs font-bold transition-all border ${
                             isSelected 
                               ? 'bg-primary text-white border-primary shadow-sm scale-95' 
                               : 'clay-surface text-slate-300 hover:border-white/20 hover:text-white'
@@ -667,7 +760,10 @@ const CreateTrip = () => {
 
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-slate-400 uppercase tracking-wider">Transit</span>
-                  <span className="font-bold text-slate-200 capitalize">{transportMode}</span>
+                  <span className="font-bold text-slate-200 capitalize flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-sm text-blue-400">{transportIcons[transportMode]}</span>
+                    {transportMode}
+                  </span>
                 </div>
               </div>
 
