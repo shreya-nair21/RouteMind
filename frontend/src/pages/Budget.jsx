@@ -70,11 +70,11 @@ const Budget = () => {
       <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Capital Allocation</p>
-          <h1 className="text-5xl font-extrabold tracking-tighter text-white italic uppercase">Budget Analytics</h1>
+          <h1 className="text-5xl font-extrabold tracking-tighter text-white uppercase">Budget Analytics</h1>
         </div>
         <div className="text-right">
-           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 italic">Total Allocation</p>
-           <p className="text-3xl font-black text-blue-400 tracking-tighter italic">₹{(trip.budget || 0).toLocaleString()}</p>
+           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Allocation</p>
+           <p className="text-3xl font-black text-blue-400 tracking-tighter">₹{(trip.budget || 0).toLocaleString()}</p>
         </div>
       </div>      
       
@@ -83,7 +83,7 @@ const Budget = () => {
         <div className="lg:col-span-2 space-y-8">
            <div className="grid grid-cols-2 gap-6">
               <div className="bg-gradient-to-tr from-primary to-blue-600 text-white p-6 rounded-xl shadow-sm">
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-2 italic">Capital Deployed</p>
+                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-2">Capital Deployed</p>
                   <h3 className="text-3xl font-black tracking-tight">₹{totalSpent.toLocaleString()}</h3>
                   <div className="mt-6 flex items-center gap-2">
                      <div className="h-1 bg-white/20 flex-1 rounded-full overflow-hidden">
@@ -93,7 +93,7 @@ const Budget = () => {
                   </div>
               </div>
               <div className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 italic">Liquid Reserve</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Liquid Reserve</p>
                   <h3 className="text-3xl font-black text-secondary tracking-tight">₹{Math.max(0, remaining).toLocaleString()}</h3>
                   <div className="mt-6 flex items-center gap-2">
                      <span className={`material-symbols-outlined text-sm ${remaining >= 0 ? 'text-supporting' : 'text-red-500'}`}>
@@ -170,14 +170,14 @@ const Budget = () => {
 
            <div className="w-full mt-8 p-5 bg-[#0B0F19]/50 border border-white/5 rounded-lg space-y-4">
               <div>
-                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 italic">Group Specifics</p>
+                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Group Specifics</p>
                  <div className="flex justify-between items-center">
                     <span className="text-xs font-bold text-secondary uppercase">Per Person Cost</span>
                     <span className="text-lg font-black text-primary tracking-tight">₹{Math.round(totalSpent / (trip.travelerCount || 1)).toLocaleString()}</span>
                  </div>
               </div>
               <div className="pt-4 border-t border-white/5">
-                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 italic">Transport Logistics</p>
+                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Transport Logistics</p>
                   <div className="flex justify-between items-center">
                      <span className="text-xs font-bold text-secondary uppercase flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-sm text-blue-400">
