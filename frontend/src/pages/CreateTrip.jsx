@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { countryData, popularCities } from '../utils/countryData';
+import { AuthContext } from '../context/AuthContext';
 
 const getDestinationImage = (dest) => {
   if (!dest) return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200';
   const query = dest.toLowerCase();
-  
+
   if (query.includes('china') || query.includes('beijing') || query.includes('shanghai') || query.includes('hong kong')) {
     return 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=1200';
   }
@@ -68,6 +69,7 @@ const transportIcons = {
 };
 
 const CreateTrip = () => {
+  const { logout } = useContext(AuthContext);
   // Core Trip states
   const [destination, setDestination] = useState('');
   const [cities, setCities] = useState('');
@@ -81,7 +83,7 @@ const CreateTrip = () => {
   const [destImage, setDestImage] = useState('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop');
   const [interests, setInterests] = useState([]);
   const [travelPace, setTravelPace] = useState('balanced');
-  
+
   // Form Wizard progress state
   const [step, setStep] = useState(1);
 
@@ -120,10 +122,10 @@ const CreateTrip = () => {
     }
 
     const term = destination.toLowerCase().trim();
-    
+
     // Local filter matching
-    const localFiltered = popularCities.filter(item => 
-      item.city.toLowerCase().includes(term) || 
+    const localFiltered = popularCities.filter(item =>
+      item.city.toLowerCase().includes(term) ||
       item.country.toLowerCase().includes(term)
     ).map(item => {
       const cDetails = countryData[item.country.toLowerCase()] || {};
@@ -171,9 +173,9 @@ const CreateTrip = () => {
             const city = address.city || address.town || address.village || address.municipality || address.state || '';
             const country = address.country || '';
             const countryCode = (address.country_code || '').toLowerCase();
-            
+
             const cDetails = countryData[country.toLowerCase()] || {};
-            
+
             if (city && country) {
               return {
                 display: `${city}, ${country}`,
@@ -276,6 +278,12 @@ const CreateTrip = () => {
         })
       });
 
+      if (response.status === 401) {
+        logout();
+        navigate('/login');
+        return;
+      }
+
       if (response.ok) {
         const data = await response.json();
         await fetch(`http://localhost:5001/api/trips/${data._id}/generate-ai`, {
@@ -312,27 +320,27 @@ const CreateTrip = () => {
               <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
               <span className="material-symbols-outlined text-3xl text-blue-400 absolute inset-0 flex items-center justify-center animate-pulse">auto_awesome</span>
             </div>
-            
+
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Neural Itinerary Engine</p>
-            
+
             <h2 className="text-3xl font-extrabold text-white leading-tight">
               Compiling Custom Voyage to
             </h2>
-            
-            <div 
+
+            <div
               className="text-5xl font-black italic tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
               style={{ fontFamily: "'Roboto', sans-serif" }}
             >
               {destination ? destination.split(',')[0].trim() : 'Destination'}
             </div>
-            
+
             <p className="text-xs text-slate-450 leading-relaxed font-medium animate-pulse">
               Synthesizing travel routes, checking transport links, and organizing budgets...
             </p>
           </div>
         </div>
       )}
-      
+
       {/* Wizard Header */}
       <div className="mb-12 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 leading-tight">
@@ -351,7 +359,7 @@ const CreateTrip = () => {
           { label: 'Transit & Budget', num: 3 },
           { label: 'Vibe & Group', num: 4 }
         ].map((item) => (
-          <div 
+          <div
             key={item.num}
             onClick={() => {
               // Only allow navigation to steps that are validated
@@ -360,13 +368,12 @@ const CreateTrip = () => {
               if (item.num === 3 && destination && startDate && durationDays) setStep(3);
               if (item.num === 4 && destination && startDate && durationDays) setStep(4);
             }}
-            className={`flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${
-              step === item.num 
-                ? 'bg-primary text-white shadow-md' 
-                : step > item.num 
-                  ? 'bg-white/10 text-slate-200' 
+            className={`flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${step === item.num
+                ? 'bg-primary text-white shadow-md'
+                : step > item.num
+                  ? 'bg-white/10 text-slate-200'
                   : 'text-slate-500 hover:text-slate-350'
-            }`}
+              }`}
           >
             {item.label}
           </div>
@@ -375,11 +382,11 @@ const CreateTrip = () => {
 
       {/* Main Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* Left Form Panel */}
         <div className="lg:col-span-8 space-y-6">
           <div className="clay-surface rounded-3xl p-8 md:p-12">
-            
+
             {/* STEP 1: DESTINATION & CITIES */}
             {step === 1 && (
               <div className="space-y-6 animate-fade-in text-left">
@@ -387,12 +394,12 @@ const CreateTrip = () => {
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">1</div>
                   <h3 className="text-xl font-bold text-white">Specify Target Location</h3>
                 </div>
-                
+
                 <div className="relative group" ref={autocompleteRef}>
                   <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Destination Country / City</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all relative">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">location_on</span>
-                    <input 
+                    <input
                       required
                       value={destination}
                       onChange={(e) => {
@@ -400,8 +407,8 @@ const CreateTrip = () => {
                         setShowSuggestions(true);
                       }}
                       onFocus={() => setShowSuggestions(true)}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none" 
-                      placeholder="e.g. Kyoto, Japan or Santorini, Greece" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none"
+                      placeholder="e.g. Kyoto, Japan or Santorini, Greece"
                       type="text"
                       autoComplete="off"
                     />
@@ -412,8 +419,8 @@ const CreateTrip = () => {
                       const cDetails = countryData[countryPart];
                       if (cDetails && cDetails.iso) {
                         return (
-                          <img 
-                            src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                          <img
+                            src={`https://flagcdn.com/w40/${cDetails.iso}.png`}
                             alt={cDetails.name}
                             className="w-5.5 h-3.5 object-cover rounded shadow-sm border border-white/10 mr-1.5"
                           />
@@ -428,7 +435,7 @@ const CreateTrip = () => {
                     <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-surface border border-white/10 shadow-2xl rounded-2xl overflow-hidden animate-fade-in">
                       <div className="py-2.5 max-h-[250px] overflow-y-auto">
                         {suggestions.map((suggestion, idx) => (
-                          <div 
+                          <div
                             key={idx}
                             onClick={() => {
                               setDestination(suggestion.display);
@@ -437,8 +444,8 @@ const CreateTrip = () => {
                             className="px-5 py-3 hover:bg-white/5 flex items-center gap-3 cursor-pointer transition-all duration-150 border-b border-white/5 last:border-0"
                           >
                             {suggestion.iso ? (
-                              <img 
-                                src={`https://flagcdn.com/w40/${suggestion.iso}.png`} 
+                              <img
+                                src={`https://flagcdn.com/w40/${suggestion.iso}.png`}
                                 alt={suggestion.country}
                                 className="w-5.5 h-4 object-cover rounded shadow-sm border border-white/10 shrink-0"
                                 onError={(e) => { e.target.style.display = 'none'; }}
@@ -470,11 +477,11 @@ const CreateTrip = () => {
                   <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Stops or Specific Cities to Explore (Optional)</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">explore</span>
-                    <input 
+                    <input
                       value={cities}
                       onChange={(e) => setCities(e.target.value)}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none" 
-                      placeholder="e.g. Tokyo, Gion, Shibuya" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 placeholder:text-slate-400 outline-none"
+                      placeholder="e.g. Tokyo, Gion, Shibuya"
                       type="text"
                     />
                   </div>
@@ -494,7 +501,7 @@ const CreateTrip = () => {
                   <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Number of Days</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">hourglass_bottom</span>
-                    <input 
+                    <input
                       required
                       type="number"
                       min="1"
@@ -513,7 +520,7 @@ const CreateTrip = () => {
                         <label className="text-[10px] font-bold text-slate-450 uppercase">Check-In Date</label>
                         <div className="flex items-center gap-3">
                           <span className="material-symbols-outlined text-primary text-lg">calendar_today</span>
-                          <input 
+                          <input
                             required
                             type="date"
                             value={startDate}
@@ -522,12 +529,12 @@ const CreateTrip = () => {
                           />
                         </div>
                       </div>
-                      
+
                       <div className="clay-inset rounded-2xl p-4 flex flex-col gap-1 text-left opacity-80">
                         <label className="text-[10px] font-bold text-slate-450 uppercase">Check-Out Date (Auto-Calculated)</label>
                         <div className="flex items-center gap-3">
                           <span className="material-symbols-outlined text-slate-400 text-lg">calendar_month</span>
-                          <input 
+                          <input
                             disabled
                             type="date"
                             value={endDate}
@@ -553,13 +560,12 @@ const CreateTrip = () => {
                   <label className="text-xs font-black uppercase tracking-wider text-slate-400 block">Transit Mode</label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {['flight', 'train', 'bus', 'car'].map(mode => (
-                      <button 
+                      <button
                         key={mode}
                         type="button"
                         onClick={() => setTransportMode(mode)}
-                        className={`clay-surface rounded-2xl p-4 flex flex-col items-center gap-2 transition-all ${
-                          transportMode === mode ? 'border-2 border-primary bg-primary/5' : 'hover:translate-y-[-2px]'
-                        }`}
+                        className={`clay-surface rounded-2xl p-4 flex flex-col items-center gap-2 transition-all ${transportMode === mode ? 'border-2 border-primary bg-primary/5' : 'hover:translate-y-[-2px]'
+                          }`}
                       >
                         <span className={`material-symbols-outlined text-2xl ${transportMode === mode ? 'text-primary' : 'text-slate-400'}`}>
                           {transportIcons[mode]}
@@ -575,12 +581,12 @@ const CreateTrip = () => {
                     <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Approximate Budget (₹)</label>
                     <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                       <span className="text-primary mr-2 font-black text-sm">₹</span>
-                      <input 
+                      <input
                         required
                         type="number"
                         value={budget}
                         onChange={(e) => setBudget(Number(e.target.value))}
-                        className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none" 
+                        className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none"
                       />
                     </div>
                   </div>
@@ -612,13 +618,13 @@ const CreateTrip = () => {
                   <label className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 block">Group Size (Number of People)</label>
                   <div className="clay-inset rounded-2xl flex items-center px-4 py-3 group-focus-within:ring-2 ring-primary transition-all">
                     <span className="material-symbols-outlined text-primary mr-3 text-lg">group</span>
-                    <input 
+                    <input
                       required
                       type="number"
                       min="1"
                       value={travelerCount}
                       onChange={(e) => setTravelerCount(Number(e.target.value))}
-                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none" 
+                      className="bg-transparent border-none focus:ring-0 w-full text-sm font-semibold text-slate-200 outline-none"
                     />
                   </div>
                 </div>
@@ -629,7 +635,7 @@ const CreateTrip = () => {
                     {['Culture', 'Nature', 'Adventure', 'Food', 'Shopping', 'Relaxation', 'Nightlife', 'History', 'Family Friendly'].map(interest => {
                       const isSelected = interests.includes(interest);
                       return (
-                        <button 
+                        <button
                           key={interest}
                           type="button"
                           onClick={() => {
@@ -639,11 +645,10 @@ const CreateTrip = () => {
                               setInterests([...interests, interest]);
                             }
                           }}
-                          className={`px-6 py-3 rounded-full text-xs font-bold transition-all border ${
-                            isSelected 
-                              ? 'bg-primary text-white border-primary shadow-sm scale-95' 
+                          className={`px-6 py-3 rounded-full text-xs font-bold transition-all border ${isSelected
+                              ? 'bg-primary text-white border-primary shadow-sm scale-95'
                               : 'clay-surface text-slate-300 hover:border-white/20 hover:text-white'
-                          }`}
+                            }`}
                         >
                           {interest}
                         </button>
@@ -657,7 +662,7 @@ const CreateTrip = () => {
             {/* Navigation buttons at the bottom */}
             <div className="mt-12 flex justify-between items-center border-t border-white/10 pt-6">
               {step > 1 ? (
-                <button 
+                <button
                   type="button"
                   onClick={prevStep}
                   className="clay-button-secondary py-3 px-6 rounded-xl text-xs flex items-center gap-1.5"
@@ -669,7 +674,7 @@ const CreateTrip = () => {
               )}
 
               {step < 4 ? (
-                <button 
+                <button
                   type="button"
                   onClick={nextStep}
                   disabled={(step === 1 && !destination) || (step === 2 && (!startDate || !durationDays))}
@@ -678,7 +683,7 @@ const CreateTrip = () => {
                   Continue <span className="material-symbols-outlined text-xs">arrow_forward</span>
                 </button>
               ) : (
-                <button 
+                <button
                   type="button"
                   onClick={handleSubmit}
                   disabled={isGenerating || !destination || !startDate || !durationDays}
@@ -697,9 +702,9 @@ const CreateTrip = () => {
         <div className="lg:col-span-4 lg:sticky lg:top-32 space-y-6">
           <div className="clay-surface rounded-3xl overflow-hidden shadow-xl border border-white/10">
             <div className="h-44 relative bg-slate-900 shrink-0">
-              <img 
-                className="w-full h-full object-cover" 
-                src={destImage} 
+              <img
+                className="w-full h-full object-cover"
+                src={destImage}
                 alt="Destination Preview"
                 onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
               />
@@ -711,8 +716,8 @@ const CreateTrip = () => {
                   const cDetails = countryData[countryPart];
                   if (cDetails && cDetails.iso) {
                     return (
-                      <img 
-                        src={`https://flagcdn.com/w40/${cDetails.iso}.png`} 
+                      <img
+                        src={`https://flagcdn.com/w40/${cDetails.iso}.png`}
                         alt={cDetails.name}
                         className="w-5.5 h-3.5 object-cover rounded border border-white/60 shadow"
                       />
@@ -727,13 +732,13 @@ const CreateTrip = () => {
             </div>
             <div className="p-8 space-y-5 text-left">
               <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-450">Voyage Parameters</h4>
-              
+
               <div className="space-y-3.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-slate-400 uppercase tracking-wider">Destination</span>
                   <span className="font-extrabold text-primary max-w-[150px] truncate">{destination || '—'}</span>
                 </div>
-                
+
                 {cities && (
                   <div className="flex justify-between items-center text-xs animate-fade-in">
                     <span className="font-semibold text-slate-400 uppercase tracking-wider">Stops</span>
@@ -772,9 +777,9 @@ const CreateTrip = () => {
                   <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 block">Total Budget</span>
                   <span className="text-xl font-black text-white">₹{budget.toLocaleString()}</span>
                 </div>
-                
+
                 {step < 4 ? (
-                  <button 
+                  <button
                     onClick={nextStep}
                     disabled={(step === 1 && !destination) || (step === 2 && (!startDate || !durationDays))}
                     className="clay-button-primary py-2.5 px-4 rounded-xl text-[10px] uppercase font-black tracking-widest disabled:opacity-50"
@@ -782,7 +787,7 @@ const CreateTrip = () => {
                     Next Step
                   </button>
                 ) : (
-                  <button 
+                  <button
                     onClick={handleSubmit}
                     disabled={isGenerating || !destination || !startDate || !durationDays}
                     className="clay-button-primary py-2.5 px-4 rounded-xl text-[10px] uppercase font-black tracking-widest disabled:opacity-50"
