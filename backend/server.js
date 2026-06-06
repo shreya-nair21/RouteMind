@@ -188,6 +188,14 @@ app.get('/api/trips/:id', protect, async (req, res) => {
 app.post('/api/trips', protect, async (req, res) => {
   try {
     const { destination, startDate, endDate, budget, coverImage, stops, isPublic } = req.body;
+
+    const user = await User.findById(req.user._id);
+    const members = [user ? user.name : 'Creator'];
+    const count = req.body.travelerCount || 1;
+    for (let i = 1; i < count; i++) {
+      members.push(`Companion ${i}`);
+    }
+
     const newTrip = new Trip({
       user: req.user._id,
       destination,
@@ -198,12 +206,13 @@ app.post('/api/trips', protect, async (req, res) => {
       travelerCount: req.body.travelerCount || 1,
       travelPace: req.body.travelPace || 'balanced',
       interests: req.body.interests || [],
+      members: req.body.members || members,
       coverImage: coverImage || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600&auto=format&fit=crop',
       stops: stops || [],
       isPublic: isPublic || false
     });
     const savedTrip = await newTrip.save();
-    
+
     // Auto-generate itinerary days
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -241,7 +250,7 @@ app.put('/api/trips/:id', protect, async (req, res) => {
       return res.status(404).json({ message: 'Trip not found or unauthorized' });
     }
 
-    const { destination, startDate, endDate, budget, coverImage, stops, isPublic, status, budgetBreakdown } = req.body;
+    const { destination, startDate, endDate, budget, coverImage, stops, isPublic, status, budgetBreakdown, members } = req.body;
     trip.destination = destination || trip.destination;
     trip.startDate = startDate || trip.startDate;
     trip.endDate = endDate || trip.endDate;
@@ -251,6 +260,7 @@ app.put('/api/trips/:id', protect, async (req, res) => {
     trip.isPublic = isPublic !== undefined ? isPublic : trip.isPublic;
     trip.status = status || trip.status;
     trip.budgetBreakdown = budgetBreakdown || trip.budgetBreakdown;
+    trip.members = members || trip.members;
 
     const updatedTrip = await trip.save();
     res.json(updatedTrip);
@@ -316,7 +326,7 @@ app.post('/api/trips/:id/itinerary', protect, async (req, res) => {
 
     const { dayNumber, date, activities } = req.body;
     let itineraryDay = await Itinerary.findOne({ tripId: req.params.id, dayNumber });
-    
+
     if (itineraryDay) {
       // Append activities if day exists
       itineraryDay.activities.push(...(activities || []));
@@ -401,11 +411,11 @@ app.put('/api/trips/:id/packing/:itemId', protect, async (req, res) => {
   try {
     const item = await PackingItem.findById(req.params.itemId);
     if (!item) return res.status(404).json({ message: 'Item not found' });
-    
+
     item.packed = req.body.packed !== undefined ? req.body.packed : item.packed;
     item.name = req.body.name || item.name;
     item.category = req.body.category || item.category;
-    
+
     await item.save();
     res.json(item);
   } catch (error) {
@@ -446,10 +456,10 @@ app.put('/api/trips/:id/notes/:noteId', protect, async (req, res) => {
   try {
     const note = await Note.findById(req.params.noteId);
     if (!note) return res.status(404).json({ message: 'Note not found' });
-    
+
     note.title = req.body.title || note.title;
     note.content = req.body.content || note.content;
-    
+
     await note.save();
     res.json(note);
   } catch (error) {
@@ -490,11 +500,11 @@ app.put('/api/packing/:itemId', protect, async (req, res) => {
   try {
     const item = await PackingItem.findById(req.params.itemId);
     if (!item) return res.status(404).json({ message: 'Item not found' });
-    
+
     item.packed = req.body.packed !== undefined ? req.body.packed : item.packed;
     item.name = req.body.name || item.name;
     item.category = req.body.category || item.category;
-    
+
     await item.save();
     res.json(item);
   } catch (error) {
@@ -535,10 +545,10 @@ app.put('/api/notes/:noteId', protect, async (req, res) => {
   try {
     const note = await Note.findById(req.params.noteId);
     if (!note) return res.status(404).json({ message: 'Note not found' });
-    
+
     note.title = req.body.title || note.title;
     note.content = req.body.content || note.content;
-    
+
     await note.save();
     res.json(note);
   } catch (error) {
@@ -554,6 +564,7 @@ app.delete('/api/notes/:noteId', protect, async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
+
 
 // --- New Activities API Facade Routes ---
 app.get('/api/activities/trip/:id', protect, async (req, res) => {
@@ -593,7 +604,7 @@ app.post('/api/activities', protect, async (req, res) => {
       date.setDate(date.getDate() + (day - 1));
       itinerary = new Itinerary({ tripId, dayNumber: day, date, activities: [] });
     }
-    
+
     const newActivity = {
       name,
       startTime,
@@ -602,10 +613,10 @@ app.post('/api/activities', protect, async (req, res) => {
       description: description || '',
       duration: duration || '2h'
     };
-    
+
     itinerary.activities.push(newActivity);
     await itinerary.save();
-    
+
     const saved = itinerary.activities[itinerary.activities.length - 1];
     res.status(201).json({
       _id: saved._id,
@@ -627,7 +638,7 @@ app.put('/api/activities/:id', protect, async (req, res) => {
   try {
     const itinerary = await Itinerary.findOne({ 'activities._id': req.params.id });
     if (!itinerary) return res.status(404).json({ message: 'Activity not found' });
-    
+
     const activity = itinerary.activities.id(req.params.id);
     activity.name = req.body.name || activity.name;
     activity.startTime = req.body.startTime || activity.startTime;
@@ -635,9 +646,9 @@ app.put('/api/activities/:id', protect, async (req, res) => {
     activity.cost = req.body.cost !== undefined ? req.body.cost : activity.cost;
     activity.description = req.body.description || activity.description;
     activity.duration = req.body.duration || activity.duration;
-    
+
     await itinerary.save();
-    
+
     res.json({
       _id: activity._id,
       name: activity.name,
@@ -658,10 +669,10 @@ app.delete('/api/activities/:id', protect, async (req, res) => {
   try {
     const itinerary = await Itinerary.findOne({ 'activities._id': req.params.id });
     if (!itinerary) return res.status(404).json({ message: 'Activity not found' });
-    
+
     itinerary.activities.pull({ _id: req.params.id });
     await itinerary.save();
-    
+
     res.json({ message: 'Activity deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -787,12 +798,39 @@ app.post('/api/trips/:id/generate-ai', protect, async (req, res) => {
           activities: []
         });
       }
-      itinerary.activities = dayPlan.activities;
+
+      // Map and sanitize activities to match the schema enums
+      const validTypes = ['flight', 'activity', 'lodging', 'dining', 'attractions', 'other', 'transport', 'food', 'explore'];
+      itinerary.activities = (dayPlan.activities || []).map(act => {
+        let type = (act.type || 'activity').toLowerCase();
+        if (!validTypes.includes(type)) {
+          if (type === 'hotel') type = 'lodging';
+          else if (type === 'restaurant' || type === 'meal') type = 'dining';
+          else if (type === 'sightseeing') type = 'explore';
+          else type = 'activity';
+        }
+        return {
+          startTime: act.startTime || '10:00',
+          name: act.name || 'Activity',
+          type,
+          cost: typeof act.cost === 'number' ? act.cost : 0,
+          description: act.description || '',
+          duration: act.duration || '2h'
+        };
+      });
+
       await itinerary.save();
     }
 
-    // Save optimized budget breakdown in database
-    trip.budgetBreakdown = aiPlan.budgetBreakdown;
+    // Save optimized budget breakdown in database with sanitization defaults
+    const bb = aiPlan.budgetBreakdown || {};
+    trip.budgetBreakdown = {
+      accommodation: typeof bb.accommodation === 'number' ? bb.accommodation : 0,
+      food: typeof bb.food === 'number' ? bb.food : 0,
+      transport: typeof bb.transport === 'number' ? bb.transport : 0,
+      activities: typeof bb.activities === 'number' ? bb.activities : 0,
+      other: typeof bb.other === 'number' ? bb.other : 0
+    };
     await trip.save();
 
     const itineraries = await Itinerary.find({ tripId: trip._id }).sort({ dayNumber: 1 });

@@ -76,7 +76,11 @@ const generateSmartItinerary = async (trip, daysCount) => {
     });
 
     const text = response.response.text();
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (!parsed || !Array.isArray(parsed.itineraryDays) || parsed.itineraryDays.length === 0) {
+      throw new Error('Invalid itinerary format returned by AI: missing itineraryDays array');
+    }
+    return parsed;
   } catch (error) {
     console.error('Gemini Itinerary Generation Error, falling back to mock:', error);
     return getFallbackItinerary(destination, daysCount, budget, transportMode, travelPace, interests);
@@ -126,7 +130,11 @@ const generateSmartPackingList = async (trip) => {
     });
 
     const text = response.response.text();
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (!parsed || !Array.isArray(parsed.items) || parsed.items.length === 0) {
+      throw new Error('Invalid packing list format returned by AI: missing items array');
+    }
+    return parsed;
   } catch (error) {
     console.error('Gemini Packing Generation Error, falling back to mock:', error);
     return getFallbackPackingList(destination, interests);
