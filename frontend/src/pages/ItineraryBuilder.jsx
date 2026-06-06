@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { ActivitySearchModal, ActivityEditorModal } from '../components/SearchModals';
 import AIChatDrawer from '../components/AIChatDrawer';
 
@@ -76,6 +77,7 @@ const transportIcons = {
 const ItineraryBuilder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
   const [trip, setTrip] = useState(null);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,6 +86,7 @@ const ItineraryBuilder = () => {
   const [editingActivity, setEditingActivity] = useState(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTripDetails = async () => {
@@ -94,20 +97,34 @@ const ItineraryBuilder = () => {
           fetch(`http://localhost:5001/api/activities/trip/${id}`, { headers: { 'Authorization': `Bearer ${token}` } })
         ]);
 
-        if (tripRes.ok && actRes.ok) {
-          const tripData = await tripRes.ok ? await tripRes.json() : null;
-          const actData = await actRes.ok ? await actRes.json() : [];
-          setTrip(tripData);
-          setActivities(actData);
+        if (tripRes.status === 401 || actRes.status === 401) {
+          logout();
+          navigate('/login');
+          return;
         }
+
+        if (!tripRes.ok) {
+          setError(`Trip loading failed: ${tripRes.statusText || tripRes.status}`);
+          return;
+        }
+        if (!actRes.ok) {
+          setError(`Activities loading failed: ${actRes.statusText || actRes.status}`);
+          return;
+        }
+
+        const tripData = await tripRes.json();
+        const actData = await actRes.json();
+        setTrip(tripData);
+        setActivities(actData);
       } catch (err) {
         console.error(err);
+        setError('A network error occurred while compiling your itinerary.');
       } finally {
         setLoading(false);
       }
     };
     fetchTripDetails();
-  }, [id]);
+  }, [id, navigate, logout]);
 
   const handleAddActivity = async (activityData) => {
     try {
@@ -177,6 +194,21 @@ const ItineraryBuilder = () => {
       setLoading(false);
     }
   };
+
+  if (error) return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center bg-[#080C14] text-slate-100 font-sans select-none animate-fade-in">
+      <div className="max-w-md text-center space-y-6 px-6">
+        <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto mb-6">
+          <span className="material-symbols-outlined text-3xl">error</span>
+        </div>
+        <h2 className="text-2xl font-extrabold text-white leading-tight">Itinerary Compilation Interrupted</h2>
+        <p className="text-sm text-slate-400 leading-relaxed font-medium">{error}</p>
+        <button onClick={() => navigate('/dashboard')} className="btn-primary px-8 h-12 uppercase text-[10px] tracking-widest font-black inline-block mt-4 rounded-xl border-none">
+          Return to Dashboard
+        </button>
+      </div>
+    </div>
+  );
 
   if (loading || !trip) return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center bg-[#080C14] text-slate-100 font-sans select-none animate-fade-in">
