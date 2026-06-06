@@ -40,13 +40,13 @@ const Trips = () => {
 
   return (
     <div className="max-w-7xl mx-auto pb-20 space-y-12 text-slate-100">
-      <div className="flex justify-between items-end border-b border-white/5 pb-10">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/5 pb-10">
         <div>
           <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-[0.3em] mb-2">Vault of Explorations</p>
           <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">My Journeys</h1>
         </div>
-        <button onClick={() => navigate('/create-trip')} className="btn-primary px-6 h-12 text-xs font-bold uppercase tracking-wider rounded-xl relative overflow-hidden group">
-          <span className="relative z-10 flex items-center gap-2">
+        <button onClick={() => navigate('/create-trip')} className="btn-primary px-6 h-12 text-xs font-bold uppercase tracking-wider rounded-xl relative overflow-hidden group w-full sm:w-auto">
+          <span className="relative z-10 flex items-center gap-2 justify-center">
             <span className="material-symbols-outlined text-sm">add</span>
             Plan New Voyage
           </span>

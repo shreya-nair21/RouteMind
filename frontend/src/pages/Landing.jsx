@@ -264,7 +264,7 @@ export default function Landing() {
       </header>
 
       {/* ═══════════ HERO SECTION ═══════════ */}
-      <section className="relative z-0 h-screen w-full overflow-hidden">
+      <section className="relative z-0 min-h-screen lg:h-screen w-full flex items-center justify-center overflow-hidden py-24 lg:py-0">
 
         {/* Background Carousel */}
         <div className="absolute inset-0 -z-20 bg-slate-950">
@@ -285,7 +285,7 @@ export default function Landing() {
         <div className="absolute inset-0 bg-[#080C14]/40 -z-10" />
 
         {/* ═══════ HERO CONTENT ═══════ */}
-        <main className="relative z-10 mx-auto max-w-3xl px-6 flex flex-col items-center justify-center h-full text-center pt-16">
+        <main className="relative z-10 mx-auto max-w-3xl px-6 flex flex-col items-center justify-center w-full text-center">
 
           <div className="relative w-full bg-zinc-900/60 backdrop-blur-xl border border-white/5 px-8 py-14 md:p-16 rounded-[40px] shadow-2xl space-y-8 overflow-hidden">
             {/* Badge */}

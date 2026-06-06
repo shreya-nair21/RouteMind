@@ -6,10 +6,10 @@ const Profile = () => {
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-12 pb-20">
-      <div className="flex justify-between items-end border-b border-white/10 pb-10">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Member Authentication</p>
-          <h1 className="text-4xl font-black text-secondary uppercase">Identity Profile</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-secondary uppercase">Identity Profile</h1>
         </div>
       </div>
 
@@ -52,9 +52,9 @@ const Profile = () => {
 
             <div className="bg-red-500/10 border border-red-500/20 p-6 rounded-xl shadow-sm">
                <h3 className="text-xs font-bold uppercase tracking-wider text-red-400 mb-4">Critical Actions</h3>
-               <div className="flex gap-4">
-                  <button onClick={logout} className="btn-secondary border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300 h-12 px-6 uppercase font-bold text-xs tracking-wider flex-1">Terminate Session</button>
-                  <button className="btn-primary bg-red-600 hover:bg-red-700 h-12 px-6 uppercase font-bold text-xs tracking-wider flex-1 border-none text-white">Liquidate Profile</button>
+               <div className="flex flex-col sm:flex-row gap-4">
+                  <button onClick={logout} className="btn-secondary border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300 h-12 px-6 uppercase font-bold text-xs tracking-wider flex-1 w-full sm:w-auto">Terminate Session</button>
+                  <button className="btn-primary bg-red-600 hover:bg-red-700 h-12 px-6 uppercase font-bold text-xs tracking-wider flex-1 border-none text-white w-full sm:w-auto">Liquidate Profile</button>
                </div>
             </div>
          </div>

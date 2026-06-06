@@ -141,7 +141,7 @@ const SharedTrip = () => {
         <div className="absolute bottom-16 left-10 md:left-20 right-10 md:right-20">
            <p className="text-primary font-bold tracking-[0.25em] uppercase text-xs mb-3 animate-fade-in">Shared Expedition Record</p>
            <div 
-             className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none animate-fade-in" 
+             className="text-3xl sm:text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none animate-fade-in break-words" 
              style={{ animationDelay: '0.1s' }}
            >
               {trip.destination}
@@ -164,13 +164,13 @@ const SharedTrip = () => {
          <div className="bg-surface border border-white/10 p-8 rounded-xl shadow-sm">
             <h2 className="text-xl font-bold tracking-tight text-secondary uppercase mb-8">Sequenced Maneuvers</h2>
             
-            <div className="space-y-8 relative before:absolute before:left-10 before:top-6 before:bottom-6 before:w-px before:bg-white/10">
+            <div className="space-y-8 relative before:absolute before:left-6 sm:before:left-10 before:top-6 before:bottom-6 before:w-px before:bg-white/10">
                {activities.map((act, index) => (
-                  <div key={act._id} className="relative pl-20 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                     <div className="absolute left-0 top-5 w-16 text-right">
+                  <div key={act._id} className="relative pl-14 sm:pl-20 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                     <div className="absolute left-0 top-5 w-10 sm:w-16 text-left sm:text-right">
                         <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter leading-none">{act.startTime}</p>
                      </div>
-                     <div className="absolute left-[39px] top-5 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-zinc-950 shadow-sm z-10"></div>
+                     <div className="absolute left-[21px] sm:left-[39px] top-5 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-zinc-950 shadow-sm z-10"></div>
                      
                      <div className="bg-[#0B0F19]/50 border border-white/5 p-5 rounded-lg hover:bg-zinc-900/50 hover:border-white/10 transition-all">
                         <div className="flex items-center gap-3 mb-2">
