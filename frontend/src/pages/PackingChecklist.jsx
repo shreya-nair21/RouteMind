@@ -100,7 +100,7 @@ const PackingChecklist = () => {
       <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Logistics Prep</p>
-          <h1 className="text-4xl font-black text-secondary uppercase italic">Equipment List</h1>
+          <h1 className="text-4xl font-black text-secondary uppercase">Equipment List</h1>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ const PackingChecklist = () => {
 
       <div className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm space-y-3">
         {items.length === 0 ? (
-          <p className="text-center py-10 text-slate-400 text-sm font-medium italic">No inventory specified yet.</p>
+          <p className="text-center py-10 text-slate-400 text-sm font-medium">No inventory specified yet.</p>
         ) : (
           items.map(item => (
             <div 
@@ -144,7 +144,7 @@ const PackingChecklist = () => {
               }`}>
                 {item.packed && <span className="material-symbols-outlined text-white text-[10px]">check</span>}
               </div>
-              <span className={`flex-1 text-sm ${item.packed ? 'line-through text-slate-400 italic' : 'text-secondary font-medium'}`}>{item.name}</span>
+              <span className={`flex-1 text-sm ${item.packed ? 'line-through text-slate-400' : 'text-secondary font-medium'}`}>{item.name}</span>
             </div>
           ))
         )}
