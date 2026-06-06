@@ -266,22 +266,22 @@ const ItineraryBuilder = () => {
   const currentDayActivities = activities.filter(a => a.day === activeDay).sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   return (
-    <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-32">
+    <div className="max-w-7xl mx-auto space-y-12 pb-32">
       {/* Header Panel */}
-      <div className="pro-card p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-end gap-8 min-h-[220px]">
+      <div className="pro-card p-6 md:p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-end gap-8 min-h-[220px] animate-fade-in">
         {/* Abstract Glowing Banner Background */}
         <div 
           className="absolute inset-0 z-0"
           style={getAbstractBannerStyle(trip._id || trip.destination)}
         />
 
-        <div className="relative z-10">
+        <div className="relative z-10 w-full">
           <div className="flex items-center gap-3 mb-4">
             <span className="material-symbols-outlined text-blue-600 filled">auto_awesome</span>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Neural Itinerary Engine</p>
           </div>
           <div 
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-none mb-6 text-white py-1"
+            className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-none mb-6 text-white py-1 break-words"
           >
             {trip.destination}
           </div>
@@ -296,12 +296,12 @@ const ItineraryBuilder = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-4 relative z-10">
-          <button onClick={() => setIsShareModalOpen(true)} className="btn-secondary px-8 h-14">
+        <div className="flex flex-col sm:flex-row gap-4 relative z-10 w-full md:w-auto shrink-0">
+          <button onClick={() => setIsShareModalOpen(true)} className="btn-secondary px-8 h-14 w-full sm:w-auto">
             <span className="material-symbols-outlined text-sm">share</span>
             Distribute
           </button>
-          <button onClick={handleGenerateAI} className="btn-primary px-8 h-14">
+          <button onClick={handleGenerateAI} className="btn-primary px-8 h-14 w-full sm:w-auto">
             <span className="material-symbols-outlined text-sm">temp_preferences_custom</span>
             AI Re-Generate
           </button>
@@ -309,48 +309,91 @@ const ItineraryBuilder = () => {
       </div>
 
       {/* Navigation Sub-Bar */}
-      <div className="flex justify-between items-center bg-surface p-4 rounded-2xl border border-white/10 shadow-sm sticky top-24 z-30">
-        <div className="flex gap-4">
-          <button onClick={() => navigate(`/trips/${id}/budget`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Budget</button>
-          <button onClick={() => navigate(`/trips/${id}/packing`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Packing</button>
-          <button onClick={() => navigate(`/trips/${id}/notes`)} className="nav-link text-xs font-black uppercase tracking-widest px-6">Notes</button>
+      <div className="flex flex-row justify-between items-center bg-[#0B0F19]/40 backdrop-blur-xl p-2 rounded-2xl border border-white/5 shadow-2xl !sticky top-[72px] z-30 animate-fade-in w-full">
+        <div className="flex items-center gap-1 bg-[#05070B]/50 p-1 rounded-xl border border-white/5 w-full sm:w-auto overflow-x-auto scrollbar-none">
+          <button 
+            onClick={() => navigate(`/trips/${id}/itinerary`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 bg-primary text-white shadow-md shadow-primary/20"
+          >
+            Itinerary
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/budget`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Budget
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/packing`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Packing
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/notes`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Notes
+          </button>
         </div>
-        <div className="flex items-center gap-4 px-6 border-l border-white/10">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Platform Sync</p>
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-[#05070B]/30 rounded-xl border border-white/5">
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Cloud Synchronized</p>
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-start">
-        {/* Day Navigation */}
-        <div className="space-y-4 lg:sticky lg:top-48">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Timeline Matrix</p>
-          <div className="flex flex-row lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0">
-            {Array.from({ length: daysCount }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveDay(i + 1)}
-                className={`flex-shrink-0 px-8 py-5 rounded-2xl text-sm font-black transition-all flex items-center justify-between border-2 ${activeDay === i + 1
-                  ? 'bg-primary border-primary text-white shadow-2xl scale-105'
-                  : 'bg-surface border-white/5 text-slate-400 hover:border-white/20 hover:text-white'
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 animate-fade-in">
+        {/* Day Navigation Column */}
+        <div className="lg:col-span-1">
+          <div className="space-y-4 lg:sticky lg:top-[160px]">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Timeline Matrix</p>
+            <div className="flex flex-row lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0 scrollbar-none">
+              {Array.from({ length: daysCount }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveDay(i + 1)}
+                  className={`flex-shrink-0 px-5 py-4 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-between border group gap-6 ${
+                    activeDay === i + 1
+                      ? 'bg-[#0B0F19]/80 border-primary/40 text-white shadow-[0_4px_20px_rgba(59,130,246,0.15)] ring-1 ring-primary/20'
+                      : 'bg-[#0B0F19]/40 border-white/5 text-slate-400 hover:border-white/10 hover:text-white hover:bg-[#0B0F19]/60'
                   }`}
-              >
-                <span>Day {String(i + 1).padStart(2, '0')}</span>
-                {activeDay === i + 1 && <span className="material-symbols-outlined text-xs">arrow_forward</span>}
-              </button>
-            ))}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-all duration-300 ${
+                      activeDay === i + 1
+                        ? 'bg-primary text-white shadow-md shadow-primary/20'
+                        : 'bg-zinc-800 text-slate-400 group-hover:bg-zinc-700 group-hover:text-white'
+                    }`}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-extrabold tracking-wider uppercase text-[11px]">Day {String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  {activeDay === i + 1 && (
+                    <span className="material-symbols-outlined text-primary text-xs animate-pulse">
+                      arrow_forward_ios
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Activity Timeline */}
-        <div className="lg:col-span-2 space-y-10">
-          <div className="flex justify-between items-center">
+        <div className="lg:col-span-3 space-y-10">
+          <div className="flex justify-between items-center flex-wrap gap-4 border-b border-white/10 pb-6">
             <h2 className="text-3xl font-black tracking-tighter text-white uppercase">Sequence of Events</h2>
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Day {activeDay} Strategy</span>
+            <button 
+              onClick={() => setIsModalOpen(true)} 
+              className="btn-primary px-6 h-12 text-xs font-bold uppercase tracking-wider rounded-xl relative overflow-hidden group w-full sm:w-auto"
+            >
+              <span className="material-symbols-outlined text-sm">add</span>
+              Add Event
+            </button>
           </div>
 
           {currentDayActivities.length === 0 ? (
-            <div className="pro-card p-24 text-center bg-surface border-dashed border-white/10 flex flex-col items-center">
+            <div className="pro-card p-12 sm:p-24 text-center bg-surface border-dashed border-white/10 flex flex-col items-center">
               <div className="w-20 h-20 rounded-full bg-[#0B0F19]/50 flex items-center justify-center text-slate-500 mb-8 border border-white/5 shadow-sm">
                 <span className="material-symbols-outlined text-4xl">history_toggle_off</span>
               </div>
@@ -359,44 +402,48 @@ const ItineraryBuilder = () => {
               <button onClick={handleGenerateAI} className="btn-primary px-10">Deploy AI Engine</button>
             </div>
           ) : (
-            <div className="space-y-8 relative before:absolute before:left-10 before:top-10 before:bottom-10 before:w-px before:bg-white/10">
+            <div className="space-y-8 relative before:absolute before:left-6 sm:before:left-10 before:top-10 before:bottom-10 before:w-[2px] before:bg-gradient-to-b before:from-primary/30 before:via-primary/10 before:to-transparent">
               {currentDayActivities.map((activity, index) => (
-                <div key={activity._id} className="relative pl-24 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div key={activity._id} className="relative pl-14 sm:pl-24 group animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                   {/* Time Indicator */}
-                  <div className="absolute left-0 top-6 w-20 text-right">
-                    <p className="text-[10px] font-black text-slate-200 uppercase tracking-tighter leading-none">{activity.startTime}</p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase mt-1">EST</p>
+                  <div className="absolute left-0 top-6 w-10 sm:w-20 text-left sm:text-right">
+                    <p className="text-[10px] sm:text-xs font-mono font-black text-primary tracking-wide leading-none">{activity.startTime}</p>
+                    <p className="text-[8px] font-bold text-slate-500 uppercase mt-1 tracking-wider">EST</p>
                   </div>
                   {/* Node */}
-                  <div className="absolute left-[39px] top-6 w-3 h-3 rounded-full bg-primary border-4 border-white shadow-[0_0_0_1px_rgba(255,126,95,0.2)] z-10 group-hover:scale-150 transition-all"></div>
+                  <div className="absolute left-[20px] sm:left-[38px] top-[22px] w-4 h-4 rounded-full bg-[#080C14] border-2 border-primary flex items-center justify-center z-10 group-hover:border-blue-400 group-hover:scale-125 transition-all duration-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary group-hover:bg-blue-400 transition-colors"></span>
+                  </div>
 
-                  <div className="pro-card p-8 hover:border-[#0056B3]/30 transition-all flex justify-between items-start">
-                    <div className="space-y-4">
+                  <div className="pro-card p-5 sm:p-6 hover:border-primary/20 hover:bg-[#0B0F19]/40 transition-all duration-300 flex justify-between items-start gap-4">
+                    <div className="space-y-4 flex-1 min-w-0">
                       <div className="flex items-center gap-3">
-                        {activity.type === 'food' ? (
-                          <span className="material-symbols-outlined text-blue-600 text-lg filled">restaurant</span>
-                        ) : activity.type === 'transport' ? (
-                          <span className="material-symbols-outlined text-blue-600 text-lg filled">
-                            {transportIcons[trip.transportMode?.toLowerCase()] || 'flight'}
-                          </span>
-                        ) : (
-                          <span className="material-symbols-outlined text-blue-600 text-lg filled">explore</span>
-                        )}
-                        <h4 className="text-xl font-black text-white tracking-tight uppercase">{activity.name}</h4>
-                      </div>
-                      <p className="text-slate-400 font-medium text-sm leading-relaxed max-w-md">{activity.description}</p>
-                      <div className="flex gap-6 items-center">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black text-slate-350 uppercase tracking-widest">Allocation</span>
-                          <span className="text-xs font-bold text-slate-200">₹{activity.cost?.toLocaleString()}</span>
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-all duration-300 shrink-0">
+                          {activity.type === 'food' ? (
+                            <span className="material-symbols-outlined text-sm filled">restaurant</span>
+                          ) : activity.type === 'transport' ? (
+                            <span className="material-symbols-outlined text-sm filled">
+                              {transportIcons[trip.transportMode?.toLowerCase()] || 'flight'}
+                            </span>
+                          ) : (
+                            <span className="material-symbols-outlined text-sm filled">explore</span>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black text-slate-350 uppercase tracking-widest">Duration</span>
-                          <span className="text-xs font-bold text-slate-200">{activity.duration}</span>
+                        <h4 className="text-base sm:text-lg font-black text-white tracking-tight uppercase truncate">{activity.name}</h4>
+                      </div>
+                      <p className="text-slate-400 font-medium text-xs sm:text-sm leading-relaxed">{activity.description}</p>
+                      <div className="flex flex-wrap gap-4 sm:gap-6 items-center">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#05070B]/50 rounded-lg border border-white/5">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Allocation</span>
+                          <span className="text-xs font-bold text-white">₹{activity.cost?.toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#05070B]/50 rounded-lg border border-white/5">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Duration</span>
+                          <span className="text-xs font-bold text-white">{activity.duration}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                    <div className="flex flex-col gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all lg:translate-x-4 lg:group-hover:translate-x-0 shrink-0">
                       <button onClick={() => { setEditingActivity(activity); setIsModalOpen(true); }} className="btn-ghost w-10 h-10 rounded-xl bg-white/5 text-slate-400 hover:text-blue-400 hover:bg-blue-600/20">
                         <span className="material-symbols-outlined text-lg">edit</span>
                       </button>
@@ -409,37 +456,6 @@ const ItineraryBuilder = () => {
               ))}
             </div>
           )}
-        </div>
-
-        {/* Sidebar Insights */}
-        <div className="space-y-8">
-          <div className="pro-card p-10 bg-blue-950/20 border border-blue-500/10 text-slate-200 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full -mr-10 -mt-10"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="material-symbols-outlined text-primary filled">auto_awesome</span>
-                <h2 className="text-lg font-bold text-white">Smart Insights</h2>
-              </div>
-              <p className="text-slate-350 text-sm leading-relaxed mb-10 font-medium">
-                We've analyzed your {trip.destination} journey. For Day {activeDay}, we suggest prioritizing {activities.length === 0 ? 'any local activity' : 'cultural discovery'} to maximize your travel score.
-              </p>
-              <button onClick={() => setIsModalOpen(true)} className="btn-primary w-full py-4 text-xs tracking-widest uppercase">
-                Explore Top Picks
-              </button>
-            </div>
-          </div>
-
-          <div className="pro-card p-8 flex flex-col items-center text-center">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6">Platform Efficiency</p>
-            <div className="w-24 h-24 rounded-full border-8 border-white/5 flex items-center justify-center relative">
-              <svg className="absolute inset-0 w-full h-full -rotate-90">
-                <circle cx="48" cy="48" r="40" fill="transparent" stroke="#0056B3" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset={251.2 * (1 - 0.85)} />
-              </svg>
-              <span className="text-xl font-black text-white">85%</span>
-            </div>
-            <p className="mt-6 text-sm font-bold text-white">Optimization Level</p>
-            <p className="text-xs text-slate-400 font-medium mt-1">High Efficiency Detected</p>
-          </div>
         </div>
       </div>
 
