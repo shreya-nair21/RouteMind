@@ -311,7 +311,7 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto font-body-md text-slate-100">
+    <div className="pt-32 pb-24 px-4 md:px-8 max-w-7xl mx-auto font-body-md text-slate-100">
       {isGenerating && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080C14]/95 backdrop-blur-md animate-fade-in text-slate-100">
           <div className="max-w-md text-center space-y-6 px-6">
@@ -351,7 +351,7 @@ const CreateTrip = () => {
       </div>
 
       {/* Progressive Step Progress Bar */}
-      <div className="max-w-xl mx-auto md:mx-0 mb-12 bg-[#0B0F19]/50 p-2.5 rounded-2xl border border-white/10 flex justify-between items-center gap-1">
+      <div className="max-w-xl mx-auto md:mx-0 mb-12 bg-[#0B0F19]/50 p-2 rounded-2xl border border-white/10 grid grid-cols-2 sm:flex sm:justify-between sm:items-center gap-1.5">
         {[
           { label: 'Destination', num: 1 },
           { label: 'Dates & Days', num: 2 },
@@ -367,7 +367,7 @@ const CreateTrip = () => {
               if (item.num === 3 && destination && startDate && durationDays) setStep(3);
               if (item.num === 4 && destination && startDate && durationDays) setStep(4);
             }}
-            className={`flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${step === item.num
+            className={`w-full sm:flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${step === item.num
                 ? 'bg-primary text-white shadow-md'
                 : step > item.num
                   ? 'bg-white/10 text-slate-200'
