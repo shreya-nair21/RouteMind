@@ -18,7 +18,7 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['DM Sans', 'sans-serif'],
         display: ['Poppins', 'sans-serif'],
       },
       borderRadius: {
