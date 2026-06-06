@@ -328,8 +328,7 @@ const CreateTrip = () => {
             </h2>
 
             <div
-              className="text-5xl font-black italic tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
-              style={{ fontFamily: "'Roboto', sans-serif" }}
+              className="text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
             >
               {destination ? destination.split(',')[0].trim() : 'Destination'}
             </div>
