@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const transportIcons = {
@@ -11,6 +12,8 @@ const transportIcons = {
 
 const Budget = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
   const [trip, setTrip] = useState(null);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +26,12 @@ const Budget = () => {
           fetch(`http://localhost:5001/api/trips/${id}`, { headers: { 'Authorization': `Bearer ${token}` } }),
           fetch(`http://localhost:5001/api/activities/trip/${id}`, { headers: { 'Authorization': `Bearer ${token}` } })
         ]);
+
+        if (tripRes.status === 401 || actRes.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
 
         if (tripRes.ok && actRes.ok) {
           const t = await tripRes.json();
@@ -37,7 +46,7 @@ const Budget = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, navigate, logout]);
 
   if (loading || !trip) return (
     <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]">
