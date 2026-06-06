@@ -28,7 +28,7 @@ const Profile = () => {
                </div>
                <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest text-slate-400">
                   <span>Expeditions</span>
-                  <span className="text-secondary italic">Verified</span>
+                  <span className="text-secondary">Verified</span>
                </div>
             </div>
          </div>

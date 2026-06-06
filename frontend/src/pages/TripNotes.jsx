@@ -63,7 +63,7 @@ const TripNotes = () => {
       <div className="flex justify-between items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Tactical Intelligence</p>
-          <h1 className="text-4xl font-black text-secondary uppercase italic">Field Notes</h1>
+          <h1 className="text-4xl font-black text-secondary uppercase">Field Notes</h1>
         </div>
       </div>
 
@@ -84,12 +84,12 @@ const TripNotes = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {notes.length === 0 ? (
-          <p className="text-center py-10 text-slate-400 text-sm font-medium italic">The archive is currently empty.</p>
+          <p className="text-center py-10 text-slate-400 text-sm font-medium">The archive is currently empty.</p>
         ) : (
           notes.map(note => (
             <div key={note._id} className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm relative overflow-hidden group">
                <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3 italic">
+               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3">
                   Recorded on {new Date(note.createdAt).toLocaleDateString()}
                </p>
                <p className="text-secondary text-sm font-normal leading-relaxed whitespace-pre-wrap">{note.content}</p>
