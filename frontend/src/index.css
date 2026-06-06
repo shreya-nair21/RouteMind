@@ -167,6 +167,11 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.2);
+  cursor: pointer;
+}
+
 /* ═══════════════════════════════
    BUTTON SYSTEM
    ═══════════════════════════════ */
