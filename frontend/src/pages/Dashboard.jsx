@@ -22,7 +22,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 
 const Dashboard = () => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Interactive filtering states
@@ -37,6 +37,11 @@ const Dashboard = () => {
         const response = await fetch('http://localhost:5001/api/trips', {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
+        if (response.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
         if (response.ok) {
           const data = await response.json();
           setTrips(data);
@@ -48,7 +53,7 @@ const Dashboard = () => {
       }
     };
     fetchTrips();
-  }, []);
+  }, [logout, navigate]);
 
   if (loading) return (
     <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]">
