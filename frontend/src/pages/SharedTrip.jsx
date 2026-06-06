@@ -71,6 +71,30 @@ const isDefaultImage = (url) => {
   return url.includes('photo-1469854523086') || url.includes('photo-1488646953014');
 };
 
+const getAbstractBannerStyle = (seed) => {
+  if (!seed) seed = 'default';
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue1 = Math.abs(hash) % 360;
+  const hue2 = (hue1 + 120) % 360;
+  const hue3 = (hue1 + 240) % 360;
+  
+  return {
+    backgroundColor: '#080C14',
+    backgroundImage: `
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      radial-gradient(at 0% 0%, hsla(${hue1}, 80%, 55%, 0.2) 0px, transparent 60%),
+      radial-gradient(at 90% 10%, hsla(${hue2}, 75%, 50%, 0.15) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, hsla(${hue3}, 70%, 45%, 0.15) 0px, transparent 60%),
+      linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(8, 12, 20, 0.8) 100%)
+    `,
+    backgroundSize: '40px 40px, 40px 40px, auto, auto, auto, auto',
+  };
+};
+
 const SharedTrip = () => {
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
@@ -98,32 +122,27 @@ const SharedTrip = () => {
     fetchSharedData();
   }, [id]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary italic font-bold uppercase tracking-wider">Decoding Transmission...</div>;
-  if (!trip) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary italic font-bold uppercase tracking-wider">Access Denied: Itinerary Private</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary font-bold uppercase tracking-wider">Decoding Transmission...</div>;
+  if (!trip) return <div className="min-h-screen flex items-center justify-center bg-background text-secondary font-bold uppercase tracking-wider">Access Denied: Itinerary Private</div>;
 
   return (
     <div className="min-h-screen bg-background pb-20 selection:bg-primary/20 selection:text-primary">
       {/* Visual Banner */}
-      <div className="h-[50vh] relative overflow-hidden">
-        <img 
-          src={isDefaultImage(trip.coverImage) ? getDestinationImage(trip.destination) : (trip.coverImage || trip.image)} 
-          className="w-full h-full object-cover grayscale opacity-90" 
-          alt={trip.destination} 
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent"></div>
+      <div className="h-[50vh] relative overflow-hidden border-b border-white/10" style={getAbstractBannerStyle(trip._id || trip.destination)}>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
         
         <div className="absolute top-10 left-10 md:left-20 flex items-center gap-3">
            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
               <span className="material-symbols-outlined text-md">flight_takeoff</span>
            </div>
-           <span className="text-lg font-black tracking-tight text-white uppercase italic">RouteMind</span>
+           <span className="text-lg font-black tracking-tight text-white uppercase">RouteMind</span>
         </div>
-
+ 
         <div className="absolute bottom-16 left-10 md:left-20 right-10 md:right-20">
            <p className="text-primary font-bold tracking-[0.25em] uppercase text-xs mb-3 animate-fade-in">Shared Expedition Record</p>
            <div 
              className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase leading-none animate-fade-in" 
-             style={{ animationDelay: '0.1s', fontFamily: "'Roboto', sans-serif" }}
+             style={{ animationDelay: '0.1s' }}
            >
               {trip.destination}
            </div>
@@ -134,7 +153,7 @@ const SharedTrip = () => {
               </div>
               <div>
                  <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-1">Duration</p>
-                 <p className="text-sm font-bold text-white italic uppercase">Premium Log</p>
+                 <p className="text-sm font-bold text-white uppercase">Premium Log</p>
               </div>
            </div>
         </div>
