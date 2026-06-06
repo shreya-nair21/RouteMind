@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const TripNotes = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
@@ -13,6 +16,11 @@ const TripNotes = () => {
         const response = await fetch(`http://localhost:5001/api/notes/trip/${id}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
+        if (response.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
         if (response.ok) {
           const data = await response.json();
           setNotes(data);
@@ -24,7 +32,7 @@ const TripNotes = () => {
       }
     };
     fetchNotes();
-  }, [id]);
+  }, [id, logout, navigate]);
 
   const addNote = async (e) => {
     e.preventDefault();
