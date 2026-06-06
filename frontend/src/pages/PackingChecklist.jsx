@@ -97,10 +97,44 @@ const PackingChecklist = () => {
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-12 pb-20">
-      <div className="flex justify-between items-end border-b border-white/10 pb-10">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Logistics Prep</p>
-          <h1 className="text-4xl font-black text-secondary uppercase">Equipment List</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-secondary uppercase">Equipment List</h1>
+        </div>
+      </div>
+
+      {/* Navigation Sub-Bar */}
+      <div className="flex flex-row justify-between items-center bg-[#0B0F19]/40 backdrop-blur-xl p-2 rounded-2xl border border-white/5 shadow-2xl !sticky top-[72px] z-30 w-full">
+        <div className="flex items-center gap-1 bg-[#05070B]/50 p-1 rounded-xl border border-white/5 w-full sm:w-auto overflow-x-auto scrollbar-none">
+          <button 
+            onClick={() => navigate(`/trips/${id}/itinerary`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Itinerary
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/budget`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Budget
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/packing`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 bg-primary text-white shadow-md shadow-primary/20"
+          >
+            Packing
+          </button>
+          <button 
+            onClick={() => navigate(`/trips/${id}/notes`)} 
+            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
+          >
+            Notes
+          </button>
+        </div>
+        <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-[#05070B]/30 rounded-xl border border-white/5">
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Cloud Synchronized</p>
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
         </div>
       </div>
 
