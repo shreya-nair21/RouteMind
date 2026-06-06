@@ -63,10 +63,10 @@ const AdminDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-20">
       {/* Header */}
-      <div className="flex justify-between items-end border-b border-white/10 pb-10">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Central Operations</p>
-          <h1 className="text-4xl font-black text-secondary">Platform Analytics</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-secondary">Platform Analytics</h1>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-full border border-green-500/20">
