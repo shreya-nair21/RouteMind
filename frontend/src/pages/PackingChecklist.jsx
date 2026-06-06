@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const PackingChecklist = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState('');
   const [loading, setLoading] = useState(true);
@@ -32,6 +35,11 @@ const PackingChecklist = () => {
         const response = await fetch(`http://localhost:5001/api/packing/trip/${id}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
+        if (response.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
         if (response.ok) {
           const data = await response.json();
           setItems(data);
@@ -43,7 +51,7 @@ const PackingChecklist = () => {
       }
     };
     fetchItems();
-  }, [id]);
+  }, [id, logout, navigate]);
 
   const addItem = async (e) => {
     e.preventDefault();
