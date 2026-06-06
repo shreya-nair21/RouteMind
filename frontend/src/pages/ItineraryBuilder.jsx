@@ -74,6 +74,30 @@ const transportIcons = {
   car: 'directions_car'
 };
 
+const getAbstractBannerStyle = (seed) => {
+  if (!seed) seed = 'default';
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue1 = Math.abs(hash) % 360;
+  const hue2 = (hue1 + 120) % 360;
+  const hue3 = (hue1 + 240) % 360;
+  
+  return {
+    backgroundColor: '#080C14',
+    backgroundImage: `
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      radial-gradient(at 0% 0%, hsla(${hue1}, 80%, 55%, 0.2) 0px, transparent 60%),
+      radial-gradient(at 90% 10%, hsla(${hue2}, 75%, 50%, 0.15) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, hsla(${hue3}, 70%, 45%, 0.15) 0px, transparent 60%),
+      linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(8, 12, 20, 0.8) 100%)
+    `,
+    backgroundSize: '40px 40px, 40px 40px, auto, auto, auto, auto',
+  };
+};
+
 const ItineraryBuilder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -226,8 +250,7 @@ const ItineraryBuilder = () => {
         </h2>
         
         <div 
-          className="text-5xl font-black italic tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
-          style={{ fontFamily: "'Roboto', sans-serif" }}
+          className="text-5xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent py-2"
         >
           {trip ? trip.destination.split(',')[0].trim() : 'Destination'}
         </div>
@@ -246,12 +269,10 @@ const ItineraryBuilder = () => {
     <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-32">
       {/* Header Panel */}
       <div className="pro-card p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-end gap-8 min-h-[220px]">
-        {/* Background Image Banner */}
+        {/* Abstract Glowing Banner Background */}
         <div 
-          className="absolute inset-0 bg-cover bg-center z-0"
-          style={{
-            backgroundImage: `linear-gradient(to right, rgba(8, 12, 20, 0.9) 35%, rgba(8, 12, 20, 0.3) 100%), url(${isDefaultImage(trip.coverImage) ? getDestinationImage(trip.destination) : trip.coverImage})`,
-          }}
+          className="absolute inset-0 z-0"
+          style={getAbstractBannerStyle(trip._id || trip.destination)}
         />
 
         <div className="relative z-10">
@@ -260,8 +281,7 @@ const ItineraryBuilder = () => {
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Neural Itinerary Engine</p>
           </div>
           <div 
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-none mb-6 bg-gradient-to-r from-white via-slate-100 to-slate-350 bg-clip-text text-transparent py-1"
-            style={{ fontFamily: "'Roboto', sans-serif" }}
+            className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-none mb-6 text-white py-1"
           >
             {trip.destination}
           </div>
@@ -325,7 +345,7 @@ const ItineraryBuilder = () => {
         {/* Activity Timeline */}
         <div className="lg:col-span-2 space-y-10">
           <div className="flex justify-between items-center">
-            <h2 className="text-3xl font-black tracking-tighter text-white italic uppercase">Sequence of Events</h2>
+            <h2 className="text-3xl font-black tracking-tighter text-white uppercase">Sequence of Events</h2>
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Day {activeDay} Strategy</span>
           </div>
 
@@ -334,7 +354,7 @@ const ItineraryBuilder = () => {
               <div className="w-20 h-20 rounded-full bg-[#0B0F19]/50 flex items-center justify-center text-slate-500 mb-8 border border-white/5 shadow-sm">
                 <span className="material-symbols-outlined text-4xl">history_toggle_off</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4 uppercase italic">Timeline Void</h3>
+              <h3 className="text-xl font-bold text-white mb-4 uppercase">Timeline Void</h3>
               <p className="text-slate-400 font-medium mb-10 max-w-xs mx-auto">No maneuvers scheduled for this sector. Use the intelligence module to populate your itinerary.</p>
               <button onClick={handleGenerateAI} className="btn-primary px-10">Deploy AI Engine</button>
             </div>
@@ -362,7 +382,7 @@ const ItineraryBuilder = () => {
                         ) : (
                           <span className="material-symbols-outlined text-blue-600 text-lg filled">explore</span>
                         )}
-                        <h4 className="text-xl font-black text-white tracking-tight italic uppercase">{activity.name}</h4>
+                        <h4 className="text-xl font-black text-white tracking-tight uppercase">{activity.name}</h4>
                       </div>
                       <p className="text-slate-400 font-medium text-sm leading-relaxed max-w-md">{activity.description}</p>
                       <div className="flex gap-6 items-center">
@@ -415,7 +435,7 @@ const ItineraryBuilder = () => {
               <svg className="absolute inset-0 w-full h-full -rotate-90">
                 <circle cx="48" cy="48" r="40" fill="transparent" stroke="#0056B3" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset={251.2 * (1 - 0.85)} />
               </svg>
-              <span className="text-xl font-black text-white italic">85%</span>
+              <span className="text-xl font-black text-white">85%</span>
             </div>
             <p className="mt-6 text-sm font-bold text-white">Optimization Level</p>
             <p className="text-xs text-slate-400 font-medium mt-1">High Efficiency Detected</p>
@@ -444,7 +464,7 @@ const ItineraryBuilder = () => {
           <div className="bg-surface border border-white/10 rounded-[32px] w-full max-w-md p-10 space-y-8 animate-fade-in shadow-2xl">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-2xl font-extrabold text-white tracking-tight italic uppercase">Distribute Voyage</h3>
+                <h3 className="text-2xl font-extrabold text-white tracking-tight uppercase">Distribute Voyage</h3>
                 <p className="text-slate-400 font-medium text-sm">Allow associates to view your curated plans.</p>
               </div>
               <button onClick={() => setIsShareModalOpen(false)} className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all">
