@@ -893,6 +893,19 @@ app.post('/api/trips/:id/chat', protect, async (req, res) => {
   }
 });
 
+app.post('/api/chat', protect, async (req, res) => {
+  try {
+    const { history, message } = req.body;
+    if (!message) return res.status(400).json({ message: 'User message is required' });
+
+    const reply = await ai.chatSmartAssistant(null, history || [], message);
+    res.json({ reply });
+  } catch (error) {
+    console.error("AI General Chat Endpoint Error:", error);
+    res.status(500).json({ message: 'Server Error during conversation', error: error.message });
+  }
+});
+
 app.get('/api/activities/search', protect, async (req, res) => {
   const { cityName } = req.query;
   if (!cityName) return res.status(400).json({ message: 'City name is required' });
