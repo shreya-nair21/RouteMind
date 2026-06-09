@@ -145,10 +145,13 @@ const generateSmartPackingList = async (trip) => {
  * Perform a trip-contextual conversational completion.
  */
 const chatSmartAssistant = async (trip, history, message) => {
-  const { destination, budget, travelerCount, transportMode } = trip;
+  const destination = trip?.destination || 'any global destination';
+  const budget = trip?.budget ? `₹${trip.budget}` : 'any budget';
+  const travelerCount = trip?.travelerCount || 1;
+  const transportMode = trip?.transportMode || 'any transport';
 
   if (!aiClient) {
-    return "I am currently running in Offline/Fallback Mode because the GEMINI_API_KEY is not defined in the environment. Please add GEMINI_API_KEY=your_key in your backend .env file to enable live conversations. In the meantime, enjoy your beautifully organized Traveloop trip!";
+    return "I am currently running in Offline/Fallback Mode because the GEMINI_API_KEY is not defined in the environment. Please add GEMINI_API_KEY=your_key in your backend .env file to enable live conversations. In the meantime, enjoy your beautifully organized RouteMind travel planner!";
   }
 
   try {
@@ -161,18 +164,24 @@ const chatSmartAssistant = async (trip, history, message) => {
     }));
     
     // Append system prompt instruction as part of system instruction parameter
-    const systemPrompt = `
-      You are the "Traveloop Elite AI Assistant". You are helping a traveler plan their trip to "${destination}".
+    let systemPrompt = `
+      You are the "RouteMind Elite AI Assistant". You are helping a traveler plan their trips.
+    `;
+    if (trip) {
+      systemPrompt += `
+      You are specifically helping them plan their trip to "${destination}".
       
       Trip Details:
       - Destination: ${destination}
-      - Total Budget: ₹${budget}
+      - Total Budget: ${budget}
       - Traveler Count: ${travelerCount}
       - Primary Transport Mode: ${transportMode}
-      
+      `;
+    }
+    systemPrompt += `
       Instructions:
       - Be extremely helpful, knowledgeable, professional, and friendly.
-      - Keep answers relatively concise and highly specific to the trip's destination (${destination}).
+      - Keep answers relatively concise and highly specific to travel, itineraries, packing, food, and culture.
       - If requested, provide restaurant names, weather, cultural norms, packing tips, or currency insights.
       - Feel free to suggest timeline event ideas.
     `;
