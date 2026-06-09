@@ -1,11 +1,36 @@
-import React, { useContext, useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import AIChatDrawer from './AIChatDrawer';
 
 const Layout = ({ children }) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { id } = useParams();
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [tripDestination, setTripDestination] = useState('');
+
+  useEffect(() => {
+    if (!id) {
+      setTripDestination('');
+      return;
+    }
+    const fetchTrip = async () => {
+      try {
+        const response = await fetch(`http://localhost:5001/api/trips/${id}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setTripDestination(data.destination);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTrip();
+  }, [id]);
 
   const handleLogout = () => {
     logout();
@@ -135,6 +160,22 @@ const Layout = ({ children }) => {
           {children || <Outlet />}
         </main>
       </div>
+
+      {/* Floating Smart Assistant Button */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-8 right-8 z-45 w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white flex items-center justify-center shadow-[0_10px_25px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(37,99,235,0.6)] transition-all hover:scale-110 active:scale-95 group border-none cursor-pointer"
+      >
+        <span className="material-symbols-outlined filled text-2xl group-hover:rotate-12 transition-all">auto_awesome</span>
+      </button>
+
+      {/* Smart Assistant Drawer */}
+      <AIChatDrawer
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        tripId={id}
+        destination={tripDestination}
+      />
     </div>
   );
 };
