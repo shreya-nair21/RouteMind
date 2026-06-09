@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const AIChatDrawer = ({ isOpen, onClose, tripId, destination }) => {
-  const [messages, setMessages] = useState([
-    {
-      sender: 'ai',
-      text: `Greetings! I am your RouteMind AI assistant. I have mapped out your expedition to ${destination}. How can I assist you today?`,
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    setMessages([
+      {
+        sender: 'ai',
+        text: destination 
+          ? `Greetings! I am your RouteMind AI assistant. I have mapped out your expedition to ${destination}. How can I assist you today?`
+          : `Greetings! I am your RouteMind AI assistant. How can I assist you with your travel planning today?`,
+        timestamp: new Date()
+      }
+    ]);
+  }, [tripId, destination]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -18,11 +24,16 @@ const AIChatDrawer = ({ isOpen, onClose, tripId, destination }) => {
     }
   }, [messages, isTyping]);
 
-  const suggestionChips = [
+  const suggestionChips = destination ? [
     `What is the weather like in ${destination}?`,
     `Suggest 3 signature dishes to try`,
     `Recommend top photo spots`,
     `Suggest a relaxed packing tip`
+  ] : [
+    "Recommend 3 trending travel destinations",
+    "How should I plan a 5-day itinerary?",
+    "What are essential international travel documents?",
+    "Give me some general packing tips"
   ];
 
   const handleSendMessage = async (textToSend) => {
@@ -44,7 +55,11 @@ const AIChatDrawer = ({ isOpen, onClose, tripId, destination }) => {
         text: m.text
       }));
 
-      const response = await fetch(`http://localhost:5001/api/trips/${tripId}/chat`, {
+      const url = tripId 
+        ? `http://localhost:5001/api/trips/${tripId}/chat` 
+        : `http://localhost:5001/api/chat`;
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
