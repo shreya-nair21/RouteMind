@@ -12,7 +12,6 @@ import {
   Navigation,
   MapPin,
   ChevronRight,
-  Plus,
   Sparkles,
   Map,
   XCircle
@@ -186,14 +185,6 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {trips.length > 0 && (
-          <button
-            onClick={() => navigate('/create-trip')}
-            className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-widest px-6 py-3.5 shadow-lg shadow-blue-500/20 active:scale-95 transition-all group"
-          >
-            <span className="relative z-10 flex items-center gap-2">Plan New Trip <Plus className="h-4 w-4 shrink-0" /></span>
-          </button>
-        )}
       </section>
 
       {/* Bento Grid: Statistics & Visited Countries Passport */}
@@ -490,15 +481,6 @@ const Dashboard = () => {
         )}
       </section>
 
-
-      {/* Floating Action Button */}
-      <button
-        onClick={() => navigate('/create-trip')}
-        className="fixed bottom-12 right-12 w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 hover:opacity-95 text-white rounded-full shadow-xl shadow-blue-500/20 flex items-center justify-center transition-all z-50 border border-white/5"
-        aria-label="Construct Expedition"
-      >
-        <Plus className="h-6 w-6 shrink-0" />
-      </button>
 
     </div>
   );
