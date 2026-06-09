@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ActivitySearchModal, ActivityEditorModal } from '../components/SearchModals';
-import AIChatDrawer from '../components/AIChatDrawer';
 
 const getDestinationImage = (dest) => {
   if (!dest) return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200';
@@ -109,7 +108,6 @@ const ItineraryBuilder = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -510,20 +508,6 @@ const ItineraryBuilder = () => {
           </div>
         </div>
       )}
-      <AIChatDrawer
-        isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
-        tripId={id}
-        destination={trip.destination}
-      />
-
-      {/* Floating AI Bubble */}
-      <button
-        onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-8 right-8 z-40 w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white flex items-center justify-center shadow-[0_10px_25px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(37,99,235,0.6)] transition-all hover:scale-110 active:scale-95 group border-none"
-      >
-        <span className="material-symbols-outlined filled text-2xl group-hover:rotate-12 transition-all">auto_awesome</span>
-      </button>
     </div>
   );
 };
