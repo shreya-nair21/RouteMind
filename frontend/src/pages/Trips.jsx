@@ -45,12 +45,7 @@ const Trips = () => {
           <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-[0.3em] mb-2">Vault of Explorations</p>
           <h1 className="text-4xl font-extrabold tracking-tight text-white font-display">My Journeys</h1>
         </div>
-        <button onClick={() => navigate('/create-trip')} className="btn-primary px-6 h-12 text-xs font-bold uppercase tracking-wider rounded-xl relative overflow-hidden group w-full sm:w-auto">
-          <span className="relative z-10 flex items-center gap-2 justify-center">
-            <span className="material-symbols-outlined text-sm">add</span>
-            Plan New Voyage
-          </span>
-        </button>
+
       </div>
 
       {trips.length === 0 ? (
