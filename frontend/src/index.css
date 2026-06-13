@@ -1,61 +1,71 @@
 :root {
   /* ═══════════════════════════════════════════
-     RouteMind — Premium Clean Dark Theme
-     Inspired by Rutugo style
+     RouteMind — Monochrome Glass Theme
      ═══════════════════════════════════════════ */
 
-  /* Primary Accent: Vibrant Blue */
-  --primary: #3B82F6;
-  --primary-hover: #2563EB;
-  --primary-light: rgba(59, 130, 246, 0.08);
-  --primary-glow: rgba(59, 130, 246, 0.15);
+  /* Theme variables */
+  --neutral-05: #000000;
+  --neutral-03: #1c1c1e;
+  --theme-color-02: #09090b;
+  --theme-color-03: #ffffff;
+  --neutral-01: white;
+  --neutral-02: #e5e5e5;
+  --neutral-04: #ffffff;
+  --theme-color-01: #a1a1aa;
+  --theme-color-4: #f4f4f5;
 
-  /* Accent: Slate / Blue Accent */
-  --accent: #60A5FA;
-  --accent-hover: #3B82F6;
-  --accent-light: rgba(96, 165, 250, 0.08);
-  --accent-glow: rgba(96, 165, 250, 0.15);
+  /* Primary Accent */
+  --primary: #ffffff;
+  --primary-hover: #e5e5e5;
+  --primary-light: rgba(255, 255, 255, 0.12);
+  --primary-glow: rgba(255, 255, 255, 0.08);
+
+  /* Secondary Accent */
+  --accent: #a1a1aa;
+  --accent-hover: #71717a;
+  --accent-light: rgba(161, 161, 170, 0.12);
+  --accent-glow: rgba(161, 161, 170, 0.08);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-  --gradient-accent: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
-  --gradient-hero: linear-gradient(135deg, #0B0F19 0%, #080C14 100%);
-  --gradient-sidebar: linear-gradient(180deg, #0B0F19 0%, #070A13 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  --gradient-primary: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  --gradient-accent: linear-gradient(135deg, #a1a1aa 0%, #1c1c1e 100%);
+  --gradient-hero: linear-gradient(180deg, #000000 0%, #09090b 100%);
+  --gradient-sidebar: linear-gradient(180deg, #000000 0%, #0c0c0c 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
 
-  /* Surfaces - Clean Dark Mode */
-  --bg-color: #080C14;
-  --surface: #0F172A;
-  --surface-dark: #070A13;
-  --surface-hover: #1E293B;
+  /* Surfaces */
+  --bg-color: #000000;
+  --surface: #09090b;
+  --surface-dark: #000000;
+  --surface-hover: #1c1c1e;
 
   /* Typography */
-  --text-main: #FFFFFF;
-  --text-muted: #CBD5E1;
-  --text-light: #E2E8F0;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --text-light: #71717a;
 
   /* Borders */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
 
   /* Radius */
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 30px;
+  --radius-xl: 36px;
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
-  --shadow-accent: 0 8px 24px rgba(59, 130, 246, 0.15);
-  --shadow-focus: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  --shadow-sm: 0 10px 24px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 16px 38px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 72px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 40px rgba(255, 255, 255, 0.05);
+  --shadow-accent: 0 12px 34px rgba(161, 161, 170, 0.1);
+  --shadow-focus: 0 0 0 4px rgba(255, 255, 255, 0.2);
 
   /* Brand */
-  --brand: #3B82F6;
-  --link: #3B82F6;
+  --brand: #ffffff;
+  --link: #ffffff;
 }
 
 /* ═══════════════════════════════
@@ -69,7 +79,7 @@
 }
 
 body, input, button, textarea, select {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -78,10 +88,102 @@ body {
   background-color: var(--bg-color);
   color: var(--text-main);
   min-height: 100vh;
+  background-image:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.02), transparent 20%),
+    linear-gradient(180deg, #000000 0%, #080808 100%);
+  background-attachment: fixed;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.page-shell {
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.panel-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.page-header {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.page-shell .text-white,
+.page-shell .text-slate-100,
+.page-shell .text-slate-200,
+.page-shell .text-slate-300,
+.page-shell .text-slate-400 {
+  color: var(--text-main) !important;
+}
+
+.bg-\[\#080C14\],
+.bg-\[\#0B0F19\],
+.bg-\[\#05070B\],
+.bg-\[\#0B0F19\]\/40,
+.bg-\[\#0B0F19\]\/50,
+.bg-\[\#080C14\]\/30,
+.bg-\[\#080C14\]\/40,
+.bg-\[\#080C14\]\/95,
+.bg-\[\#05070B\]\/50,
+.bg-zinc-950,
+.bg-zinc-900,
+.bg-zinc-800,
+.bg-slate-900,
+.bg-slate-950,
+.bg-surface,
+.bg-surface-dark {
+  background-color: var(--surface-dark) !important;
+}
+
+.text-slate-100,
+.text-slate-200,
+.text-slate-350 {
+  color: #ffffff !important;
+}
+
+.text-slate-300,
+.text-slate-400,
+.text-gray-400,
+.text-zinc-400,
+.text-slate-450 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.text-slate-500,
+.text-gray-500,
+.text-zinc-500 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.btn-ghost {
+  color: #d8e9e7;
+}
+
+.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-main);
@@ -179,14 +281,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Primary Button */
 .clay-button-primary, .btn-primary {
   padding: 0.8rem 1.75rem;
-  background: var(--gradient-primary) !important;
-  color: white !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   font-weight: 600 !important;
   font-size: 0.875rem !important;
   border-radius: var(--radius-sm) !important;
   border: none !important;
   box-shadow: var(--shadow-sm) !important;
-  transition: opacity 0.2s ease, transform 0.1s ease !important;
+  transition: background-color 0.2s ease, transform 0.1s ease !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,7 +297,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .clay-button-primary:hover, .btn-primary:hover {
-  opacity: 0.95;
+  background: #e5e5e5 !important;
+  color: #000000 !important;
+  opacity: 1 !important;
 }
 
 .clay-button-primary:active, .btn-primary:active {
@@ -288,10 +392,10 @@ header {
 }
 
 .nav-link.active {
-  background: rgba(59, 130, 246, 0.1) !important;
-  color: var(--primary) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
   font-weight: 600;
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid #ffffff;
 }
 
 /* ═══════════════════════════════
@@ -340,8 +444,8 @@ header {
 .day-indicator {
   width: 54px;
   height: 54px;
-  background: var(--gradient-primary) !important;
-  color: white !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   border-radius: 50% !important;
   display: flex;
   justify-content: center;
@@ -413,3 +517,166 @@ header {
 .hover-scale:hover {
   transform: scale(1.02);
 }
+
+/* Liquid Glass Effect & Animations from Design System */
+.liquid-glass {
+  background: rgba(0, 0, 0, 0.4);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+video {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.1) 80%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════
+   ACCESSIBILITY & HIGH CONTRAST READABILITY SYSTEM
+   ═══════════════════════════════ */
+
+/* 1. Global typography weights thickness override (thicker text on dark bg) */
+.font-light {
+  font-weight: 500 !important;
+}
+.font-normal {
+  font-weight: 500 !important;
+}
+p, span, div, li, td, th {
+  font-weight: 500;
+}
+
+/* 2. Global variable contrast overrides for monochrome black theme */
+:root {
+  --text-muted: #ffffff !important;
+  --text-light: #ffffff !important;
+}
+
+/* 3. Force all gray/muted text classes to render as pure white on dark bg */
+.text-slate-300,
+.text-slate-400,
+.text-slate-500,
+.text-zinc-300,
+.text-zinc-400,
+.text-zinc-500,
+.text-gray-300,
+.text-gray-400,
+.text-gray-500,
+.text-white\/30,
+.text-white\/40,
+.text-white\/50,
+.text-white\/60,
+.text-white\/70,
+.text-white\/80,
+.text-white\/85,
+.text-white\/90 {
+  color: #ffffff !important;
+}
+
+/* 4. Enforce black text on all light / white background elements */
+.bg-white,
+[class*="bg-white"],
+.bg-gray-100,
+.bg-slate-100,
+.bg-zinc-100,
+.bg-gray-200,
+.bg-slate-200,
+.bg-zinc-200,
+.bg-gray-150 {
+  color: #000000 !important;
+}
+
+/* 5. Enforce black text for children nested inside white / light elements */
+.bg-white p,
+.bg-white span,
+.bg-white h1,
+.bg-white h2,
+.bg-white h3,
+.bg-white h4,
+.bg-white h5,
+.bg-white h6,
+.bg-white a,
+.bg-white input,
+.bg-white textarea,
+.bg-white button,
+[class*="bg-white"] p,
+[class*="bg-white"] span,
+[class*="bg-white"] h1,
+[class*="bg-white"] h2,
+[class*="bg-white"] h3,
+[class*="bg-white"] h4,
+[class*="bg-white"] h5,
+[class*="bg-white"] h6,
+[class*="bg-white"] a,
+[class*="bg-white"] input,
+[class*="bg-white"] textarea,
+[class*="bg-white"] button,
+.bg-gray-100 p,
+.bg-gray-100 span,
+.bg-gray-100 a,
+.bg-gray-150 p,
+.bg-gray-150 span,
+.bg-gray-150 a {
+  color: #000000 !important;
+}
+
+/* 6. Enforce black text for specific neutral text colors inside white / light elements */
+.bg-white .text-white,
+.bg-white .text-white\/80,
+.bg-white .text-white\/60,
+.bg-white .text-slate-400,
+.bg-white .text-slate-500,
+.bg-white .text-zinc-400,
+.bg-white .text-zinc-500,
+.bg-white .text-gray-400,
+.bg-white .text-gray-500,
+[class*="bg-white"] .text-white,
+[class*="bg-white"] .text-white\/80,
+[class*="bg-white"] .text-white\/60,
+[class*="bg-white"] .text-slate-400,
+[class*="bg-white"] .text-slate-500,
+[class*="bg-white"] .text-zinc-400,
+[class*="bg-white"] .text-zinc-500,
+[class*="bg-white"] .text-gray-400,
+[class*="bg-white"] .text-gray-500 {
+  color: #000000 !important;
+}
+

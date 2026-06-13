@@ -66,7 +66,7 @@ const Budget = () => {
   ].filter(d => d.value > 0);
 
   return (
-    <div className="max-w-7xl mx-auto animate-fade-in space-y-12 pb-20">
+    <div className="max-w-6xl mx-auto animate-fade-in space-y-12 pb-20">
       <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Capital Allocation</p>

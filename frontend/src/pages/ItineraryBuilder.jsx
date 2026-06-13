@@ -264,7 +264,7 @@ const ItineraryBuilder = () => {
   const currentDayActivities = activities.filter(a => a.day === activeDay).sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   return (
-    <div className="max-w-7xl mx-auto space-y-12 pb-32">
+    <div className="max-w-6xl mx-auto space-y-12 pb-32">
       {/* Header Panel */}
       <div className="pro-card p-6 md:p-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-end gap-8 min-h-[220px] animate-fade-in">
         {/* Abstract Glowing Banner Background */}

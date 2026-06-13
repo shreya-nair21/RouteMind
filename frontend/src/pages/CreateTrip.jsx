@@ -311,7 +311,7 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 px-4 md:px-8 max-w-7xl mx-auto font-body-md text-slate-100">
+    <div className="pb-24 max-w-6xl mx-auto font-body-md text-white">
       {isGenerating && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080C14]/95 backdrop-blur-md animate-fade-in text-slate-100">
           <div className="max-w-md text-center space-y-6 px-6">

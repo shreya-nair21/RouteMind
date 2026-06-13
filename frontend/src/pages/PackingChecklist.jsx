@@ -96,7 +96,7 @@ const PackingChecklist = () => {
   if (loading) return <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]"><div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in space-y-12 pb-20">
+    <div className="max-w-6xl mx-auto animate-fade-in space-y-12 pb-20">
       <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-end border-b border-white/10 pb-10">
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-2">Logistics Prep</p>
