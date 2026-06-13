@@ -578,7 +578,7 @@ export default function Landing() {
       {/* ═══════════ FAQ SECTION ═══════════ */}
       <Section id="faq" className="bg-zinc-950/20">
         <SectionHeading 
-          title="Frequest queries." 
+          title="Frequent queries." 
           subtitle="FAQ Matrix" 
         />
         <div className="max-w-3xl mx-auto space-y-4">
