@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { TripContext } from '../context/TripContext';
+import { TripSubNavbar } from '../components';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const transportIcons = {
@@ -13,40 +14,7 @@ const transportIcons = {
 const Budget = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-  const [trip, setTrip] = useState(null);
-  const [activities, setActivities] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const [tripRes, actRes] = await Promise.all([
-          fetch(`http://localhost:5001/api/trips/${id}`, { headers: { 'Authorization': `Bearer ${token}` } }),
-          fetch(`http://localhost:5001/api/activities/trip/${id}`, { headers: { 'Authorization': `Bearer ${token}` } })
-        ]);
-
-        if (tripRes.status === 401 || actRes.status === 401) {
-          logout();
-          navigate('/login');
-          return;
-        }
-
-        if (tripRes.ok && actRes.ok) {
-          const t = await tripRes.json();
-          const a = await actRes.json();
-          setTrip(t);
-          setActivities(a);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [id, navigate, logout]);
+  const { trip, activities, loading } = useContext(TripContext);
 
   if (loading || !trip) return (
     <div className="min-h-[60vh] flex items-center justify-center bg-[#080C14]">
@@ -79,38 +47,7 @@ const Budget = () => {
       </div>      
       
       {/* Navigation Sub-Bar */}
-      <div className="flex flex-row justify-between items-center bg-[#0B0F19]/40 backdrop-blur-xl p-2 rounded-2xl border border-white/5 shadow-2xl !sticky top-[72px] z-30 w-full">
-        <div className="flex items-center gap-1 bg-[#05070B]/50 p-1 rounded-xl border border-white/5 w-full sm:w-auto overflow-x-auto scrollbar-none">
-          <button 
-            onClick={() => navigate(`/trips/${id}/itinerary`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Itinerary
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/budget`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 bg-primary text-white shadow-md shadow-primary/20"
-          >
-            Budget
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/packing`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Packing
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/notes`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Notes
-          </button>
-        </div>
-        <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-[#05070B]/30 rounded-xl border border-white/5">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Cloud Synchronized</p>
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
-        </div>
-      </div>
+      <TripSubNavbar activeTab="budget" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Stats */}
