@@ -199,7 +199,7 @@ const Dashboard = () => {
               <div className="h-64 sm:h-80 overflow-hidden relative bg-zinc-950">
                 <img
                   className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                  src={nextTrip.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935'}
+                  src={nextTrip.coverImage || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935'}
                   alt={nextTrip.destination}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
@@ -309,7 +309,7 @@ const Dashboard = () => {
                       <div className="h-40 overflow-hidden relative bg-zinc-950">
                         <img
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          src={trip.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935'}
+                          src={trip.coverImage || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935'}
                           alt={trip.destination}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
