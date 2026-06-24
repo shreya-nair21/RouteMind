@@ -154,6 +154,15 @@ const Layout = ({ children }) => {
           </main>
         </div>
 
+      {/* Floating AI Chat Assistant FAB */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-8 right-8 z-[99] w-14 h-14 rounded-full bg-white hover:bg-gray-250 text-black flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border-none cursor-pointer"
+        title="AI Travel Assistant"
+      >
+        <span className="material-symbols-outlined text-black text-2xl">auto_awesome</span>
+      </button>
+
       {/* Smart Assistant Drawer */}
       <AIChatDrawer
         isOpen={isChatOpen}
