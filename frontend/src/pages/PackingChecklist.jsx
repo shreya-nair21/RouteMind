@@ -1,95 +1,35 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { TripContext } from '../context/TripContext';
+import { TripSubNavbar } from '../components';
 
 const PackingChecklist = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-  const [items, setItems] = useState([]);
+
+  const {
+    packingItems,
+    loading,
+    addPackingItem,
+    togglePackingItem,
+    generateAIPacking
+  } = useContext(TripContext);
+
   const [newItem, setNewItem] = useState('');
-  const [loading, setLoading] = useState(true);
   const [isAILoading, setIsAILoading] = useState(false);
 
   const handleGenerateAIPacking = async () => {
     setIsAILoading(true);
-    try {
-      const response = await fetch(`http://localhost:5001/api/trips/${id}/generate-packing`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setItems(data);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsAILoading(false);
-    }
+    await generateAIPacking();
+    setIsAILoading(false);
   };
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(`http://localhost:5001/api/packing/trip/${id}`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (response.status === 401) {
-          logout();
-          navigate('/login');
-          return;
-        }
-        if (response.ok) {
-          const data = await response.json();
-          setItems(data);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchItems();
-  }, [id, logout, navigate]);
 
   const addItem = async (e) => {
     e.preventDefault();
     if (!newItem.trim()) return;
-    try {
-      const response = await fetch('http://localhost:5001/api/packing', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ name: newItem, tripId: id })
-      });
-      if (response.ok) {
-        const item = await response.json();
-        setItems([...items, item]);
-        setNewItem('');
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const toggleItem = async (item) => {
-    try {
-      const response = await fetch(`http://localhost:5001/api/packing/${item._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ ...item, packed: !item.packed })
-      });
-      if (response.ok) {
-        setItems(items.map(i => i._id === item._id ? { ...i, packed: !i.packed } : i));
-      }
-    } catch (err) {
-      console.error(err);
+    const success = await addPackingItem(newItem);
+    if (success) {
+      setNewItem('');
     }
   };
 
@@ -105,38 +45,7 @@ const PackingChecklist = () => {
       </div>
 
       {/* Navigation Sub-Bar */}
-      <div className="flex flex-row justify-between items-center bg-[#0B0F19]/40 backdrop-blur-xl p-2 rounded-2xl border border-white/5 shadow-2xl !sticky top-[72px] z-30 w-full">
-        <div className="flex items-center gap-1 bg-[#05070B]/50 p-1 rounded-xl border border-white/5 w-full sm:w-auto overflow-x-auto scrollbar-none">
-          <button 
-            onClick={() => navigate(`/trips/${id}/itinerary`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Itinerary
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/budget`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Budget
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/packing`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 bg-primary text-white shadow-md shadow-primary/20"
-          >
-            Packing
-          </button>
-          <button 
-            onClick={() => navigate(`/trips/${id}/notes`)} 
-            className="px-5 py-2.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 flex-shrink-0 text-slate-400 hover:text-white hover:bg-white/5"
-          >
-            Notes
-          </button>
-        </div>
-        <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-[#05070B]/30 rounded-xl border border-white/5">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Cloud Synchronized</p>
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
-        </div>
-      </div>
+      <TripSubNavbar activeTab="packing" />
 
       <div className="flex flex-col sm:flex-row gap-4">
         <form onSubmit={addItem} className="flex-1 flex gap-4">
@@ -162,13 +71,13 @@ const PackingChecklist = () => {
       </div>
 
       <div className="bg-surface border border-white/10 p-6 rounded-xl shadow-sm space-y-3">
-        {items.length === 0 ? (
+        {packingItems.length === 0 ? (
           <p className="text-center py-10 text-slate-400 text-sm font-medium">No inventory specified yet.</p>
         ) : (
-          items.map(item => (
+          packingItems.map(item => (
             <div 
               key={item._id} 
-              onClick={() => toggleItem(item)}
+              onClick={() => togglePackingItem(item)}
               className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all border ${
                 item.packed ? 'bg-[#0B0F19]/50 border-white/5 opacity-60' : 'bg-surface border-white/5 hover:border-primary/30'
               }`}
