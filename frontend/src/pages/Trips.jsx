@@ -69,7 +69,7 @@ const TripCard = ({ trip, onClick }) => (
   <div onClick={onClick} className="liquid-glass border border-white/5 rounded-3xl group cursor-pointer overflow-hidden shadow-sm hover:border-white/20 transition-all duration-300 flex flex-col">
     <div className="h-48 overflow-hidden relative bg-surface-dark">
       <img 
-        src={trip.image || `https://source.unsplash.com/1600x900/?${trip.destination}`} 
+        src={trip.coverImage || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200'} 
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
         alt={trip.destination} 
         onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'; }}
