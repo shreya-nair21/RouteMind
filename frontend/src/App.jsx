@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -13,6 +13,7 @@ import SharedTrip from './pages/SharedTrip';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import { TripProvider } from './context/TripContext';
 import Landing from './pages/Landing';
 
 const ProtectedRoute = ({ children }) => {
@@ -33,10 +34,12 @@ function App() {
       <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
       <Route path="/trips" element={<ProtectedRoute><Layout><Trips /></Layout></ProtectedRoute>} />
       <Route path="/create-trip" element={<ProtectedRoute><Layout><CreateTrip /></Layout></ProtectedRoute>} />
-      <Route path="/trips/:id/itinerary" element={<ProtectedRoute><Layout><ItineraryBuilder /></Layout></ProtectedRoute>} />
-      <Route path="/trips/:id/budget" element={<ProtectedRoute><Layout><Budget /></Layout></ProtectedRoute>} />
-      <Route path="/trips/:id/packing" element={<ProtectedRoute><Layout><PackingChecklist /></Layout></ProtectedRoute>} />
-      <Route path="/trips/:id/notes" element={<ProtectedRoute><Layout><TripNotes /></Layout></ProtectedRoute>} />
+      <Route path="/trips/:id" element={<ProtectedRoute><Layout><TripProvider><Outlet /></TripProvider></Layout></ProtectedRoute>}>
+        <Route path="itinerary" element={<ItineraryBuilder />} />
+        <Route path="budget" element={<Budget />} />
+        <Route path="packing" element={<PackingChecklist />} />
+        <Route path="notes" element={<TripNotes />} />
+      </Route>
       <Route path="/settings" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
       <Route path="/admin" element={<ProtectedRoute><Layout><AdminDashboard /></Layout></ProtectedRoute>} />
     </Routes>
