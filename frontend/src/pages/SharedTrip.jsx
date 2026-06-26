@@ -71,7 +71,7 @@ const SharedTrip = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
         
         <div className="absolute top-10 left-10 md:left-20 flex items-center gap-3">
-           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-black shadow-sm">
               <span className="material-symbols-outlined text-md">flight_takeoff</span>
            </div>
            <span className="text-lg font-black tracking-tight text-white uppercase">RouteMind</span>
