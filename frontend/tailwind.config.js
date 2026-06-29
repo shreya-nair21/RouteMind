@@ -20,7 +20,7 @@ module.exports = {
           glow: 'rgba(161, 161, 170, 0.15)',
           light: 'rgba(161, 161, 170, 0.1)',
         },
-        secondary: '#27272a',
+        secondary: '#e4e4e7',
         supporting: '#ffffff',
         background: '#000000',
         surface: '#09090b',

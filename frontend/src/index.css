@@ -574,59 +574,75 @@ video {
    ═══════════════════════════════ */
 
 /* 1. Global typography weights thickness override (thicker text on dark bg) */
-.font-light {
+.high-contrast .font-light {
   font-weight: 500 !important;
 }
-.font-normal {
+.high-contrast .font-normal {
   font-weight: 500 !important;
 }
-p, span, div, li, td, th {
+.high-contrast p,
+.high-contrast span,
+.high-contrast div,
+.high-contrast li,
+.high-contrast td,
+.high-contrast th {
   font-weight: 500;
 }
 
-/* 2. Global variable contrast overrides for monochrome black theme */
-:root {
+/* 2. Variable contrast overrides for monochrome black theme in high-contrast mode */
+.high-contrast {
   --text-muted: #ffffff !important;
   --text-light: #ffffff !important;
 }
 
-/* 3. Force all gray/muted text classes to render as pure white on dark bg */
-.text-slate-300,
-.text-slate-400,
-.text-slate-500,
-.text-zinc-300,
-.text-zinc-400,
-.text-zinc-500,
-.text-gray-300,
-.text-gray-400,
-.text-gray-500,
-.text-white\/30,
-.text-white\/40,
-.text-white\/50,
-.text-white\/60,
-.text-white\/70,
-.text-white\/80,
-.text-white\/85,
-.text-white\/90 {
+/* 3. Force all gray/muted text classes to render as pure white on dark bg in high-contrast mode */
+.high-contrast .text-slate-300,
+.high-contrast .text-slate-400,
+.high-contrast .text-slate-500,
+.high-contrast .text-zinc-300,
+.high-contrast .text-zinc-400,
+.high-contrast .text-zinc-500,
+.high-contrast .text-gray-300,
+.high-contrast .text-gray-400,
+.high-contrast .text-gray-500,
+.high-contrast .text-white\/30,
+.high-contrast .text-white\/40,
+.high-contrast .text-white\/50,
+.high-contrast .text-white\/60,
+.high-contrast .text-white\/70,
+.high-contrast .text-white\/80,
+.high-contrast .text-white\/85,
+.high-contrast .text-white\/90 {
   color: #ffffff !important;
 }
 
-/* 4. Enforce black text ONLY for buttons and interactive items that have a white background */
+/* 4. Enforce black text ONLY for buttons and interactive items that have a solid white background */
 button.bg-white,
-button[class*="bg-white"],
 .bg-white button,
-[class*="bg-white"] button,
 a.bg-white,
-[class*="bg-white"] a,
+.bg-white a,
 input[type="submit"].bg-white,
-input[type="button"].bg-white {
+input[type="button"].bg-white,
+.btn-primary,
+.clay-button-primary {
   color: #000000 !important;
 }
 
 /* Also ensure icons inside white buttons are black */
 button.bg-white *,
 .bg-white button *,
-[class*="bg-white"] button * {
+.btn-primary *,
+.clay-button-primary * {
   color: #000000 !important;
 }
+
+/* ═══════════════════════════════
+   SVG ANIMATION KEYFRAMES
+   ═══════════════════════════════ */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -160;
+  }
+}
+
 

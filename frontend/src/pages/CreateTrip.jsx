@@ -312,7 +312,7 @@ const CreateTrip = () => {
               if (item.num === 4 && destination && startDate && durationDays) setStep(4);
             }}
             className={`w-full sm:flex-1 py-2 px-3 text-center rounded-xl cursor-pointer text-[10px] font-black uppercase tracking-wider transition-all duration-200 ${step === item.num
-                ? 'bg-primary text-white shadow-md'
+                ? 'bg-primary text-black shadow-md'
                 : step > item.num
                   ? 'bg-white/10 text-slate-200'
                   : 'text-slate-500 hover:text-slate-350'
@@ -589,7 +589,7 @@ const CreateTrip = () => {
                             }
                           }}
                           className={`px-6 py-3 rounded-full text-xs font-bold transition-all border ${isSelected
-                              ? 'bg-primary text-white border-primary shadow-sm scale-95'
+                              ? 'bg-primary text-black border-primary shadow-sm scale-95'
                               : 'clay-surface text-slate-300 hover:border-white/20 hover:text-white'
                             }`}
                         >

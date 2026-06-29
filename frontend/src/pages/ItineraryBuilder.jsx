@@ -161,6 +161,88 @@ const ItineraryBuilder = () => {
       {/* Navigation Sub-Bar */}
       <TripSubNavbar activeTab="itinerary" />
 
+      {/* Interactive SVG Day Timeline */}
+      <div className="pro-card p-6 md:p-8 animate-fade-in relative overflow-hidden">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
+          Interactive Voyage Timeline
+        </p>
+        
+        <div className="overflow-x-auto pb-2 scrollbar-none">
+          <div className="relative py-4 min-w-[500px] max-w-3xl mx-auto">
+            {/* Horizontal connection lines */}
+            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] z-0 pointer-events-none px-6">
+              <svg className="w-full h-[2px] overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Base grey line */}
+                <line 
+                  x1="0" y1="1" x2="100%" y2="1" 
+                  stroke="rgba(255,255,255,0.05)" 
+                  strokeWidth="2" 
+                />
+                {/* Active animated line up to the selected day node */}
+                <line 
+                  x1="0" y1="1" 
+                  x2={`${((activeDay - 1) / Math.max(1, daysCount - 1)) * 100}%`} 
+                  y2="1" 
+                  stroke="#ffffff" 
+                  strokeWidth="2" 
+                  strokeDasharray="6,4"
+                  style={{
+                    animation: 'dash 5s linear infinite',
+                    transition: 'x2 0.5s ease-in-out'
+                  }}
+                />
+              </svg>
+            </div>
+
+            {/* Day Nodes */}
+            <div className="relative z-10 flex justify-between items-center gap-2">
+              {Array.from({ length: daysCount }).map((_, i) => {
+                const dayNum = i + 1;
+                const isActive = dayNum <= activeDay;
+                const isSelected = dayNum === activeDay;
+                
+                // Count activities for this day
+                const dayActCount = activities.filter(a => a.day === dayNum).length;
+
+                return (
+                  <div 
+                    key={dayNum} 
+                    onClick={() => setActiveDay(dayNum)}
+                    className="flex flex-col items-center group cursor-pointer"
+                  >
+                    {/* Node circle */}
+                    <div 
+                      className={`w-12 h-12 rounded-full bg-black border transition-all duration-500 flex flex-col items-center justify-center shadow-xl shadow-black select-none ${
+                        isSelected 
+                          ? 'border-white scale-110 ring-4 ring-white/10' 
+                          : isActive 
+                          ? 'border-white/60 hover:border-white' 
+                          : 'border-white/10 group-hover:border-white/30'
+                      }`}
+                    >
+                      <span 
+                        className={`text-xs font-bold transition-colors duration-500 ${
+                          isActive ? 'text-white' : 'text-white/40'
+                        }`}
+                      >
+                        D{dayNum}
+                      </span>
+                    </div>
+
+                    {/* Activity Badge Count */}
+                    <span className={`text-[9px] font-mono mt-2 transition-colors duration-500 ${
+                      isSelected ? 'text-white font-bold' : isActive ? 'text-slate-400' : 'text-white/20'
+                    }`}>
+                      {dayActCount} {dayActCount === 1 ? 'event' : 'events'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 animate-fade-in">
         {/* Day Navigation Column */}
         <div className="lg:col-span-1">
@@ -180,7 +262,7 @@ const ItineraryBuilder = () => {
                   <div className="flex items-center gap-3">
                     <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-all duration-300 ${
                       activeDay === i + 1
-                        ? 'bg-primary text-white shadow-md shadow-primary/20'
+                        ? 'bg-primary text-black shadow-md shadow-primary/20'
                         : 'bg-zinc-800 text-slate-400 group-hover:bg-zinc-700 group-hover:text-white'
                     }`}>
                       {String(i + 1).padStart(2, '0')}

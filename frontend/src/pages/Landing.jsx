@@ -137,6 +137,9 @@ export default function Landing() {
   const [isCloning, setIsCloning] = useState(false);
   const [pendingPackage, setPendingPackage] = useState(null);
 
+  // Active Node for SVG Route Visualization
+  const [activeNode, setActiveNode] = useState(0);
+
   // FAQ Accordion State
   const [faqOpen, setFaqOpen] = useState(Array(5).fill(false));
 
@@ -428,41 +431,126 @@ export default function Landing() {
         />
         <div className="liquid-glass rounded-2xl p-10 border border-white/5">
           <p className="text-xs text-gray-400 leading-relaxed max-w-xl mb-12 font-light">
-            Every complex itinerary is computed as a logistics graph. Here is an optimized luxury transit graph mapped across continents.
+            Every complex itinerary is computed as a logistics graph. Click the nodes below to explore stop details and optimized transit plans.
           </p>
 
           {/* SVG / Graph layout */}
           <div className="relative py-8 flex flex-col md:flex-row items-center justify-between gap-12 max-w-4xl mx-auto">
             {/* Horizontal connection line for larger screens */}
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1px] bg-gradient-to-r from-white/5 via-white/40 to-white/5 hidden md:block" />
+            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] hidden md:block z-0 pointer-events-none px-8">
+              <svg className="w-full h-[2px] overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Base path */}
+                <line 
+                  x1="0" y1="1" x2="100%" y2="1" 
+                  stroke="rgba(255,255,255,0.05)" 
+                  strokeWidth="2" 
+                />
+                {/* Animated pulsing path up to active node */}
+                <line 
+                  x1="0" y1="1" x2={`${(activeNode / 3) * 100}%`} y2="1" 
+                  stroke="#ffffff" 
+                  strokeWidth="2" 
+                  strokeDasharray="6,4"
+                  style={{
+                    animation: 'dash 5s linear infinite',
+                    transition: 'x2 0.5s ease-in-out'
+                  }}
+                />
+              </svg>
+            </div>
+
+            {/* Vertical connection line for mobile view */}
+            <div className="absolute top-16 bottom-16 left-1/2 -translate-x-1/2 w-[2px] bg-white/5 md:hidden z-0 pointer-events-none" />
+            <div 
+              className="absolute top-16 left-1/2 -translate-x-1/2 w-[2px] bg-white/40 md:hidden z-0 pointer-events-none transition-all duration-500" 
+              style={{ 
+                height: activeNode === 0 ? '0%' : activeNode === 1 ? '30%' : activeNode === 2 ? '63%' : '90%' 
+              }}
+            />
 
             {[
               { code: 'BOM', city: 'Mumbai', time: 'Departure' },
               { code: 'DXB', city: 'Dubai', time: 'Layover 4h' },
               { code: 'IST', city: 'Istanbul', time: 'Stopover 1d' },
               { code: 'CDG', city: 'Paris', time: 'Destination' }
-            ].map((node, index) => (
-              <div key={node.code} className="relative z-10 flex flex-col items-center group">
-                {/* Node Circle */}
-                <div className="w-16 h-16 rounded-full bg-black border border-white/10 group-hover:border-white/30 flex items-center justify-center transition-all duration-300 shadow-xl shadow-black">
-                  <span className="text-xs font-mono font-bold tracking-widest text-white">{node.code}</span>
-                </div>
-                <div className="text-center mt-4 space-y-1">
-                  <p className="text-sm font-normal text-white">{node.city}</p>
-                  <p className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">{node.time}</p>
-                </div>
-
-                {/* Arrow down for mobile view */}
-                {index < 3 && (
-                  <div className="md:hidden text-white/20 my-4">
-                    ↓
+            ].map((node, index) => {
+              const isActive = index <= activeNode;
+              const isSelected = index === activeNode;
+              return (
+                <div 
+                  key={node.code} 
+                  onClick={() => setActiveNode(index)}
+                  className="relative z-10 flex flex-col items-center group cursor-pointer"
+                >
+                  {/* Node Circle */}
+                  <div 
+                    className={`w-16 h-16 rounded-full bg-black border transition-all duration-500 flex items-center justify-center shadow-xl shadow-black select-none ${
+                      isSelected 
+                        ? 'border-white scale-110 ring-4 ring-white/10' 
+                        : isActive 
+                        ? 'border-white/60 hover:border-white' 
+                        : 'border-white/10 group-hover:border-white/30'
+                    }`}
+                  >
+                    <span 
+                      className={`text-xs font-mono font-bold tracking-widest transition-colors duration-500 ${
+                        isActive ? 'text-white' : 'text-white/40'
+                      }`}
+                    >
+                      {node.code}
+                    </span>
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  <div className="text-center mt-4 space-y-1 select-none">
+                    <p className={`text-sm transition-colors duration-500 ${isActive ? 'text-white font-medium' : 'text-white/40'}`}>
+                      {node.city}
+                    </p>
+                    <p className={`text-[10px] font-mono uppercase tracking-wider transition-colors duration-500 ${isActive ? 'text-gray-400' : 'text-white/20'}`}>
+                      {node.time}
+                    </p>
+                  </div>
+
+                  {/* Arrow down for mobile view - spacer matching the visual height of elements */}
+                  {index < 3 && (
+                    <div className="md:hidden h-12 flex items-center text-white/5 font-bold text-lg select-none">
+                      ↓
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Active Node Detail Card */}
+          <div 
+            className="mt-12 max-w-2xl mx-auto liquid-glass rounded-2xl p-6 border border-white/10 animate-fade-in text-left transition-all duration-300"
+            key={activeNode} // Force re-render for animation on change
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-[10px] bg-white text-black px-2.5 py-1 rounded-full font-mono font-bold uppercase tracking-wider">
+                {activeNode === 0 ? 'Start' : activeNode === 3 ? 'End' : `Stop 0${activeNode}`}
+              </span>
+              <h4 className="text-sm font-semibold tracking-wider uppercase text-white">
+                {[
+                  'Chhatrapati Shivaji Maharaj Terminus & Sea Link (Mumbai)',
+                  'Dubai International & Downtown Dunes (Dubai)',
+                  'Bosphorus Cruise & Historic Sultanahmet (Istanbul)',
+                  'Eiffel Tower Private Lounge & Seine Dinner (Paris)'
+                ][activeNode]}
+              </h4>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed font-light">
+              {[
+                'Starting point of your global expedition. Experience luxury airport lounge service, premium document clearance, and private chauffeur transfers to the terminal.',
+                'First stopover. 4-hour transit in the Emirates First Class lounge. Optional skyline viewing or private dune safari depending on connection flight parameters.',
+                '1-day stopover. Explore the historic Hagia Sophia, cruise down the majestic Bosphorus Strait at sunset, and dine in traditional rooftop terrace suites.',
+                'Final destination. Settle into a boutique suite in the 8th Arrondissement. Guided gallery walkthroughs and private Seine river cruise dining.'
+              ][activeNode]}
+            </p>
           </div>
         </div>
       </Section>
+
 
       {/* ═══════════ TRAVEL STYLES ═══════════ */}
       <Section id="travel-styles">
